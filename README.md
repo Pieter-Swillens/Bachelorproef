@@ -102,8 +102,6 @@ Om je bachelorproef*voorstel* en poster te compileren zijn er gelijkaardige scri
 
 De resulterende PDF-bestanden vind je in de directory `output/`, die aangemaakt wordt indien nodig.
 
-**Let op!** Als je codefragmenten in je bachelorproef opneemt die opgemaakt worden met `minted`, dan moet je in het hoofddocument zorgen dat de optie `outputdir` van de `minted`-package ingesteld wordt op `../output`. Anders zal de compilatie mislukken. Je kan regel 24 uit commentaar halen (en regel 21 uitcommentariëren of verwijderen):
-
 ```latex
 \usepackage[section,outputdir=../output]{minted}
 ```

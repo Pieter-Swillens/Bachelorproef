@@ -59,7 +59,7 @@
                 "--output-directory=%OUTDIR%",
                 "%DOCFILE%"
             ],
-            "command": "biber",
+            "command": "/Users/pieterswillens/.local/bin/biber-arm64",
             "env": {},
             "name": "biber"
         }

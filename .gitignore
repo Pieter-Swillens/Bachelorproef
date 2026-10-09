@@ -137,3 +137,4 @@ out/
 
 # vscode folder
 .vscode/*
+.DS_Store

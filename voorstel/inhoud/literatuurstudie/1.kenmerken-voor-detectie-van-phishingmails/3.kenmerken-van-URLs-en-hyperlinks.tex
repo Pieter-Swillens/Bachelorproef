@@ -1,0 +1,24 @@
+\subsubsection{URL's en hyperlinks}%
+\label{subsubsec:urls-hyperlinks}
+
+Veel phishingmails leiden de ontvanger via een link naar een website die gegevens probeert te ontfutselen. URL- en hyperlinkkenmerken beschrijven daarom de opbouw van die links, het domein waarnaar ze verwijzen en de vraag of de zichtbare link overeenkomt met de werkelijke bestemming. Drie groepen kenmerken komen aan bod: lexicale URL-kenmerken, domein- en hostkenmerken en misleidende hyperlinks.
+
+\paragraph{Lexicale URL-kenmerken.}
+Lexicale kenmerken beschrijven de opbouw van de URL zelf. Veelgebruikte kenmerken zijn:
+\begin{enumerate}
+    \item \textbf{Lengte en opbouw.} Een lange URL met veel punten, streepjes of subdomeinen kan het echte domein verbergen. Neem bijvoorbeeld \emph{emph}{voorbeeldbank.be.aanvaller.com}. Hoewel het domein eigendom lijkt te zijn van een bank, is het eigenlijke domein \emph{aanvaller.com} \autocite{Ma2009}.
+    \item \textbf{Speciale tekens.} Wanneer er een \emph{@} in de URL voorkomt, dan zal de browser alles voor dit teken negeren \autocite{Berners2005}. Een link als \url{https://voorbeeldbank.be@aanvaller.com} verwijst dus naar \emph{aanvaller.com}.
+    \item \textbf{Verdachte woorden of merknamen.} Woorden als \emph{pay}, \emph{login}, \emph{update} of \emph{app} en bekende merknamen in het domein of pad wekken vertrouwen op \autocite{Tupsamudre2021}, zonder dat het domein van de organisatie is.
+\end{enumerate}
+
+Met URLNet toonden \textcite{Le2018} aan dat een nueraal netwerk in staat is om zelf kenmerken te ontekken uit een ruwe URL en dit zowel op teken- als op woordniveau. Het nadeel is dat een groot deel van de uitlegbaar daardoor verloren gaat.
+
+
+\paragraph{Misleidende hyperlinks.}
+De zichtbare tekst van een hyperlink hoeft niet overeen te komen met de werkelijke bestemming. \textcite{Veit2025} identificeerden verschillende linkgerelateerde misleidingstechnieken, waaronder technieken die rechtstreeks uit de HTML-structuur van een e-mail kunnen worden afgeleid. Hieronder worden enkele van deze kenmerken besproken.
+
+\begin{enumerate}
+    \item \textbf{Link Mismatch:} De tekst die door de link wordt getoond komt niet overeen met de beoogde bestemming \autocite{Fette2007,Veit2025}.
+    \item \textbf{Valse tooltip:} Een tooltip is een popup venster dat extra informatie toont bij een bepaald object in de e-mail. Een aanvaller kan zo'n tooltip maken met daarin de link naar een kwaadardige webpagina. \autocite{Veit2025}
+    \item \textbf{Hexadecimale codering:} Een aanvaller kan gebruikmaken van hexadecimaal geëncodeerde tekens om zo de link onleesbaar te maken voor personen. \textcite{Veit2025} geven aan dat een geëncodeerd domein vaak wordt bijgestaan door een leesbaar sub-domein dat het vertrouwen van het slachtoffer weet te wekken.
+\end{enumerate}

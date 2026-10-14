@@ -1,17 +1,18 @@
 \subsubsection{URL's en hyperlinks}%
 \label{subsubsec:urls-hyperlinks}
 
-Veel phishingmails leiden de ontvanger via een link naar een website die gegevens probeert te ontfutselen. URL- en hyperlinkkenmerken beschrijven daarom de opbouw van die links, het domein waarnaar ze verwijzen en de vraag of de zichtbare link overeenkomt met de werkelijke bestemming. Drie groepen kenmerken komen aan bod: lexicale URL-kenmerken, domein- en hostkenmerken en misleidende hyperlinks.
+Phishingmails kunnen links bevatten die de ontvanger naar nagemaakte websites leiden, waar wordt geprobeerd gevoelige informatie, zoals inloggegevens, te verkrijgen \autocite{Varshney2016}. 
+URL- en hyperlinkkenmerken beschrijven de opbouw van die links, het domein waarnaar ze verwijzen en of de zichtbare link overeenkomt met de werkelijke bestemming. Drie groepen kenmerken komen aan bod: lexicale URL-kenmerken, domein- en hostkenmerken en misleidende hyperlinks.
 
 \paragraph{Lexicale URL-kenmerken.}
 Lexicale kenmerken beschrijven de opbouw van de URL zelf. Veelgebruikte kenmerken zijn:
 \begin{enumerate}
-    \item \textbf{Lengte en opbouw.} Een lange URL met veel punten, streepjes of subdomeinen kan het echte domein verbergen. Neem bijvoorbeeld \emph{emph}{voorbeeldbank.be.aanvaller.com}. Hoewel het domein eigendom lijkt te zijn van een bank, is het eigenlijke domein \emph{aanvaller.com} \autocite{Ma2009}.
-    \item \textbf{Speciale tekens.} Wanneer er een \emph{@} in de URL voorkomt, dan zal de browser alles voor dit teken negeren \autocite{Berners2005}. Een link als \url{https://voorbeeldbank.be@aanvaller.com} verwijst dus naar \emph{aanvaller.com}.
+    \item \textbf{Lengte en opbouw.} Een lange URL met veel punten, streepjes of subdomeinen kan het echte domein verbergen. Neem bijvoorbeeld \url{voorbeeldbank.be.aanvaller.com}. Hoewel het domein eigendom lijkt te zijn van een bank, is het eigenlijke domein \emph{aanvaller.com} \autocite{Ma2009}.
+    \item \textbf{Speciale tekens.} Wanneer er een \emph{@} in de URL voorkomt, dan zal de browser alles voor dit teken negeren \autocite{Berners2005}. Een link als \url{https://voorbeeldbank.be@aanvaller.com} routeert dus naar \emph{aanvaller.com}.
     \item \textbf{Verdachte woorden of merknamen.} Woorden als \emph{pay}, \emph{login}, \emph{update} of \emph{app} en bekende merknamen in het domein of pad wekken vertrouwen op \autocite{Tupsamudre2021}, zonder dat het domein van de organisatie is.
 \end{enumerate}
 
-Met URLNet toonden \textcite{Le2018} aan dat een nueraal netwerk in staat is om zelf kenmerken te ontekken uit een ruwe URL en dit zowel op teken- als op woordniveau. Het nadeel is dat een groot deel van de uitlegbaar daardoor verloren gaat.
+Met URLNet toonden \textcite{Le2018} aan dat een neuraal netwerk in staat is om zelf kenmerken te ontdekken uit een URL en dit zowel op teken- als op woordniveau. Het nadeel van een neuraal netwerk is echter dat een groot deel van de uitlegbaarheid daardoor verloren gaat.
 
 
 \paragraph{Misleidende hyperlinks.}

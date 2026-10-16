@@ -1,4 +1,34 @@
 \subsubsection{Detectie op basis van machine learning}
 \label{subsubsec:machinelearning-detectie}
 
-TODO
+\emph{Machinelearning (ML)} vervangt de handmatig ingestelde gewichten door modellen \autocite{Salloum2022}. Deze modellen werden getraind op échte phishingmails en leerden zelf de correlatie tussen kenmerken die frequent voorkomen bij phishingmails. De regels zelf verdwijnen dus niet, enkel de manier waarop ze worden gecombineerd verandert.
+
+\paragraph{Kenmerkselectie.}
+Kenmerkselectie sluit rechtstreeks aan bij deelvraag 1, namelijk welke kenmerken het meest relevant zijn. Hierbij wordt getracht enkel de kenmerken te behouden die bijdragen aan de het onderscheiden tussen phishing en legitieme e-mails. Op die manier wordt het model sneller en minder gevoelig voor ruis. \textcite{Guyon2003} onderscheiden drie families van methoden om relevante kenmerken te selecteren:
+
+\begin{enumerate}
+    \item \textbf{Filtermethoden.} Bij filtermethoden wordt elk kenmerk afzonderlijk beoordeeld, nog voordat het model wordt getraind. Een veelgebruikte maatstaf is \emph{information gain}, die meet in welke mate de waarde van een kenmerk de onzekerheid over de klasse (phishing of legitiem) vermindert \autocite{Forman2003}. Kenmerken die laag scoren, worden verwijderd. Filtermethoden zijn snel en onafhankelijk van het gekozen model, maar houden geen rekening met de samenhang tussen kenmerken. Twee kenmerken die afzonderlijk zwak scoren, kunnen samen toch een belangrijke meerwaarde bieden \autocite{Guyon2003}.
+    \item \textbf{Wrappermethoden.} Bij wrappermethoden wordt het model getraind op verschillende subsets van kenmerken, waarna de subset met de beste prestatie wordt behouden \autocite{Kohavi1997}. Op die manier wordt wel rekening gehouden met de samenhang tussen kenmerken en met het gekozen model. Het nadeel is de sterk oplopende rekenkost: het aantal mogelijke subsets groeit exponentieel met het aantal kenmerken, en voor elke subset moet een model worden getraind \autocite{Kohavi1997}.
+    \item \textbf{Embedded methoden.} Bij embedded methoden gebeurt de selectie tijdens het trainen van het model zelf \autocite{Guyon2003}. Een bekend voorbeeld is L1-regula\-risatie. Daarbij kent het model aan elk kenmerk een gewicht toe dat aangeeft in welke mate dat kenmerk meetelt in de uiteindelijke beslissing. De som van de absolute waarden van alle gewichten wordt beperkt, zodat het model maar over een beperkt budget beschikt en niet elk kenmerk zwaar kan laten doorwegen. Het model moet dus kiezen aan welke kenmerken het gewicht wordt besteed. Kenmerken die weinig bijdragen aan de classificatie krijgen een gewicht van exact nul en spelen dan geen rol meer in het model \autocite{Fatih2024}. Hoe streng dit budget is, wordt bepaald door een instelbare parameter: hoe strenger het budget, hoe minder kenmerken overblijven.
+\end{enumerate}
+
+\paragraph{Veelgebruikte modellen.}
+Voor phishingdetectie kunnen verschillende modellen gebruikt worden:
+
+\begin{enumerate}
+    \item \textbf{Gradient boosting.} Gradient boosting is bijzonder geschikt voor gestructureerde, tabulaire data, zoals de header-, authenticatie- en URL-kenmerken uit Sectie~\ref{subsec:kenmerken-detectie}. Onderzoek van \textcite{Grinsztajn2022} toont aan dat boomgebaseerde modellen op dergelijke data vaak competitief blijven met \emph{deep learning}, terwijl ze minder rekenkracht vereisen. Het model bouwt een reeks kleine beslissingsbomen, waarbij elke nieuwe boom probeert de fouten van het bestaande model te corrigeren. Een beslissingsboom bestaat uit opeenvolgende vragen over de kenmerken van een e-mail, bijvoorbeeld of het \texttt{Reply-To}-veld afwijkt van het \texttt{From}-veld. Op basis van de antwoorden wordt het bericht naar een classificatie geleid. XGBoost is een veelgebruikte implementatie van gradient boosting \autocite{Chen2016}.
+    \item \textbf{Transformermodels.} Transformermodels zijn het meest geschikt voor ongestructureerde data, zoals de tekstinhoud van een bericht. Modellen zoals BERT worden eerst op grote hoeveelheden tekst voorgetraind en daarna bijgetraind op als phishing bestempelde e-mails \autocite{Devlin2019}. Ze houden rekening met de volledige context van een zin. 
+    \item \textbf{Large Language Models (LLM).} \emph{LLM's} kunnen ook zonder taakspecifieke training worden ingezet. \textcite{Koide2025} ontwikkelden een systeem waarbij inhoud van een e-mail als prompt aan een LLM werd aangeboden, waarna het model een beoordeling teruggaf.
+\end{enumerate}
+
+\paragraph{Van classificatie naar risicoscore.}
+De hierboven besproken modellen leveren een binair antwoord op de vraag of een e-mail phishing is of niet. Deze bachelorproef beoogt echter een uitlegbare risicoscore, waarvoor de uitvoer van het model als kans moet kunnen worden geïnterpreteerd. Dat is niet vanzelfsprekend, want veel classifiers geven geen goed gekalibreerde kansen, waardoor een aparte kalibratiestap nodig kan zijn \autocite{Niculescu-Mizil2005}. 
+
+Een model dat rechtstreeks een score oplevert, is logistische regressie \autocite{Alhuzali2025}. Elk kenmerk krijgt daarbij een gewicht dat aangeeft hoeveel het bijdraagt aan de score. Dat is vergelijkbaar met de gewogen scores bij regelgebaseerde systemen (zie Sectie~\ref{subsubsec:rulebased-detectie}), maar met gewichten die uit data worden geleerd.
+
+\paragraph{Nadelen.}
+Machinelearning lost het probleem van handmatig ingestelde gewichten op, maar brengt eigen nadelen met zich mee. Een eerste nadeel is de afhankelijkheid van data. Een model leert enkel wat in de trainingsdata aanwezig is, waardoor de kwaliteit rechtstreeks afhangt van de kwaliteit en de representativiteit ervan \autocite{Mendes2025}.
+
+Een tweede nadeel is dat phishingaanvallen voortdurend evolueren. Hierdoor vertonen nieuwe berichten andere kenmerken dan de berichten uit de trainingsdata. \textcite{Fernando2026} beschrijven dit als \emph{concept drift}. Het gevolg hiervan is dat het model geleidelijk minder goed gaat presteren, omdat het op oude data is getraind.
+
+Voor LLM's komen daar twee specifieke nadelen bij. De verklaring die een LLM bij zijn beoordeling geeft, hoeft niet de werkelijke reden van de beslissing weer te geven, waardoor ze overtuigend kan klinken zonder correct te zijn \autocite{Turpin2023}. Bovendien kan een aanvaller via \emph{indirect prompt injection} instructies in de e-mailinhoud verwerken om de beoordeling van het model te beïnvloeden \autocite{Greshake2023}.

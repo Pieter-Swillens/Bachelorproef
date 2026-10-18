@@ -1,0 +1,60 @@
+\subsubsection{Evaluatiemetrieken voor phishingdetectie}
+\label{subsubsec:evaluatiemetrieken}
+
+\paragraph{Confusion matrix.}
+Phishingdetectie wordt in de literatuur beschouwd als een binair classificatieprobleem, waarbij een e-mail als phishing of als legitiem wordt geclassificeerd. Door de inschatting te vergelijken met de werkelijkheid, kunnen vier mogelijke uitkomsten worden onderscheiden \autocite{Powers2020}:
+
+\begin{itemize}
+    \item \textbf{True positive (TP):} een phishingmail die als phishing wordt herkend.
+    \item \textbf{True negative (TN):} een legitieme e-mail die als legitiem wordt herkend.
+    \item \textbf{False positive (FP):} een legitieme e-mail die onterecht als phishing wordt ingeschat.
+    \item \textbf{False negative (FN):} een phishingmail die als onterecht legitiem wordt ingeschat.
+\end{itemize}
+
+De uitkomsten worden gevisualiseerd in een confusion-matrix \autocite{Salloum2022} zoals in tabel \ref{tab:confusion-matrix}.
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{lcc}
+        \toprule
+        & \begin{tabular}{c}\textbf{Ingeschat}\\\textbf{phishing}\end{tabular}
+        & \begin{tabular}{c}\textbf{Ingeschat}\\\textbf{legitiem}\end{tabular} \\
+        \midrule
+        \textbf{Werkelijk phishing} & TP & FN \\
+        \textbf{Werkelijk legitiem} & FP & TN \\
+        \bottomrule
+    \end{tabular}
+    \caption{Confusion matrix voor phishingdetectie \autocite{Salloum2022}.}
+    \label{tab:confusion-matrix}
+\end{table}
+
+Op basis van de aantallen uit deze matrix worden evaluatieformules afgeleid, zoals beschreven door \textcite{Sokolova2009}
+
+\emph{Precision} meet de betrouwbaarheid van de positieve voorspellingen door te bepalen welk aandeel hiervan daadwerkelijk correct is:
+\begin{equation*}
+    \text{Precision} = \frac{TP}{TP + FP}
+\end{equation*}
+
+\emph{Recall} meet de volledigheid van de positieve voorspellingen door te bepalen welk aandeel van de daadwerkelijk positieve gevallen door het model is geïdentificeerd:
+\begin{equation*}
+    \text{Recall} = \frac{TP}{TP + FN}
+\end{equation*}
+
+Het \emph{false-positive-percentage} (FPR) toont welk deel van de legitieme e-mails ten onrechte als phishing wordt ingeschat:
+\begin{equation*}
+    \text{FPR} = \frac{FP}{FP + TN}
+\end{equation*}
+
+De \emph{F1-score} combineert precision en recall in één getal. Ze wordt berekend als het harmonisch gemiddelde van beide, waardoor ze enkel hoog is wanneer zowel precision als recall hoog zijn:
+\begin{equation*}
+    \text{F1-score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{equation*}
+
+Tot slot geeft \emph{accuracy} het aandeel correcte classificaties over alle e-mails:
+\begin{equation*}
+    \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+\end{equation*}
+
+In de praktijk worden deze maten niet even vaak gebruikt. In de analyse van \textcite{Salloum2022} was accuracy de meest gerapporteerde maat (83 experimenten), gevolgd door de F1-score (38), de confusion matrix (36) en precision en recall (elk 35) \autocite{Salloum2022}.

@@ -1,0 +1,15 @@
+\subsection{Afbakening van de scope}
+\label{subsec:afbakening-scope}
+De hoofdrequirement van de oplossing is om aan een e-mail een risicoscore te hangen die de gegeven input aftoetst aan de kans op phishing. Het formaat van die input, volgt de RFC~5322 zoals opgesteld door \textcite{Resnick2008}. 
+
+Gelet op de eis van uitlegbaarheid, wordt gekozen voor een interpreteerbaar model. Zoals besproken in sectie~\ref{subsubsec:machinelearning-detectie:logistische-regressie} is logistische regressie is een geschikte kandidaat, aangezien elk kenmerk een gewicht krijgt dat rechtstreeks aangeeft hoe het de risicoscore beïnvloedt. Verder kan er voor elke beslissing vooraf een uitleg worden gedefinieerd die dan in het uiteindelijke antwoord kan worden gecapteerd.
+
+De kenmerken waarop het model getraind zal worden, worden berekend uit de datasets die verder worden besproken \ref{subsec:voorbereiding-data}. 
+
+Wat buiten de scope van dit onderzoek valt en dus niet wordt opgenomen:
+\begin{enumerate}
+    \item \textbf{Bijagen als detectiekenmerk.} Zoals aangehaald in sectie \ref{subsubsec:bijlagen} blijken bijlagekenmerken volgens \textcite{Mendes2025} slechts een beperkte bijdrage te hebben in het eindoordeel van het model. De geringe meerwaarde weegt niet op tegen de bijkomende complexiteit;
+    \item \textbf{LLM's voor beoordeling en uitleg.} Op basis van de bevindingen van \textcite{Turpin2023} valt een LLM af als generator van uitleg: de uitleg moet waarheidsgetrouw zijn, en dat kan een LLM niet in elk geval garanderen. Ook \emph{indirect prompt injection} \autocite{Greshake2023} (sectie~\ref{subsubsec:machinelearning-detectie:nadelen}) vormt een risico voor de correcte werking van de oplossing, aangezien de inhoud van een phishingmail door een aanvaller wordt bepaald en dus ongewenste instructies voor de LLM kan bevatten;
+    \item \textbf{Inhoudelijke (lexicale) kenmerken.} Lexicale kenmerken zijn taalafhankelijk. Omdat de beschikbare corpora overwegend Engelstalig zijn \autocite{Pajola2025} (sectie~\ref{subsubsec:datasets}), zou een model dat op woordgebruik wordt getraind niet naar het Nederlands te veralgemenen zijn.
+    \item \textbf{Stilometrische kenmerken.} Deze kenmerken vergelijken het schrijfgedrag in een bericht met de gebruikelijke schrijfstijl van de afzender. Dat vereist voldoende eerdere berichten van dezelfde afzender \autocite{Stringhini2014} (sectie~\ref{subsubsec:inhoud-taalgebruik:stilometrische-kenmerken}), terwijl het algoritme telkens één afzonderlijk bericht beoordeelt.
+\end{enumerate}

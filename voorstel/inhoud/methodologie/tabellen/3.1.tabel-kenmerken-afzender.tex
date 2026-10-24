@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} l p{0.7\linewidth} p{0.2\linewidth} @{}}
+        \toprule
+        \textbf{ID} & \textbf{Kenmerk} & \textbf{Waarde} \\
+        \midrule
+        \textbf{A1} & \texttt{From} wijkt af van \texttt{Reply-To} & boolean \\
+        \textbf{A2} & \texttt{From} wijkt af van \texttt{Return-Path} & boolean \\
+        \textbf{A3} & \texttt{Reply-To} wijkt af van \texttt{Return-Path} & boolean \\
+        \textbf{A4} & Aantal verschillende domeinen over A1--A3 & int (1--3) \\
+        \textbf{A5} & Weergavenaam bevat een adres of domein dat afwijkt van het echte adres & boolean \\
+        \textbf{A6} & Weergavenaam deelt geen token met het adres & boolean \\
+        \textbf{A7} & Merknaam in weergavenaam, maar niet in het domein & boolean \\
+        \textbf{A8} & Tekens uit meerdere alfabetten in het \texttt{From}-domein & int \\
+        \textbf{A9} & \texttt{From}-domein is geen geldig registreerbaar domein & boolean \\
+        \textbf{A10} & Lengte van het \texttt{From}-domein & int \\
+        \textbf{A11} & Cijfers in het \texttt{From}-domein & int \\
+        \textbf{A12} & Aantal koppeltekens in \texttt{From}-domein & int \\
+        \textbf{A13} & Labels in het \texttt{From}-domein & int \\
+        \bottomrule
+    \end{tabular*}
+    \caption{Kandidaatkenmerken voor afzenderidentiteit.}
+    \label{tab:kenmerken-afzender}
+\end{table}
+
+

@@ -1,0 +1,22 @@
+\subsection{Voorbereiding data}
+\label{subsec:voorbereiding-data}
+
+De in sectie~\ref{subsubsec:datasets} besproken corpora zijn niet geschikt voor dit onderzoek, omdat ze niet de vereiste e-mailheaders bevatten. Daarom wordt geen gebruikgemaakt van MeAJOR \autocite{Mendes2025}, Enron \autocite{klimt2004} of Nazario \autocite{Nazario2025}, maar van de volgende twee datasets:
+\begin{enumerate}
+    \item \textbf{Phishing\_pot.} Een verzameling phishingmails die actief onderhouden wordt door \textcite{PhishingPot};
+    \item \textbf{SpamAssassin Public Corpus.} Een verzameling e-mailberichten uit de vroege jaren 2000, met zowel ongewenste als legitieme e-mails \footfullcite{SpamAssassinCorpus}. Voor dit onderzoek wordt echter uitsluitend gebruikmaakt van de partities \\ \emph{easy\_ham} en \emph{hard\_ham}. De eerste bevat legitieme e-mails die relatief eenvoudig te detecteren zijn. De tweede bevat legitieme e-mails die meer gelijkenissen vertonen met frauduleuze berichten.
+\end{enumerate}
+
+\paragraph{Beperkingen van de data.}
+Het SpamAssassin-project raadt zelf af om hun legitieme e-mailset te gebruiken als die ouder is dan 18 maanden is, omdat legitieme e-mail met de tijd verandert \footfullcite{SpamAssassinCorpusPolicy}.
+Het gebruik van deze data blijft echter verdedigbaar, omdat het doel een risicoscore is op basis van structurele kenmerken, zoals headerconsistentie, URL-opbouw of hyperlinks. Deze kenmerken evolueren naar verwachting trager dan woordgebruik.
+
+\paragraph{Voorbereiding.} 
+Elke e-mail wordt ingelezen en omgezet naar een verwerkbare vorm. Daarbij worden headers en body gedecodeerd waar nodig, zoals \emph{encoded-words} in headers (RFC~2047 \autocite{Moore1996}) en body-delen die als base64 zijn gecodeerd. 
+
+Vervolgens wordt de dataset opgesplitst in een trainingsset van 70\% en een testset van 30\%. Hierbij blijft de verhouding tussen phishingmails en legitieme e-mails in beide sets behouden. Een vaste seed zorgt ervoor dat de opsplitsing bij herhaaldelijke uitvoering reproduceerbaar is.
+
+Uit elk bericht worden vervolgens de kenmerken berekend. Deze kenmerken, samen met de indeling van de berichten in trainings- en testset, worden opgeslagen. Zo hoeven de berichten niet bij elk experiment opnieuw te worden verwerkt, en worden alle modelconfiguraties op dezelfde gegevens getraind.
+
+De testset wordt pas gebruikt wanneer de parameters van het model op punt staan na voldoende trainingsiteraties.
+

@@ -22,11 +22,13 @@ Voor phishingdetectie kunnen verschillende modellen gebruikt worden:
 \end{enumerate}
 
 \paragraph{Van classificatie naar risicoscore.}
+\label{subsubsec:machinelearning-detectie:logistische-regressie}
 De hierboven besproken modellen leveren een binair antwoord op de vraag of een e-mail phishing is of niet. Deze bachelorproef beoogt echter een uitlegbare risicoscore, waarvoor de uitvoer van het model als kans moet kunnen worden geïnterpreteerd. Dat is niet vanzelfsprekend, want veel classifiers geven geen goed gekalibreerde kansen, waardoor een aparte kalibratiestap nodig kan zijn \autocite{Niculescu-Mizil2005}. 
 
 Een model dat rechtstreeks een score oplevert, is logistische regressie \autocite{Alhuzali2025}. Elk kenmerk krijgt daarbij een gewicht dat aangeeft hoeveel het bijdraagt aan de score. Dat is vergelijkbaar met de gewogen scores bij regelgebaseerde systemen (zie Sectie~\ref{subsubsec:rulebased-detectie}), maar met gewichten die uit data worden geleerd.
 
 \paragraph{Nadelen.}
+\label{subsubsec:machinelearning-detectie:nadelen}
 Machinelearning lost het probleem van handmatig ingestelde gewichten op, maar brengt eigen nadelen met zich mee. Een eerste nadeel is de afhankelijkheid van data. Een model leert enkel wat in de trainingsdata aanwezig is, waardoor de kwaliteit rechtstreeks afhangt van de kwaliteit en de representativiteit ervan \autocite{Mendes2025}.
 
 Een tweede nadeel is dat phishingaanvallen voortdurend evolueren. Hierdoor vertonen nieuwe berichten andere kenmerken dan de berichten uit de trainingsdata. \textcite{Fernando2026} beschrijven dit als \emph{concept drift}. Het gevolg hiervan is dat het model geleidelijk minder goed gaat presteren, omdat het op oude data is getraind.

@@ -1,0 +1,37 @@
+\subsection{Kenmerkextractie}%
+\label{sec:kenmerkextractie}
+
+Uit elk bericht worden de kenmerken afgeleid die in sectie~\ref{subsec:afbakening-scope} binnen de scope vallen, voor zover ze rechtstreeks uit de datasets van sectie~\ref{subsec:voorbereiding-data} komen of eruit af te leiden zijn. Het gaat om vier families die besprokekn werden in sectie~\ref{subsec:kenmerken-detectie}. 
+
+De kenmerken worden eerst allemaal berekend als kandidaat-kenmerken. Welke ervan in het uiteindelijke model blijven, wordt bepaald aan de hand van L1-regularisatie zoals aangehaald in sectie~\ref{subsubsec:machinelearning-detectie}.
+
+\paragraph{Opbouw van de extractors.}
+Elke extractor levert twee elementen: een numerieke waarde voor het model en het concrete bewijs in de e-mail waarop die waarde berust. Zo kan de uitleg later controleerbaar naar de e-mail zelf verwijzen, zonder dat daarvoor een apart proces nodig is.
+
+\paragraph{Afzenderidentiteit.}
+De kenmerken in tabel~\ref{tab:kenmerken-afzender} volgen uit sectie~\ref{subsubsec:Afzender en e-mailheaders}. De controle op domeinen die lijken op legitieme domeinen en de controle op merken in de weergavenaam (A7) hangen af van een referentielijst.
+
+\input{inhoud/methodologie/tabellen/3.1.tabel-kenmerken-afzender.tex}
+
+\paragraph{Transportkenmerken.}
+De kenmerken in tabel~\ref{tab:kenmerken-transport} worden eveneens besproken in sectie~\ref{subsubsec:Afzender en e-mailheaders:transport}.
+
+\input{inhoud/methodologie/tabellen/3.2.tabel-kenmerken-transport.tex}
+
+Kenmerk B4 telt het aantal hops in de \texttt{Received}-keten. Kenmerk B5 meet het verschil tussen het \texttt{Date}-veld en het oudste \texttt{Received}-tijdstempel. Omdat \texttt{Date} door de afzender zelf wordt ingesteld en de \texttt{Received}-tijdstempels door de betrokken servers worden toegevoegd, kan een groot verschil wijzen op manipulatie. Kenmerk B6 controleert ten slotte of de tijdstempels van opeenvolgende hops chronologisch oplopen, aangezien een afwijkende volgorde kan wijzen op een toegevoegde of aangepaste \texttt{Received}-header.
+
+\paragraph{Lexicale URL-kenmerken.}
+De kenmerken in tabel~\ref{tab:kenmerken-url} volgen uit sectie~\ref{subsubsec:urls-hyperlinks}.
+
+\input{inhoud/methodologie/tabellen/3.3.tabel-url.tex}
+
+C9 steunt op de private sectie van de Public Suffix List, die onder meer gratis hostingplatformen bevat die ook door aanvallers worden misbruikt.
+
+\paragraph{Misleidende hyperlinks.}
+De kenmerken in tabel~\ref{tab:kenmerken-url} volgen uit sectie~\ref{subsubsec:urls-hyperlinks::misleidende-hyperlinks}.
+Deze kenmerken zijn enkel van toepassing op mails waarbij de body een stuk HTML bevat [waarom?]
+
+\input{inhoud/methodologie/tabellen/3.4.tabel-hyperlinks.tex}
+
+\paragraph{Niet-bepaalbare kenmerken.}
+Sommige kandidaat-kenmerken zijn niet voor elke e-mail te bepalen, bijvoorbeeld omdat het bericht geen HTML-deel of geen \texttt{Reply-To} bevat. In dat geval valt er geen kandidaat-kenmerk te berekenen, en dat wordt expliciet als \enquote{niet van toepassing} vastgelegd. Dit mag niet gelijkgesteld worden met een waarde van 0 of false, want dit betekent dat een controle werd uitgevoerd en geen afwijking vond. Hoe vaak een kandidaat-kenmerk niet bepaalbaar was, wordt apart bijgehouden voor de rapportering achteraf, maar niet als modelkenmerk gebruikt.

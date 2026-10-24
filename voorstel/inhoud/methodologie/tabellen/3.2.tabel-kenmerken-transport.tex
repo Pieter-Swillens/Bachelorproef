@@ -1,0 +1,19 @@
+t\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} l p{0.7\linewidth} p{0.2\linewidth} @{}}
+        \toprule
+        \textbf{ID} & \textbf{Kenmerk} & \textbf{Waarde} \\
+        \midrule
+        \textbf{B1} & Domein van de \texttt{Message-ID} wijkt af van het \texttt{From}-domein & boolean \\
+        \textbf{B2} & \texttt{Message-ID} is ongeldig opgebouwd & boolean \\
+        \textbf{B3} & Domein van de \texttt{Message-ID} is geen geldig domein & boolean \\
+        \textbf{B4} & Aantal \texttt{Received}-headers na opschoning & int \\
+        \textbf{B5} & Verschil tussen \texttt{Date} en oudste \texttt{Received}-tijdstempel & float \\
+        \textbf{B6} & \texttt{Received}-tijdstempels zijn niet monotoon & boolean \\
+        \bottomrule
+    \end{tabular*}
+    \caption{Kandidaatkenmerken voor transport.}
+    \label{tab:kenmerken-transport}
+\end{table}

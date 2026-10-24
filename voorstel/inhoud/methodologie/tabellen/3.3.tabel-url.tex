@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} l p{0.7\linewidth} p{0.2\linewidth} @{}}
+        \toprule
+        \textbf{ID} & \textbf{Kenmerk} & \textbf{Waarde} \\
+        \midrule
+        \textbf{C1} & Aantal unieke URL's & int \\
+        \textbf{C2} & Maximale URL-lengte & aantal tekens \\
+        \textbf{C3} & Maximaal aantal subdomeinen & int \\
+        \textbf{C4} & Maximaal aantal punten in de host & int \\
+        \textbf{C5} & Maximaal aantal koppeltekens in de host & int \\
+        \textbf{C6} & \texttt{@} in de URL & boolean \\
+        \textbf{C7} & Verdachte woorden in host, pad of gebruikersinfo & int (woordenlijst) \\
+        \textbf{C8} & Merknaam in host, pad of gebruikersinfo buiten het registreerbare domein & boolean (referentielijst) \\
+        \textbf{C9} & Registreerbaar domein valt onder de private sectie van de Public Suffix List & boolean \\
+        \textbf{C10} & Host is een IP-adres & boolean \\
+        \textbf{C11} & Meerdere alfabetten in de link-host & boolean \\
+        \bottomrule
+    \end{tabular*}
+    \caption{Kandidaatkenmerken voor lexicale URL-kenmerken.}
+    \label{tab:kenmerken-url}
+\end{table}

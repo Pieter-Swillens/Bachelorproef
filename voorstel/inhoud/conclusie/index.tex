@@ -1,0 +1,31 @@
+\section{Verwacht resultaat, conclusie}%
+\label{sec:verwachte_resultaten}
+
+Naar verwachting levert dit onderzoek een algoritme op dat een e-mail analyseert, er een risicoscore aan toekent en de achterliggende redenen weergeeft via een lokale uitleg. Ik verwacht dat het model op de testset een hoge precision en een lage \emph{false-positive-rate} (FPR) behaalt. Tabel~\ref{tab:verwachte_resultaten} geeft een schatting van de prestaties.
+
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{lc}
+    \toprule
+    \textbf{Metriek} & \textbf{Verwachting} \\
+    \midrule
+    FPR       & $\leqslant 3\%$ \\
+    Recall    & $\geqslant 80\%$ \\
+    Precision & $\geqslant 95\%$ \\
+    F1-score  & $\approx 87\%$ \\
+    Accuracy  & $\geqslant 90\%$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{Verwachte prestaties van het model op de testset.}
+  \label{tab:verwachte_resultaten}
+\end{table}
+
+De FPR is de belangrijkste metriek (sectie~\ref{sec:evaluatie}), en dit percentage moet dus zo laag mogelijk zijn. Een lagere recall wordt daarom aanvaard, aangezien het model liever niet te optimistisch wordt. Die voorzichtigheid duwt de \emph{precision} omhoog, omdat het aantal \emph{false positives} laag blijft. 
+
+De F1-score is het harmonisch gemiddelde van \emph{precision} en \emph{recall}.
+ 
+Verder wordt de \emph{accuracy} ingeschat op minstens 90\%. Dit cijfer volgt uit de overige waarden, maar hangt ook af van de verhouding tussen phishingmails en legitieme e-mails in de testset.
+
+Wat betreft de kenmerken, verwacht ik dat van de kandidaat-kenmerken uit sectie~\ref{sec:kenmerkextractie} een groot deel niet in het uiteindelijke model terechtkomt. Door de L1-regularisatie (sectie~\ref{subsubsec:machinelearning-detectie}) krijgen kenmerken met een beperkte bijdrage een gewicht van nul en vallen ze dus weg. Vermoedelijk wegen de kenmerken rond afzenderidentiteit en lexicale URL-kenmerken het zwaarst door.
+
+Tot slot verwacht ik dat de eis van uitlegbaarheid wordt ingelost. Voor elke e-mail met een risicoscore moet kunnen worden aangetoond welke onderdelen van het bericht hebben bijgedragen tot de eindscore. Zo zou worden aangetoond dat een uitlegbare risicoscore technisch haalbaar is. Voor eindgebruikers kan zo'n uitleg bovendien helpen om phishingmails beter te herkennen.

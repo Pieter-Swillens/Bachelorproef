@@ -30,10 +30,12 @@
 \keywords{Phishingdetectie, E-mailbeveiliging, Risicoscore}
 
 \begin{document}
-
 \begin{abstract}
-    TODO
-  %Hier schrijf je de samenvatting van je voorstel, als een doorlopende tekst van één paragraaf. Let op: dit is geen inleiding, maar een samenvattende tekst van heel je voorstel met inleiding (voorstelling, kaderen thema), probleemstelling en centrale onderzoeksvraag, onderzoeksdoelstelling (wat zie je als het concrete resultaat van je bachelorproef?), voorgestelde methodologie, verwachte resultaten en meerwaarde van dit onderzoek (wat heeft de doelgroep aan het resultaat?).
+Phishing via e-mail blijft volgens \textcite{Veit2025} een van de grootste beveiligingsrisico's voor zowel bedrijven als alledaagse internetgebruikers. Ook in België is de omvang aanzienlijk: fraudeurs maakten in 2024 ongeveer 49 miljoen euro buit \autocite{Febelfin2025}. De opkomst van GenAI maakt het bovendien eenvoudiger om overtuigende en gepersonaliseerde berichten op te stellen \autocite{SchmittFlechais2024}. Sensibilisering alleen volstaat niet, want gebruikers blijven ook na phishingtraining kwetsbaar \autocite{Marshall2024}. Wanneer een phishingmail de filters van de mailclient passeert, ligt de beoordeling van de legitimiteit bij de gebruiker, die baat heeft bij ondersteuning bij het nemen van die beslissing. 
+
+Deze bachelorproef onderzoekt hoe relevante kenmerken uit e-mails kunnen worden geïdentificeerd en gecombineerd om phishingmails automatisch te detecteren en hun risiconiveau te bepalen. Het beoogde resultaat is een proof of concept dat een e-mail analyseert, er een risicoscore aan toekent en de achterliggende redenen op een begrijpelijke manier weergeeft. Omdat uitleg een kernvereiste is, wordt gekozen voor een interpreteerbaar model, namelijk logistische regressie \autocite{Rudin2019}. Uit elke e-mail worden kandidaat-kenmerken berekend rond afzenderidentiteit, transport, lexicale URL-opbouw en misleidende hyperlinks. Via L1-regularisatie, een embedded methode voor kenmerkselectie \autocite{Guyon2003}, wordt bepaald welke kenmerken in het uiteindelijke model blijven. 
+
+Het model wordt getraind en geëvalueerd op een combinatie van Phishing\_pot \autocite{PhishingPot} en de legitieme partities van het SpamAssassin Public Corpus \autocite{SpamAssassinCorpus}. De prestaties worden gemeten op een afgezonderde testset, met de \emph{false-positive-rate} (\emph{FPR}) als belangrijkste metriek, aangezien vals positieven tot gewenning en verlaagde aandacht leiden \autocite{Anderson2015}. Verwacht wordt dat het model een \emph{FPR} van hoogstens 3\% en een precision van minstens 95\% behaalt, en dat elke risicoscore herleidbaar is tot concreet, controleerbaar bewijs in de e-mail. Zo wordt nagegaan of een uitlegbare risicoscore technisch haalbaar is en eindgebruikers ondersteuning biedt bij het beoordelen van verdachte berichten.
 \end{abstract}
 
 \tableofcontents

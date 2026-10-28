@@ -1,22 +1,22 @@
 \section{Inleiding}%
 \label{sec:inleiding}
-Cybercriminaliteit die gericht is op het verkrijgen van geld of persoonsgegevens is geen recent verschijnsel. Reeds in de jaren negentig slaagden aanvallers erin om via phishing de authenticatiegegevens van America Online (AOL)-gebruikers te bemachtigen \autocite{Goel2018}. Sindsdien heeft phishing zich verder ontwikkeld en is het uitgegroeid tot een veelvoorkomende vorm van cybercriminaliteit. De blijvende relevantie van deze vorm van criminaliteit blijkt onder meer uit recente cijfers over de omvang van phishing in België.
+Phishing, het misleiden van mensen om geld of persoonsgegevens af te geven, is een veelvoorkomende vorm van cybercriminaliteit. De omvang ervan blijkt onder meer uit recente cijfers uit België.
 
 In 2025 stuurden burgers bijna 10 miljoen verdachte berichten door naar \url{verdacht@safeonweb.be}\footfullcite{Ccb2026}. De omvang van phishing is trouwens niet uitsluitend zichtbaar in het aantal gemelde berichten, maar ook in de financiële schade die ermee gepaard gaat. Volgens \textcite{Febelfin2025} maakten fraudeurs in 2024 ongeveer 49 miljoen euro buit.
 
-Hoewel phishing via verschillende kanalen verloopt, blijft misleiding via e-mail volgens \textcite{Veit2025} een van de grootste beveiligingsrisico's voor zowel bedrijven als alledaagse internetgebruikers. Wanneer zo'n phishingmail de filters van de mailclient passeert, is het de verantwoordelijkheid van de gebruiker om in te schatten of de mail te vertrouwen is of niet. Deze beoordeling wordt verder bemoeilijkt door de opkomst van generatieve artificiële intelligentie, die aanvallers in staat stelt om overtuigende en gepersonaliseerde phishingberichten te creëren in een handomdraai \autocite{SchmittFlechais2024}.
+Hoewel phishing via verschillende kanalen verloopt, blijft misleiding via e-mail volgens \textcite{Veit2025} een van de grootste beveiligingsrisico's voor zowel bedrijven als alledaagse internetgebruikers. Wanneer zo'n phishingmail de filters van de mailclient passeert, is het de verantwoordelijkheid van de gebruiker om in te schatten of de mail te vertrouwen is of niet. Deze beoordeling wordt verder bemoeilijkt door de opkomst van GenAI, die aanvallers in staat stelt om overtuigende en gepersonaliseerde phishingberichten te creëren in een handomdraai \autocite{SchmittFlechais2024}.
 
-Hoewel sensibilisering gebruikers kan helpen om phishingmails te herkennen, volstaat ze niet om het risico op succesvolle aanvallen volledig weg te nemen. Onderzoek toont aan dat gebruikers ook na phishing\-training kwetsbaar blijven voor dergelijke aanvallen \autocite{Marshall2024}. 
-Daarom is aanvullende ondersteuning wenselijk op het moment dat de gebruiker een e-mail moet beoordelen. 
+Hoewel sensibilisering gebruikers kan helpen om phishingmails te herkennen, volstaat ze niet om het risico op succesvolle aanvallen volledig weg te nemen. Onderzoek toont aan dat gebruikers ook na phishing\-training kwetsbaar blijven voor dergelijke aanvallen \autocite{Marshall2024}. Mailclients tonen bovendien vaak niet de volledige afzender of de werkelijke bestemming van een link \autocite{Veit2025}, waardoor precies de structurele aanwijzingen die phishing verraden voor de gebruiker verborgen blijven. Aanvullende ondersteuning die die aanwijzingen zichtbaar maakt, is daarom een plausibele aanvulling op sensibilisering.
 
-Deze bachelorproef onderzoekt daarom de volgende centrale onderzoeksvraag: \emph{``Hoe kunnen relevante kenmerken uit e-mails worden geïdentificeerd en gecombineerd om phishingmails automatisch te detecteren en hun risiconiveau te bepalen?''}
+Deze bachelorproef onderzoekt daarom de volgende centrale onderzoeksvraag: \emph{``Hoe kan een interpreteerbare risicoscore voor phishingmails worden opgebouwd uit structurele e-mailkenmerken, zodat phishing met een lage false-positive-rate wordt gedetecteerd en elke score herleidbaar is tot controleerbaar bewijs in de e-mail?''}
 
-Naast de scriptie levert het onderzoek een algoritme op dat een e-mail analyseert, er een risicoscore aan toekent en de redenen om tot die score te komen op een begrijpelijke en toegankelijke manier aan de gebruiker toont. Om de centrale onderzoeksvraag te beantwoorden, worden de volgende deelvragen behandeld:
+Naast de scriptie levert het onderzoek een algoritme op dat een e-mail analyseert op structurele kenmerken, er een risicoscore aan toekent en de redenen om tot die score te komen in gewone taal weergeeft. De nadruk ligt op technische haalbaarheid. Of de uitleg gebruikers effectief ondersteunt, wordt niet onderzocht. Om de centrale onderzoeksvraag te beantwoorden, worden de volgende deelvragen behandeld:
 
 \begin{enumerate}
-  \item \emph{Welke kenmerken zijn het meest relevant om phishing te detecteren?}
+  \item \emph{Aan welke eisen moet een risicoscore voldoen om gebruikers te ondersteunen bij het beoordelen van e-mails?}
+  \item \emph{Welke structurele kenmerken van e-mails zijn relevant voor phishingdetectie?}
   \item \emph{Hoe kunnen deze kenmerken automatisch uit een e-mail worden gehaald?}
-  \item \emph{Hoe kunnen deze kenmerken worden gecombineerd tot een risicoscore?}
+  \item \emph{Hoe kunnen deze kenmerken worden gecombineerd tot een interpreteerbare risicoscore?}
 \end{enumerate}
 
-Het onderzoek wordt als geslaagd beschouwd wanneer het algoritme, geëvalueerd op een vooraf afgebakende dataset van phishingmails en legitieme e-mails, phishing betrouwbaar van legitieme e-mail onderscheidt, gemeten aan de hand van evaluatiecriteria die in de literatuurstudie worden onderbouwd.
+Het onderzoek wordt als geslaagd beschouwd wanneer het model op een afgezonderde testset een false-positive-rate van hoogstens 3\% en een precision van minstens 95\% behaalt, en wanneer in een steekproef van 50 e-mails uit die testset elk kenmerk dat bijdraagt aan de risicoscore verwijst naar concreet, controleerbaar bewijs in de oorspronkelijke e-mail.

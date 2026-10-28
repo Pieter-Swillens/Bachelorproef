@@ -18,5 +18,4 @@ Vervolgens wordt de dataset opgesplitst in een trainingsset van 70\% en een test
 
 Uit elk bericht worden vervolgens de kenmerken berekend. Deze kenmerken, samen met de indeling van de berichten in trainings- en testset, worden opgeslagen. Zo hoeven de berichten niet bij elk experiment opnieuw te worden verwerkt, en worden alle modelconfiguraties op dezelfde gegevens getraind.
 
-De testset wordt pas gebruikt wanneer de parameters van het model op punt staan na voldoende trainingsiteraties.
-
+De parameters van het model, waaronder de beslissingsdrempel, worden afgesteld via \emph{cross-validation} op de trainingsset. Hierbij wordt de trainingsset in gelijke delen (deelsets) opgesplitst en wordt het model telkens getraind op alle deelsets behalve één, waarop het vervolgens wordt gevalideerd. De drempel is de score vanaf waar een e-mail als phishing wordt aangeduid. Ze wordt zo gekozen dat de FPR in de validatiedeelsets het streefdoel van 3\% niet overschrijdt (\ref{subsec:requirements}, E1). De testset wordt pas daarna gebruikt, uitsluitend om het eindresultaat te rapporteren.

@@ -3,7 +3,7 @@
 
 Detectiekenmerken met betrekking tot afzendergegevens en e-mailheaders zijn gebaseerd op RFC~5322 \autocite{Resnick2008}, de geaccepteerde standaard voor het formaat van een e-mail. De header van een e-mail bevat onder andere metadata over de afzender, het transport en de authenticatie van een bericht. 
 
-Aangezien SMTP, het e-mailtransportprotocol, zelf geen mechanisme bevat om de afzender te verifiëren, kan een aanvaller headervelden zelf instellen en zo een afzender immiteren \autocite{Hu2018}. Voor phishingdetectie is het daarom belangrijk om velden die de afzender kan manipuleren te onderscheiden van velden die de ontvangende mailserver toevoegt en die dus betrouwbaarder zijn.
+Aangezien SMTP, het e-mailtransportprotocol, zelf geen mechanisme bevat om de afzender te verifiëren, kan een aanvaller headervelden zelf instellen en zo een afzender imiteren \autocite{Hu2018}. Voor phishingdetectie is het daarom belangrijk om velden die de afzender kan manipuleren te onderscheiden van velden die de ontvangende mailserver toevoegt en die dus betrouwbaarder zijn.
 
 \paragraph{Consistentie van de afzenderidentiteit.}
 Een e-mail verwijst via meerdere headervelden naar een afzender: 
@@ -41,10 +41,11 @@ De eerste drie controles zijn rechtstreeks uit de header af te leiden. De vierde
 
 
 \paragraph{Authenticatiekenmerken.}
+\label{subsubsec:Afzender en e-mailheaders:authenticatiekenmerken}
 Er zijn drie mechanismen om te controleren of een e-mail daadwerkelijk afkomstig is van het gebruikte domein: SPF \autocite{Kitterman2014}, DKIM \autocite{Crocker2011} en DMARC \autocite{Herr2026}. Elk mechanisme controleert een ander aspect van de herkomst en integriteit van een bericht en levert informatie op die als detectiekenmerk kan dienen.
 
 \begin{enumerate}
-    \item \textbf{SPF-controle.} De domeineigenaar legt in de DNS vast welke mailservers namens zijn domein berichten mogen verzenden. De ontvangende server controleert of de verzendende server daartoe gemachtigd is. Die controle gebeurt op het domein van de afzender dat in de SMTP-envelope staat gedefinieeerd en is dus niet noodzakelijk dezelfde als het zichtbare \emph{From}-adres \autocite{Kitterman2014}.
+    \item \textbf{SPF-controle.} De domeineigenaar legt in de DNS vast welke mailservers namens zijn domein berichten mogen verzenden. De ontvangende server controleert of de verzendende server daartoe gemachtigd is. Die controle gebeurt op het domein van de afzender dat in de SMTP-envelope staat gedefinieerd en is dus niet noodzakelijk dezelfde als het zichtbare \emph{From}-adres \autocite{Kitterman2014}.
     \item \textbf{DKIM-controle.} De verzendende partij ondertekent bepaalde headervelden en onderdelen van het bericht met een private key. De ontvangende server controleert de signature met de bijbehorende public key, die via de DNS beschikbaar is \autocite{Crocker2011}. Een geldige signature toont dat de ondertekende onderdelen niet zijn gewijzigd. Het geverifieerd domein hoeft echter niet gelijk te zijn aan het domein in \emph{From}.
     \item \textbf{DMARC-controle.} DMARC vereist dat SPF of DKIM controles slagen en dat het daarbij gevalideerde domein overeenkomt met het domein in het zichtbare \emph{From}-veld. Die overeenkomst heet \emph{alignering} \autocite{Herr2026}. Daarnaast kan de eigenaar van het domein aangeven hoe ontvangers best omgaan met berichten die falen: niets doen (\emph{none}), het bericht als verdacht behandelen (\emph{quarantine}) of het weigeren (\emph{reject}). Dat is een voorkeur en geen verplichting voor de ontvanger \autocite{Herr2026}.
 \end{enumerate}

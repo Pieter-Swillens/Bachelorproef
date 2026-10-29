@@ -1,24 +1,14 @@
 \subsubsection{Inhoud en taalgebruik}%
 \label{subsubsec:inhoud-taalgebruik}
-
-
-\paragraph{Lexicale kenmerken.}
-Lexicale kenmerken beschrijven het woordgebruik en de tekstuele patronen van een bericht. Volgens \textcite{Salloum2022} worden voor phishingdetectie verschillende technieken gebruikt om deze kenmerken om te zetten in informatie die door classificatiemodellen kan worden verwerkt. Veelgebruikte benaderingen zijn:
+Lexicale kenmerken beschrijven het woordgebruik en de tekstuele patronen van een bericht. Volgens \textcite{Salloum2022} worden voor phishingdetectie verschillende technieken gebruikt om deze kenmerken om te zetten in informatie die door classificatiemodellen kan worden verwerkt. Veelgebruikte methoden zijn:
 \begin{enumerate}
     \item \textbf{TF-IDF.} \emph{TF-IDF} staat voor \emph{Term Frequency–Inverse Document Frequency} \autocite{ElKhair2009}. Het is een veelgebruikte techniek binnen \emph{natural language processing} om woorden in documenten een gewicht toe te kennen. De techniek wordt vaak toegepast in combinatie met het \emph{Bag-of-Words (BoW)}-model \autocite{Salloum2022}. \emph{BoW} registreert hoe vaak elk woord in een document voorkomt, terwijl de \emph{inverse document frequency} rekening houdt met de verspreiding van dat woord over de volledige documentverzameling. Hierbij wordt een logaritmische functie gebruikt om woorden die in veel documenten voorkomen een lager gewicht toe te kennen. Zo krijgen algemene woorden, zoals ``de'', ``het'' en ``een'', doorgaans een lager gewicht dan woorden die slechts in een beperkt aantal documenten voorkomen en daardoor mogelijk meer onderscheidende informatie bevatten.
-    \item \textbf{Trefwoordlijsten.} Bij deze benadering wordt gebruikgemaakt van vooraf geselecteerde woorden of woordgroepen die verband houden met mogelijke phishingpogingen. Voorbeelden zijn termen rond accountverificatie, inloggegevens en accountblokkering. \textcite{Akinyelu2014} gebruikten verschillende groepen phishinggerelateerde woorden als kenmerken voor een random-forestclassifier.
+    \item \textbf{Trefwoordlijsten.} Phishingmails doen zich vaak voor als een vertrouwde organisatie die de ontvanger vraagt om bijvoorbeeld inloggegevens of persoonsgegevens te geven om een vermeend probleem met een account op te lossen \autocite{Fette2007}. Een vooraf opgestelde lijst van woorden en woordgroepen rond bepaalde thema's maakt dit taalgebruik meetbaar. \textcite{Akinyelu2014} gebruikten zo'n referentielijst als invoer voor zijn random-forestclassifier, die hij uitwerkte in kader van zijn onderzoek.
 \end{enumerate}
 
 \paragraph{Syntactische en stilometrische kenmerken.} 
 \label{subsubsec:inhoud-taalgebruik:stilometrische-kenmerken}
-Syntactische kenmerken beschrijven hoe zinnen zijn opgebouwd. Stilometrische kenmerken beschrijven patronen in een schrijfstijl. Als kenmerken kunnen worden geëxtraheerd:
-
-\begin{enumerate}
-    \item \textbf{Gebruik van leestekens en hoofdletters;}
-    \item \textbf{Zins- en woordlengte};
-    \item \textbf{Spelfouten en grammaticale constructies;}
-    \item \textbf{Generieke aanspreekvormen,} zoals \emph{Geachte klant}.
-\end{enumerate}
+Syntactische kenmerken beschrijven hoe zinnen zijn opgebouwd en stilometrische kenmerken patronen in schrijfstijl. Het domein kent een breed scala aan zulke kenmerken, waarvan hier slechts een greep wordt besproken. Voorbeelden zijn de frequentie van leestekens en hoofdletters en stijlmetingen zoals het aantal alinea's \autocite{Stringhini2014}. Ook woord- en zinslengte, spelfouten en generieke aanspreekvormen zoals \emph{Geachte klant} kunnen als kenmerk dienen.
 
 \textcite{Duman2016} combineerden onder andere stilometrische kenmerken met headerkenmerken in EmailProfiler om spearphishing te detecteren. Het uitgangspunt is dat afwijkingen van het gebruikelijke schrijfgedrag van een afzender kunnen wijzen op een poging tot imitatie. De betrouwbaarheid van deze aanpak hangt echter af van de beschikbaarheid van voldoende vergelijkbare berichten, aangezien de normale schrijfstijl van de afzender gemodelleerd dient te worden. Daarom zijn stilometrische kenmerken minder geschikt wanneer slechts één korte e-mail beschikbaar is, omdat die onvoldoende informatie bevat om een betrouwbare vergelijking met de gebruikelijke schrijfstijl van de afzender te maken \autocite{Stringhini2014}.
 
@@ -27,8 +17,7 @@ Neurale modellen kunnen verbanden tussen woorden en hun context leren herkennen.
 
 \begin{enumerate}
     \item \textbf{\emph{Word embeddings}.} Word embeddings stellen woorden voor als vectoren die verbanden tussen woorden vastleggen. Woorden die in vergelijkbare contexten voorkomen, krijgen vergelijkbare representaties, zodat een model verwante formuleringen kan herkennen \autocite{Salloum2022}. Traditionele word embeddings kennen één vaste vector toe aan elk woord en houden daarom geen rekening met de context.
-    \item \textbf{\emph{Transformers}.} Transformers modelleren relaties tussen woorden op basis van een \emph{attentionmechanism} \autocite{Vaswani2017}. BERT is een voorbeeld dat contextafhankelijke representaties leert op basis van zowel de voorafgaande als de volgende tekst \autocite{Devlin2019}.
-    \item \textbf{\emph{Graph convolutional networks} (GCN).} GCN's leren representaties door informatie tussen verbonden knopen in een graaf te combineren. Voor tekst worden bijvoorbeeld woorden en documenten als knopen gebruikt \autocite{Yao2018}. \textcite{Alhogail2021} onderzochten een phishingdetectiemethode die een GCN combineert met NLP.
+    \item \textbf{\emph{Transformers}.} Transformers modelleren relaties tussen woorden op basis van een \emph{attentionmechanism} \autocite{Vaswani2017}.\\ BERT is een voorbeeld dat contextafhankelijke representaties leert op basis van zowel de voorafgaande als de volgende tekst \autocite{Devlin2019}.
 \end{enumerate}
 
-Hoewel neurale modellen complexe patronen kunnen aanleren, hangen prestaties sterk af van de gegevens waarop ze zijn getraind en de gebruikte evaluatiemethode. Verder zijn hun voorspellingen minder rechtstreeks interpreteerbaar dan die van eenvoudige kenmerken, zoals de aanwezigheid van een specifiek trefwoord \autocite{Rudin2019}.
+Hoewel neurale modellen complexe patronen kunnen aanleren, hangen prestaties sterk af van de gegevens waarop ze zijn getraind \autocite{Hammoudeh2024}. Verder zijn hun voorspellingen minder rechtstreeks interpreteerbaar dan die van eenvoudige kenmerken, zoals de aanwezigheid van een specifiek trefwoord \autocite{Rudin2019}.

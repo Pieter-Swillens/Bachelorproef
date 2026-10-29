@@ -1,29 +1,35 @@
 \subsubsection{Afzender en e-mail\-headers}
 \label{subsubsec:Afzender en e-mailheaders}
 
-Detectiekenmerken met betrekking tot afzendergegevens en e-mailheaders zijn gebaseerd op RFC~5322 \autocite{Resnick2008}, de geaccepteerde standaard voor het formaat van een e-mail. De header van een e-mail bevat onder andere metadata over de afzender, het transport en de authenticatie van een bericht. 
+Detectiekenmerken met betrekking tot afzendergegevens en e-mailheaders worden afgeleid uit velden die zijn vastgelegd in RFC~5322 \autocite{Resnick2008}, de standaard voor het formaat van een e-mail. De header van een e-mail bevat onder andere metadata over de afzender, het transport en de authenticatie van een bericht. 
 
-Aangezien SMTP, het e-mailtransportprotocol, zelf geen mechanisme bevat om de afzender te verifiëren, kan een aanvaller headervelden zelf instellen en zo een afzender imiteren \autocite{Hu2018}. Voor phishingdetectie is het daarom belangrijk om velden die de afzender kan manipuleren te onderscheiden van velden die de ontvangende mailserver toevoegt en die dus betrouwbaarder zijn.
+SMTP, het protocol waarmee e-mail wordt getransporteerd, controleert niet of de afzender werkelijk is wie hij beweert te zijn. Een aanvaller kan daardoor willekeurige waarden invullen in afzendervelden en zo een vertrouwde afzender imiteren \autocite{Hu2018}. Voor phishingdetectie is het daarom belangrijk om velden die de afzender kan manipuleren te onderscheiden van velden die de ontvangende mailserver toevoegt en die dus betrouwbaarder zijn.
 
 \paragraph{Consistentie van de afzenderidentiteit.}
 Een e-mail verwijst via meerdere headervelden naar een afzender: 
 \begin{enumerate}
-    \item \emph{From}: de afzender zoals de ontvanger die ziet; 
-    \item \emph{Reply-To}: het adres waarnaar het antwoord wordt verstuurd;
-    \item \emph{Return-Path}: het adres waarnaar onbezorgbare berichten worden teruggestuurd. 
+    \item \textbf{From}: het e-mailadres en de eventuele weergavenaam van de afzender, zoals weergegeven aan de ontvanger;
+    \item \textbf{Reply-To}: het adres waarnaar het antwoord wordt verstuurd;
+    \item \textbf{Return-Path}: het adres waarnaar een onbezorgbaar bericht wordt teruggestuurd. 
 \end{enumerate}
 
-Bij een legitieme e-mail verwijzen deze velden doorgaans naar dezelfde persoon of hetzelfde domein. Een phisher kan echter één of meerdere van deze velden vervalsen, zodat het bericht betrouwbaar overkomt en antwoorden toch naar de aanvaller worden gestuurd \autocite{Hu2018}.
+Bij een legitieme e-mail verwijzen deze velden doorgaans naar dezelfde persoon of hetzelfde domein. Een aanvaller kan echter één of meerdere van deze velden vervalsen, zodat het bericht betrouwbaar overkomt en antwoorden toch naar de aanvaller worden gestuurd \autocite{Hu2018}.
 
 Op basis van de technieken die \textcite{Veit2025} beschrijven, kunnen vier controles op deze headervelden worden onderscheiden:
 \begin{enumerate}
-    \item \textbf{Controle op afwijkende van From- en Reply-To adressen.} De domeinen in de velden \emph{From}, \emph{Reply-To} en \emph{Return-Path} worden vergeleken om afwijkingen tussen het vermelde afzenderadres, het antwoordadres en het retouradres te detecteren.
-    \item \textbf{Controle op inconsistentie tussen weergavenaam en e-mailadres.} De weergegeven naam van de afzender wordt vergeleken met het bijbehorende e-mailadres om mogelijke discrepanties in de afzenderidentiteit te identificeren. Bij \emph{display-name spoofing} komt de weergegeven naam niet overeen met de naam in het e-mailadres. Deze techniek wordt volgens \textcite{Cidon2019} frequent ingezet bij \emph{business email compromise}, waarbij de aanvaller zich voordoet als een vertrouwde persoon, zoals een collega of leidinggevende.
+    \item \textbf{Controle op domeinconsistentie in afzendervelden.} De domeinen in de velden \emph{From}, \emph{Reply-To} en \emph{Return-Path} worden vergeleken om afwijkingen tussen het vermelde afzenderadres, het antwoordadres en het retouradres te detecteren.
+    \item \textbf{Controle op consistentie tussen weergavenaam en e-mailadres.} De weergegeven naam van de afzender wordt vergeleken met het bijbehorende e-mailadres om mogelijke discrepanties in de afzenderidentiteit te identificeren. Bij \emph{display-name spoofing} komt de weergegeven naam niet overeen met de naam in het e-mailadres. Deze techniek wordt volgens \textcite{Cidon2019} frequent ingezet bij \emph{business email compromise}, waarbij de aanvaller zich voordoet als een vertrouwde persoon, zoals een collega of leidinggevende.
     \item \textbf{Controle op homografische domeinnamen.} De domeinnaam wordt gecontroleerd op tekens uit meerdere alfabetten. Bij een homograafaanval vervangt de aanvaller namelijk tekens in een domeinnaam door tekens uit een ander alfabet die er visueel identiek uitzien, zodat de domeinnaam op die van een legitieme organisatie lijkt \autocite{Sawabe2019}. Tabel \ref{tab:homograaf} toont hoe de ontvanger geen verschil ziet tussen twee varianten van \emph{paypal.com}, terwijl het wel degelijk om twee verschillende domeinen gaat.
-    \item \textbf{Controle op domeinnamen die lijken op legitieme domeinen.} Een aanvaller kan zijn domein laten lijken op die van een bekende, legitieme organisatie door bijvoorbeeld typografische variaties (\emph{rn} in plaats van \emph{m}), toegevoegde woorden zoals \emph{secure}, een afwijkend topniveaudomein zoals \url{paypal.org} in plaats van \url{paypal.com} of het gebruik van een merknaam als subdomein gebruiken, bijvoorbeeld \url{paypal.phishing-example.com}, waardoor het adres op het eerste gezicht naar PayPal lijkt te verwijzen, terwijl het geregistreerde domein \url{phishing-example.com} is.
+    \item \textbf{Gelijkenis met legitieme domeinen.} Een aanvaller kan een domein registreren dat op dat van een bekende organisatie lijkt, zodat het adres op het eerste gezicht betrouwbaar overkomt. Veelvoorkomende technieken zijn:
+        \begin{itemize}
+        \item \emph{typografische variaties}, zoals \emph{rn} in plaats van \emph{m};
+        \item \emph{toegevoegde woorden}, zoals \emph{secure} in \url{secure-paypal.com};
+        \item \emph{een afwijkend topniveaudomein}, zoals \url{paypal.org} in plaats van \url{paypal.com};
+        \item \emph{een merknaam als subdomein}, zoals \url{paypal.phishing-example.com}. Het adres lijkt dan naar PayPal te verwijzen, terwijl het geregistreerde domein \url{phishing-example.com} is.
+        \end{itemize}
 \end{enumerate}
 
-De eerste drie controles zijn rechtstreeks uit de header af te leiden. De vierde vereist een referentielijst van legitieme domeinen en is zonder die context onbetrouwbaar. Geen van deze controles bewijst op zich phishing. Een afwijkend \emph{Reply-To} komt bijvoorbeeld ook voor bij nieuwsbrieven die via een externe verzenddienst worden verstuurd. Ze zijn daarom geschikter als gewogen signalen binnen een risicoscore dan als harde regels.
+De eerste drie controles zijn rechtstreeks uit de header af te leiden. De vierde vereist een referentielijst van legitieme domeinen en is zonder die context onbetrouwbaar. Geen van deze controles bewijst op zich phishing. Een afwijkend \emph{Reply-To} komt bijvoorbeeld ook voor bij nieuwsbrieven die via een externe verzenddienst worden verstuurd.
 
 \begin{table}[htbp]
   \centering
@@ -45,15 +51,15 @@ De eerste drie controles zijn rechtstreeks uit de header af te leiden. De vierde
 Er zijn drie mechanismen om te controleren of een e-mail daadwerkelijk afkomstig is van het gebruikte domein: SPF \autocite{Kitterman2014}, DKIM \autocite{Crocker2011} en DMARC \autocite{Herr2026}. Elk mechanisme controleert een ander aspect van de herkomst en integriteit van een bericht en levert informatie op die als detectiekenmerk kan dienen.
 
 \begin{enumerate}
-    \item \textbf{SPF-controle.} De domeineigenaar legt in de DNS vast welke mailservers namens zijn domein berichten mogen verzenden. De ontvangende server controleert of de verzendende server daartoe gemachtigd is. Die controle gebeurt op het domein van de afzender dat in de SMTP-envelope staat gedefinieerd en is dus niet noodzakelijk dezelfde als het zichtbare \emph{From}-adres \autocite{Kitterman2014}.
-    \item \textbf{DKIM-controle.} De verzendende partij ondertekent bepaalde headervelden en onderdelen van het bericht met een private key. De ontvangende server controleert de signature met de bijbehorende public key, die via de DNS beschikbaar is \autocite{Crocker2011}. Een geldige signature toont dat de ondertekende onderdelen niet zijn gewijzigd. Het geverifieerd domein hoeft echter niet gelijk te zijn aan het domein in \emph{From}.
-    \item \textbf{DMARC-controle.} DMARC vereist dat SPF of DKIM controles slagen en dat het daarbij gevalideerde domein overeenkomt met het domein in het zichtbare \emph{From}-veld. Die overeenkomst heet \emph{alignering} \autocite{Herr2026}. Daarnaast kan de eigenaar van het domein aangeven hoe ontvangers best omgaan met berichten die falen: niets doen (\emph{none}), het bericht als verdacht behandelen (\emph{quarantine}) of het weigeren (\emph{reject}). Dat is een voorkeur en geen verplichting voor de ontvanger \autocite{Herr2026}.
+    \item \textbf{SPF-controle.} De domeineigenaar bepaalt via DNS welke mailservers e-mails namens zijn domein mogen versturen. De ontvangende server controleert of de verzendende server gemachtigd is. Hierbij wordt het domein uit de SMTP-envelope gecontroleerd, dat niet noodzakelijk overeenkomt met het zichtbare \emph{From}-adres \autocite{Kitterman2014}.
+    \item \textbf{DKIM-controle.} De verzendende partij voegt een digitale handtekening toe aan bepaalde onderdelen van de e-mail. De ontvangende server controleert deze handtekening met een publieke sleutel die via DNS beschikbaar is \autocite{Crocker2011}. Een geldige handtekening bevestigt dat de ondertekende onderdelen niet zijn gewijzigd. Het domein waarvoor de handtekening geldig is, hoeft niet overeen te komen met het domein in het zichtbare \emph{From}-adres.
+    \item \textbf{DMARC-controle.} DMARC controleert of SPF of DKIM slaagt en of het bijbehorende domein overeenkomt met het domein in het zichtbare \emph{From}-veld. Deze overeenkomst heet \emph{alignering} \autocite{Herr2026}. De domeineigenaar kan ook aangeven hoe ontvangers berichten moeten behandelen die niet aan deze voorwaarden voldoen: niets doen (\emph{none}), als verdacht behandelen (\emph{quarantine}) of weigeren (\emph{reject}). De ontvanger is echter niet verplicht dit advies te volgen \autocite{Herr2026}.
 \end{enumerate}
 
 De ontvangende server legt de resultaten van deze controles vast in het headerveld \emph{Authen\-tication-Results} \autocite{Kucherawy2019}. Mogelijke waarden zijn \emph{pass}, \emph{fail} of \emph{none}. Zo'n resultaat geeft aan wat een controle heeft opgeleverd, maar is op zichzelf geen oordeel over de betrouwbaarheid van een bericht.
 Authenticatie kan namelijk ook falen bij legitieme berichten. Wanneer een e-mail wordt doorgestuurd, kan SPF mislukken omdat de doorsturende server niet op de lijst van het oorspronkelijke domein staat. Bij mailinglijsten kan een aangepast bericht dan weer een DKIM-handtekening ongeldig maken \autocite{Herr2026}. Authenticated Received Chain (ARC) werd ontwikkeld om de eerdere authenticatieresultaten tijdens het doorsturen te bewaren \autocite{Andersen2019}.
 
-Omgekeerd kan een aanvaller ook een eigen domein registreren en daarvoor geldige SPF-, DKIM- en DMARC-instellingen configureren. Een geldig DMARC-resultaat toont enkel dat het gebruik van het domein is goedgekeurd door de domeineigenaar, en zegt dus niets over de betrouwbaarheid van het bericht of de afzender \autocite{Herr2026}. 
+Omgekeerd garandeert een geslaagde authenticatie niet dat een bericht betrouwbaar is. Een aanvaller immers een eigen domein registreren en daarvoor geldige SPF-, DKIM- en DMARC-in\-stellingen configureren. Een geldig DMARC-resul\-taat toont enkel dat het gebruik van het domein is goedgekeurd door de domeineigenaar, en zegt dus niets over de betrouwbaarheid van het bericht of de afzender \autocite{Herr2026}. 
 Een aanvaller kan via DMARC dus geen bericht versturen uit naam van een domein dat hijzelf niet beheert. Wél kan de aanvaller een gelijkaardig domein registreren dat er visueel gelijkaardig uitziet \autocite{Herr2026}. \textcite{Hu2018} stelden daarnaast vast dat de meeste geteste e-mailproviders vervalste berichten ondanks beschikbare authenticatieprotocollen toch aan gebruikers leverden.
 
 Authenticatieresultaten zijn daarom bruikbare signalen voor phishingdetectie, maar moeten samen met andere kenmerken worden beoordeeld. Ze zeggen iets over de authenticatie van een domein en de integriteit van bepaalde berichtonderdelen, maar volstaan niet om een e-mail als legitiem of kwaadaardig te classificeren.
@@ -61,13 +67,13 @@ Authenticatieresultaten zijn daarom bruikbare signalen voor phishingdetectie, ma
 
 \paragraph{Transport- en infrastructuurkenmerken.}
 \label{subsubsec:Afzender en e-mailheaders:transport}
-Naast de afzendergegevens en de authenticatieresultaten bevat de header ook technische informatie over hoe een bericht is verstuurd. Daaruit zijn kenmerken af te leiden die niet afhangen van de inhoud van het bericht. De drie belangrijkste zijn:
+Naast de afzendergegevens en de authenticatieresultaten bevat de header ook technische informatie over hoe een bericht is verstuurd. De drie belangrijkste kenmerken zijn:
 
 \begin{enumerate}
-    \item \textbf{De Received-keten.} Elke mailserver die een bericht verwerkt, voegt doorgaans een Re\-ceived-header toe met informatie over de ontvangst ervan. Deze informatie omvat een timestamp en gegevens over de betrokken servers \autocite{Resnick2008}. Samen geven deze headers inzicht in de route die een e-mail heeft afgelegd. Mogelijke detectiekenmerken zijn het aantal hops, afwijkende tijdstempels en de reputatie of geografische locatie van betrokken IP-adressen.
-    \item \textbf{De \emph{Message-ID}.} Dit veld bevat een unieke identificatie van de e-mail, doorgaans in de vorm \emph{<uniek-id@domein.be>} \autocite{Resnick2008}. Het domein na het \emph{@}-teken kan worden vergeleken met het domein in het \emph{From}-adres. Een afwijking vormt op zichzelf geen bewijs van phishing, aangezien ook legitieme berichten via externe verzenddiensten kunnen worden verstuurd.
+    \item \textbf{De Received-keten.} Elke mailserver die een bericht verwerkt, voegt een Received-header toe met informatie over de ontvangst ervan. Deze informatie omvat een timestamp en gegevens over de betrokken servers \autocite{Resnick2008}. Samen geven deze headers inzicht in de route die een e-mail heeft afgelegd. Mogelijke detectiekenmerken zijn het aantal hops, afwijkende ontvangsttijdstippen en de reputatie of geografische locatie van betrokken IP-adressen.
+    \item \textbf{De \emph{Message-ID}.} Dit veld bevat een unieke identificatie van de e-mail, doorgaans in de vorm \emph{<uniek-id@domein.be>} \autocite{Resnick2008}. Het domein na het \emph{@}-teken kan worden vergeleken met het domein in het \emph{From}-adres.
 \end{enumerate}
 
-\textcite{Gascon2018} bewezen dat kenmerken die onafhankelijk zijn van de berichtinhoud, zoals de header- en transportgegevens van een e-mail, afwijkend verzendgedrag kunnen herkennen. Aangezien de berichttekst hiervoor niet hoeft te worden geanalyseerd, biedt dit ook bijkomende privacyvoordelen.
+\textcite{Gascon2018} bewezen dat kenmerken die onafhankelijk zijn van de berichtinhoud, zoals de header- en transportgegevens van een e-mail, afwijkende patronen in het e-mailverkeer kunnen herkennen. Aangezien de berichttekst hiervoor niet hoeft te worden geanalyseerd, biedt dit ook bijkomende privacyvoordelen.
 
 

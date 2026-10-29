@@ -23,9 +23,9 @@ Voor phishingdetectie kunnen verschillende modellen gebruikt worden:
 
 \paragraph{Van classificatie naar risicoscore.}
 \label{subsubsec:machinelearning-detectie:logistische-regressie}
-De hierboven besproken modellen leveren een binair antwoord op de vraag of een e-mail phishing is of niet. Deze bachelorproef beoogt echter een uitlegbare risicoscore, waarvoor de uitvoer van het model als kans moet kunnen worden geïnterpreteerd. Dat is niet vanzelfsprekend, want veel classifiers geven geen goed gekalibreerde kansen, waardoor een aparte kalibratiestap nodig kan zijn \autocite{Niculescu-Mizil2005}. 
+De hierboven besproken modellen leveren een antwoord op de vraag of een e-mail phishing is of niet. Echter blijken veel classifiers volgens \textcite{Niculescu-Mizil2005} geen kansen te produceren die goed gekalibreerd zijn, waardoor een extra kalibratiestap nodig is.
 
-Een model dat rechtstreeks een score oplevert, is logistische regressie \autocite{Alhuzali2025}. Elk kenmerk krijgt daarbij een gewicht dat aangeeft hoeveel het bijdraagt aan de score. Dat is vergelijkbaar met de gewogen scores bij rulebasede systemen (zie Sectie~\ref{subsubsec:rulebased-detectie}), maar met gewichten die uit data worden geleerd.
+Een model dat voor phishingdetectie goede prestaties behaalt en bovendien interpreteerbaar is, is logistische regressie \autocite{Alhuzali2025}. Elk kenmerk krijgt daarbij een gewicht dat aangeeft hoeveel het bijdraagt aan de score. Dat is vergelijkbaar met de gewogen scores bij rulebasede systemen (zie Sectie~\ref{subsubsec:rulebased-detectie}), maar met gewichten die uit data worden geleerd.
 
 \paragraph{Nadelen.}
 \label{subsubsec:machinelearning-detectie:nadelen}

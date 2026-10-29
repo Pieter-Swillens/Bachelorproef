@@ -1,16 +1,18 @@
 \section{Inleiding}%
 \label{sec:inleiding}
-Phishing, het misleiden van mensen om geld of persoonsgegevens af te geven, is een veelvoorkomende vorm van cybercriminaliteit. De omvang ervan blijkt onder meer uit recente cijfers uit België.
+Phishing, het misleiden van mensen om geld of persoonsgegevens te bemachtigen, is een veelvoorkomende vorm van cybercriminaliteit. De omvang ervan blijkt onder meer uit recente cijfers uit België.
 
-In 2025 stuurden burgers bijna 10 miljoen verdachte berichten door naar \url{verdacht@safeonweb.be}\footfullcite{Ccb2026}. De omvang van phishing is trouwens niet uitsluitend zichtbaar in het aantal gemelde berichten, maar ook in de financiële schade die ermee gepaard gaat. Volgens \textcite{Febelfin2025} maakten fraudeurs in 2024 ongeveer 49 miljoen euro buit.
+In 2025 stuurden burgers bijna 10 miljoen verdachte berichten door naar \url{verdacht@safeonweb.be}\footfullcite{Ccb2026}. Ook de financiële schade is aanzienlijk, want volgens \textcite{Febelfin2025} maakten fraudeurs in 2024 ongeveer 49 miljoen euro buit.
 
 Hoewel phishing via verschillende kanalen verloopt, blijft misleiding via e-mail volgens \textcite{Veit2025} een van de grootste beveiligingsrisico's voor zowel bedrijven als alledaagse internetgebruikers. Wanneer zo'n phishingmail de filters van de mailclient passeert, is het de verantwoordelijkheid van de gebruiker om in te schatten of de mail te vertrouwen is of niet. Deze beoordeling wordt verder bemoeilijkt door de opkomst van GenAI, die aanvallers in staat stelt om overtuigende en gepersonaliseerde phishingberichten te creëren in een handomdraai \autocite{SchmittFlechais2024}.
 
-Hoewel sensibilisering gebruikers kan helpen om phishingmails te herkennen, volstaat ze niet om het risico op succesvolle aanvallen volledig weg te nemen. Onderzoek toont aan dat gebruikers ook na phishing\-training kwetsbaar blijven voor dergelijke aanvallen \autocite{Marshall2024}. Mailclients tonen bovendien vaak niet de volledige afzender of de werkelijke bestemming van een link \autocite{Veit2025}, waardoor precies de structurele aanwijzingen die phishing verraden voor de gebruiker verborgen blijven. Aanvullende ondersteuning die die aanwijzingen zichtbaar maakt, is daarom een plausibele aanvulling op sensibilisering.
+Hoewel sensibilisering gebruikers kan helpen om phishingmails te herkennen, volstaat ze niet om het risico op succesvolle aanvallen volledig weg te nemen. Onderzoek toont aan dat gebruikers ook na phishing\-training kwetsbaar blijven voor dergelijke aanvallen \autocite{Marshall2024}. Mailclients tonen bovendien vaak alleen de oppervlakkige weergave van een e-mail, waardoor structurele aanwijzingen voor phishing, zoals de volledige afzender of de werkelijke bestemming van een link, voor de gebruiker verborgen blijven \autocite{Veit2025}. Aanvullende ondersteuning die die aanwijzingen zichtbaar maakt, is daarom een plausibele aanvulling op sensibilisering.
 
-Deze bachelorproef onderzoekt daarom de volgende centrale onderzoeksvraag: \emph{``Hoe kan een interpreteerbare risicoscore voor phishingmails worden opgebouwd uit structurele e-mailkenmerken, zodat phishing met een lage false-positive-rate wordt gedetecteerd en elke score herleidbaar is tot controleerbaar bewijs in de e-mail?''}
+Deze bachelorproef onderzoekt daarom de volgende centrale onderzoeksvraag: \emph{``Hoe kan een interpreteerbare risicoscore voor phishingmails worden opgebouwd uit structurele e-mail\-ken\-mer\-ken, zodat phishing met een lage false-positive-rate wordt gedetecteerd en elke score herleidbaar is tot controleerbaar bewijs in de e-mail?''}
 
-Naast de scriptie levert het onderzoek een algoritme op dat een e-mail analyseert op structurele kenmerken, er een risicoscore aan toekent en de redenen om tot die score te komen in gewone taal weergeeft. De nadruk ligt op technische haalbaarheid. Of de uitleg gebruikers effectief ondersteunt, wordt niet onderzocht. Om de centrale onderzoeksvraag te beantwoorden, worden de volgende deelvragen behandeld:
+Naast de scriptie levert het onderzoek een proof of concept op dat de technische basis vormt voor een dergelijke risicoscore. De focus ligt op het technische aspect van de probleemstelling, waardoor de optimale verwoording van de uitleg en de effecten ervan op gebruikers buiten de scope van dit onderzoek vallen.
+
+Om de centrale onderzoeksvraag te beantwoorden, worden de volgende deelvragen behandeld:
 
 \begin{enumerate}
   \item \emph{Aan welke eisen moet een risicoscore voldoen om gebruikers te ondersteunen bij het beoordelen van e-mails?}
@@ -19,4 +21,4 @@ Naast de scriptie levert het onderzoek een algoritme op dat een e-mail analyseer
   \item \emph{Hoe kunnen deze kenmerken worden gecombineerd tot een interpreteerbare risicoscore?}
 \end{enumerate}
 
-Het onderzoek wordt als geslaagd beschouwd wanneer het model op een afgezonderde testset een false-positive-rate van hoogstens 3\% en een precision van minstens 95\% behaalt, en wanneer in een steekproef van 50 e-mails uit die testset elk kenmerk dat bijdraagt aan de risicoscore verwijst naar concreet, controleerbaar bewijs in de oorspronkelijke e-mail.
+Het onderzoek wordt als geslaagd beschouwd wanneer het model op de testset een false-positive-rate van hoogstens 3\% en een precision van minstens 95\% behaalt, en wanneer in een steekproef van 50 e-mails uit die testset elk kenmerk dat bijdraagt aan de risicoscore verwijst naar een concreet, controleerbaar bewijs in de oorspronkelijke e-mail.

@@ -1,12 +1,12 @@
 \subsection{Kenmerkextractie}%
 \label{sec:kenmerkextractie}
 
-Uit elk bericht worden de kenmerken afgeleid die in sectie~\ref{subsec:afbakening-scope} binnen de scope vallen, voor zover ze rechtstreeks uit de datasets van sectie~\ref{subsec:voorbereiding-data} komen of eruit af te leiden zijn. Het gaat om vier families diebesproken werden in sectie~\ref{subsec:kenmerken-detectie}. 
+Uit elk bericht worden de kenmerken afgeleid die in sectie~\ref{subsec:afbakening-scope} binnen de scope vallen, voor zover ze rechtstreeks uit de datasets van sectie~\ref{subsec:voorbereiding-data} komen of eruit af te leiden zijn. Het gaat om vier families die besproken werden in sectie~\ref{subsec:kenmerken-detectie}. 
 
-De kenmerken worden eerst allemaal berekend als kandidaat-kenmerken. Welke ervan in het uiteindelijke model blijven, wordt bepaald aan de hand van L1-regularisatie zoals aangehaald in sectie~\ref{subsubsec:machinelearning-detectie}.
+De kenmerken worden eerst allemaal berekend als kandidaat-kenmerken. Welke ervan in het uiteindelijke model blijven, wordt bepaald aan de hand van L1-regularisatie, besproken in sectie~\ref{subsubsec:machinelearning-detectie}.
 
 \paragraph{Opbouw van de extractors.}
-Elke extractor levert twee elementen: een numerieke waarde voor het model en het concrete bewijs in de e-mail waarop die waarde berust. Zo kan de uitleg later controleerbaar naar de e-mail zelf verwijzen, wat eis E2 (\ref{subsec:requirements}) vertaalt.
+Elke extractor levert twee elementen: een numerieke waarde voor het model en het concrete bewijs in de e-mail waarop die waarde berust. Zo kan de uitleg later controleerbaar naar de e-mail zelf verwijzen, wat requirement R2 (\ref{subsec:requirements}) vertaalt.
 
 \paragraph{Afzenderidentiteit.}
 De kenmerken in tabel~\ref{tab:kenmerken-afzender} volgen uit sectie~\ref{subsubsec:Afzender en e-mailheaders}. De controle op domeinen die lijken op legitieme domeinen en de controle op merken in de weergavenaam (A7) hangen af van een referentielijst.
@@ -34,4 +34,4 @@ Deze kenmerken zijn enkel van toepassing op e-mails waarvan de body een HTML-dee
 \input{inhoud/methodologie/tabellen/3.4.tabel-hyperlinks.tex}
 
 \paragraph{Niet-bepaalbare kenmerken.}
-Sommige kandidaat-kenmerken zijn niet voor elke e-mail te bepalen, bijvoorbeeld omdat het bericht geen HTML-deel of geen \texttt{Reply-To} bevat. In dat geval wordt het kenmerk expliciet als ``niet van toepassing'' vastgelegd. Dit mag niet gelijkgesteld worden met een waarde van 0 of \emph{false}, want dit betekent dat een controle werd uitgevoerd en geen afwijking vond. Omdat logistische regressie geen ontbrekende waarden kan verwerken, worden de kenmerken gestandaardiseerd en wordt een niet-bepaalbaar kenmerk op de gemiddelde waarde van de trainingsdata gezet. Daardoor draagt het niets bij aan de risicoscore en wordt het niet als reden weergegeven. Gemiddelde en standaardafwijking worden enkel berekend op de trainingsdata. 
+Sommige kan\-di\-daat-kenmerken zijn niet voor elke e-mail te bepalen, bijvoorbeeld omdat het bericht geen HTML-deel of geen \texttt{Reply-To} bevat. In dat geval wordt het kenmerk expliciet als ``niet van toepassing'' vastgelegd. Dit mag niet gelijkgesteld worden met een waarde van 0 of \emph{false}, want dit betekent dat een controle werd uitgevoerd en geen afwijking vond. Omdat logistische regressie geen ontbrekende waarden kan verwerken, worden de kenmerken gestandaardiseerd en wordt een niet-bepaalbaar kenmerk op de gemiddelde waarde van de trainingsdata gezet. Daardoor draagt het niets bij aan de risicoscore en wordt het niet als reden weergegeven.

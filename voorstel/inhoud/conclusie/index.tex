@@ -1,7 +1,7 @@
 \section{Verwacht resultaat, conclusie}%
 \label{sec:verwachte_resultaten}
 
-Naar verwachting levert dit onderzoek een algoritme op dat een e-mail analyseert, er een risicoscore aan toekent en de achterliggende redenen weergeeft via een lokale uitleg. Verwacht wordt dat het model op de testset een hoge precision en een lage \emph{false-positive-rate} (FPR) behaalt. Tabel~\ref{tab:verwachte_resultaten} geeft een inschatting van de  prestaties weer.
+Naar verwachting levert dit onderzoek een algoritme op dat een e-mail analyseert, er een risicoscore aan toekent en de achterliggende redenen weergeeft via een lokale uitleg. Verwacht wordt dat het model op de testset een lage \emph{false-positive-rate} (FPR) behaalt. Tabel~\ref{tab:verwachte_resultaten} geeft een inschatting van de  prestaties weer.
 
 \begin{table}[htbp]
   \centering
@@ -13,7 +13,7 @@ Naar verwachting levert dit onderzoek een algoritme op dat een e-mail analyseert
     Recall    & $\geqslant 80\%$ \\
     Precision & $\geqslant 95\%$ \\
     F1-score  & $\approx 87\%$ \\
-    Accuracy  & $\approx 88,8\%$ \\
+    Accuracy  & $\approx 90\%$ \\
     \bottomrule
   \end{tabular}
   \caption{Verwachte prestaties van het model op de testset.}
@@ -22,12 +22,10 @@ Naar verwachting levert dit onderzoek een algoritme op dat een e-mail analyseert
 
 De FPR is de belangrijkste metriek (sectie~\ref{sec:evaluatie}) en moet dus zo laag mogelijk zijn. Het model wordt daarom bewust terughoudend afgesteld, waardoor een lagere \emph{recall} wordt aanvaard.
 
-De \emph{precision} hangt af van het aandeel phishingmails in de testset. De verwachte waarde gaat uit van een evenwichtige verdeling van 50\% phishingmails en 50\% legitieme e-mails. In de praktijk vormt phishing een kleine fractie van alle e-mails, waardoor de \emph{precision} daar lager zal liggen.
+De \emph{precision} hangt af van het aandeel phishingmails in de testset. De verwachte waarde gaat uit van een evenwichtige verdeling van 50\% phishingmails en 50\% legitieme e-mails.
 
-De F1-score is het harmonisch gemiddelde van \emph{precision} en \emph{recall}.
- 
-Verder wordt de \emph{accuracy} ingeschat op minstens 90\%. Dit cijfer volgt uit de overige waarden, maar hangt ook af van de verhouding tussen phishingmails en legitieme e-mails in de testset.
+Verder is de F1-score is het harmonisch gemiddelde van \emph{precision} en \emph{recall} en wordt de \emph{accuracy} ingeschat op minstens 90\%.
 
 Wat betreft de kenmerken, wordt verwacht dat van de kandidaat-kenmerken uit sectie~\ref{sec:kenmerkextractie} een groot deel niet in het uiteindelijke model terechtkomt. Door de L1-regularisatie (sectie~\ref{subsubsec:machinelearning-detectie}) krijgen kenmerken met een beperkte bijdrage een gewicht van nul en vallen ze dus weg. Vermoedelijk wegen de kenmerken rond afzenderidentiteit en lexicale URL-kenmerken het zwaarst door.
 
-Tot slot wordt verwacht dat aan de eis van uitlegbaarheid wordt voldaan, in de zin dat elke bijdrage aan de risicoscore herleidbaar is tot controleerbaar bewijs in de e-mail. Voor elke e-mail met een risicoscore moet kunnen worden aangetoond welke onderdelen van het bericht hebben bijgedragen tot de eindscore. Zo wordt aangetoond dat een uitlegbare risicoscore technisch haalbaar is. Of zo'n uitleg gebruikers ook effectief helpt om phishingmails te herkennen, en of ze \emph{overreliance} vermijdt \autocite{Bucinca2021}, vraagt aanvullend gebruikersonderzoek en valt buiten de scope van dit onderzoek.
+Tot slot wordt verwacht dat elke bijdrage aan de risicoscore herleidbaar is tot controleerbaar bewijs in de e-mail. Voor elke e-mail met een risicoscore moet kunnen worden aangetoond welke onderdelen van het bericht hebben bijgedragen tot de eindscore. Zo wordt aangetoond dat een uitlegbare risicoscore technisch haalbaar is. Of zo'n uitleg gebruikers ook effectief helpt om phishingmails te herkennen, en of ze \emph{overreliance} vermijdt \autocite{Bucinca2021}, vraagt aanvullend gebruikersonderzoek en valt buiten de scope van dit onderzoek.

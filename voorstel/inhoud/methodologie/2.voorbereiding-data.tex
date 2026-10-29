@@ -1,20 +1,24 @@
 \subsection{Voorbereiding data}
 \label{subsec:voorbereiding-data}
 
-De in sectie~\ref{subsubsec:datasets} besproken corpora zijn niet geschikt voor dit onderzoek, omdat ze niet de vereiste e-mailheaders bevatten. Daarom wordt geen gebruikgemaakt van MeAJOR \autocite{Mendes2025}, Enron \autocite{klimt2004} of Nazario \autocite{Nazario2025}, maar van de volgende twee datasets:
+De in sectie~\ref{subsubsec:datasets} besproken corpora zijn niet geschikt voor dit onderzoek, omdat ze niet de vereiste e-mailheaders bevatten. Daarom wordt geen gebruikgemaakt van MeAJOR \autocite{Mendes2025}, Enron \autocite{klimt2004} of Nazario\footfullcite{Nazario2025}.
+
+De dataset waarop de oplossing wordt getraind, wordt opgebouwd uit de volgende twee datasets:
 \begin{enumerate}
-    \item \textbf{Phishing\_pot.} Een verzameling phishingmails die actief onderhouden wordt door \textcite{PhishingPot};
-    \item \textbf{SpamAssassin Public Corpus.} Een verzameling e-mailberichten uit de vroege jaren 2000, met zowel ongewenste als legitieme e-mails \footfullcite{SpamAssassinCorpus}. Voor dit onderzoek wordt echter uitsluitend gebruikmaakt van de partities \\ \emph{easy\_ham} en \emph{hard\_ham}. De eerste bevat legitieme e-mails die relatief eenvoudig te detecteren zijn. De tweede bevat legitieme e-mails die meer gelijkenissen vertonen met frauduleuze berichten.
+    \item \textbf{Phishing Pot.} Een verzameling phishingmails die actief onderhouden wordt door \textcite{PhishingPot};
+    \item \textbf{SpamAssassin Public Corpus.} Een verzameling e-mailberichten uit de vroege jaren 2000, met zowel ongewenste als legitieme e-mails\footfullcite{SpamAssassinCorpus}. Voor dit onderzoek wordt echter uitsluitend gebruikgemaakt van de partities \emph{easy\_ham} en \emph{hard\_ham}, die beide bestaan uit legitieme e-mails.
 \end{enumerate}
 
 \paragraph{Voorbereiding.} 
-Elke e-mail wordt ingelezen en omgezet naar een verwerkbare vorm. Daarbij worden headers en body gedecodeerd waar nodig, zoals \emph{encoded-words} in headers (RFC~2047 \autocite{Moore1996}) en body-delen die als base64 zijn gecodeerd. 
-
+Elke e-mail wordt ingelezen en omgezet naar een verwerkbare vorm. Indien nodig worden headers met \emph{encoded-words} (RFC~2047 \autocite{MoorR1996}) of een base64-gecodeerde body eerst gedecodeerd.
+ 
 Vervolgens wordt de dataset opgesplitst in een trainingsset van 70\% en een testset van 30\%. Hierbij blijft de verhouding tussen phishingmails en legitieme e-mails in beide sets behouden. Een vaste seed zorgt ervoor dat de opsplitsing bij herhaaldelijke uitvoering reproduceerbaar is.
 
 Uit elk bericht worden vervolgens de kenmerken berekend. Deze kenmerken, samen met de indeling van de berichten in trainings- en testset, worden opgeslagen. Zo hoeven de berichten niet bij elk experiment opnieuw te worden verwerkt, en worden alle modelconfiguraties op dezelfde gegevens getraind.
 
-De parameters van het model, waaronder de beslissingsdrempel, worden afgesteld via \emph{cross-validation} op de trainingsset. Hierbij wordt de trainingsset in gelijke delen (deelsets) opgesplitst en wordt het model telkens getraind op alle deelsets behalve één, waarop het vervolgens wordt gevalideerd. De drempel is de score vanaf waar een e-mail als phishing wordt aangeduid. Ze wordt zo gekozen dat de FPR in de validatiedeelsets het streefdoel van 3\% niet overschrijdt (\ref{subsec:requirements}, E1). De testset wordt pas daarna gebruikt, uitsluitend om het eindresultaat te rapporteren.
+De parameters van het model, waaronder de beslissingsdrempel, worden afgesteld via \emph{cross-validation} op de trainingsset. Hierbij wordt de trainingsset in gelijke deelsets opgesplitst en wordt het model telkens getraind op alle deelsets behalve één, waarop het vervolgens wordt gevalideerd. 
+
+De drempel is de score vanaf waar een e-mail als phishing wordt aangeduid. Ze wordt zo gekozen dat de FPR in de validatiedeelsets het streefdoel van 3\% niet overschrijdt (\ref{subsec:requirements}, R1). De testset wordt pas daarna gebruikt, uitsluitend om het eindresultaat te rapporteren.
 
 \paragraph{Beperkingen van de data.}
 Voor zover bekend is er geen recente, publiek beschikbare dataset van legitieme e-mails die de volledige, ongewijzigde headers bewaart. Het SpamAssassin Public Corpus is daarom de enige bruikbare bron van legitieme e-mails met headers, ook al dateert het van begin jaren 2000 en raadt het project zelf aan om de legitieme set niet meer te gebruiken wanneer die ouder is dan 18 maanden.\footfullcite{SpamAssassinCorpusPolicy}

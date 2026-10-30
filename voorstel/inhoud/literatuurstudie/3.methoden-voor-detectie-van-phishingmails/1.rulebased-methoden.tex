@@ -1,17 +1,14 @@
-\subsubsection{Rulebased detectie}
+\subsubsection{Rule-based detectie}
 \label{subsubsec:rulebased-detectie}
 
-Rulebased detectie is de meest directe vertaling van de detectiekenmerken uit sectie \ref{subsec:kenmerken-detectie} naar een werkend systeem. Elk kenmerk wordt daarbij uitgedrukt als een expliciete, deterministische beslisregel die op een e-mail kan worden toegepast.
+Rule-based detectie is de meest directe vertaling van de detectiekenmerken uit sectie \ref{subsec:kenmerken-detectie} naar een werkend systeem. Elk kenmerk wordt daarbij uitgedrukt als een expliciete, deterministische beslisregel die op een e-mail kan worden toegepast.
 
-Het grootste voordeel van rulebasede detectie is de transparantie. Voor elke inschatting is exact na te gaan welke regels hebben bijgedragen tot het resultaat \autocite{Rudin2019}. Deze regels kunnen verder vertaald worden naar een begrijpelijke uitleg voor eindgebruikers.
+Het grootste voordeel van rule-based detectie is de transparantie. Voor elke inschatting is exact na te gaan welke regels hebben bijgedragen tot het resultaat \autocite{Rudin2019}. Deze regels kunnen verder vertaald worden naar een begrijpelijke uitleg voor eindgebruikers.
 
 Daarnaast is het toetsen van een regel computationeel goedkoop, waardoor e-mails snel kunnen worden geanalyseerd en omdat de regels rechtstreeks door mensen opgesteld dienen te worden, is er geen trainingsdata nodig om tot een resultaat te komen.
 
-Naast deze voordelen kent rulebased detectie ook enkele nadelen. Een eerste nadeel is dat deze detectieregels ook bij legitieme e-mails voor kunnen komen.
-Een afzonderlijke regel vormt dus louter een indicatie van phishing. Pas een combinatie van meerdere regels laat toe om met enige zekerheid van phishing uit te gaan.
-
 Naast deze voordelen kent rule-based detectie ook enkele nadelen. Een eerste nadeel is dat detectiekenmerken die vaak bij phishing voorkomen, ook in legitieme e-mails kunnen voorkomen. \textcite{Fette2007} tonen bijvoorbeeld aan dat bepaalde kenmerken zowel bij phishingmails als bij niet-phishingmails aanwezig zijn. Een afzonderlijk detectiekenmerk vormt bijgevolg slechts een aanwijzing voor mogelijke phishing. Pas een combinatie van meerdere kenmerken laat toe om met enige zekerheid van phishing uit te gaan.
 
-Een tweede nadeel is dat regels kunnen worden omzeild. Omdat het merendeel van de regels openlijk beschreven is, kunnen aanallers hun berichten zo opstellen dat ze de gedocumenteerde regels vermijden en onder de drempelwaarde voor een phishingclassificatie blijven \autocite{Biggio2017}. Op die manier bereiken ze hun slachtoffer toch.
+Een tweede nadeel is dat regels kunnen worden omzeild. Omdat het merendeel van de regels openlijk beschreven is, kunnen aanvallers hun berichten zo opstellen dat ze de gedocumenteerde regels vermijden en onder de drempelwaarde voor een phishingclassificatie blijven \autocite{Biggio2017}. Op die manier bereiken ze hun slachtoffer toch.
 
 Een laatste nadeel schuilt in het onderhoud. Regels moeten immers handmatig worden opgesteld en bijgehouden, wat volgens \textcite{Sebastiani2001} een groot nadeel is ten opzichte van self-learning methoden. Ook de bijdrage van individuele regels aan een totaalscore vraagt om de nodige aandacht. \textcite{Basnet2012} stelden vast dat een eenvoudige configuratie waarbij alle regels even zwaar doorwegen, niet de beste balans oplevert tussen vermijden van \emph{false negatives} en beperken van \emph{false positives}. Daarbij komt dat phishingmails evolueren, waardoor regels en gewichten voortdurend moeten worden herzien. Een systeem dat volledig op regels gebaseerd is, vergt blijvend onderhoud.

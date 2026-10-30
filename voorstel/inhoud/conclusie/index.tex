@@ -13,7 +13,7 @@ Naar verwachting levert dit onderzoek een algoritme op dat een e-mail analyseert
     Recall    & $\geqslant 80\%$ \\
     Precision & $\geqslant 95\%$ \\
     F1-score  & $\approx 87\%$ \\
-    Accuracy  & $\approx 90\%$ \\
+    Accuracy  & $\approx 88,5\%$ \\
     \bottomrule
   \end{tabular}
   \caption{Verwachte prestaties van het model op de testset.}
@@ -24,7 +24,7 @@ De FPR is de belangrijkste metriek (sectie~\ref{sec:evaluatie}) en moet dus zo l
 
 De \emph{precision} hangt af van het aandeel phishingmails in de testset. De verwachte waarde gaat uit van een evenwichtige verdeling van 50\% phishingmails en 50\% legitieme e-mails.
 
-Verder is de F1-score is het harmonisch gemiddelde van \emph{precision} en \emph{recall} en wordt de \emph{accuracy} ingeschat op minstens 90\%.
+Verder is de F1-score het harmonisch gemiddelde van \emph{precision} en \emph{recall} en wordt de \emph{accuracy} ingeschat op ongeveer 88,5\%.
 
 Wat betreft de kenmerken, wordt verwacht dat van de kandidaat-kenmerken uit sectie~\ref{sec:kenmerkextractie} een groot deel niet in het uiteindelijke model terechtkomt. Door de L1-regularisatie (sectie~\ref{subsubsec:machinelearning-detectie}) krijgen kenmerken met een beperkte bijdrage een gewicht van nul en vallen ze dus weg. Vermoedelijk wegen de kenmerken rond afzenderidentiteit en lexicale URL-kenmerken het zwaarst door.
 

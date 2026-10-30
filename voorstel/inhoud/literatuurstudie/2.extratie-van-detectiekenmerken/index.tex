@@ -3,7 +3,7 @@
 
 Zoals reeds besproken in sectie~\ref{subsubsec:Afzender en e-mailheaders} volgt een e-mail de standaard uit RFC~5322 \autocite{Resnick2008}. Een e-mail bestaat dus uit headers en een body, die kan bestaan uit platte tekst, HTML, bijlagen of een combinatie van elementen. Een mailclient vertaalt dit onderliggende bericht naar een weergave die de gebruiker kan lezen en interpreteren. Daarbij kan echter informatie verloren gaan. Zo toont een mailclient vaak enkel de weergavenaam van de afzender en niet het volledige e-mailadres. Ook de zichtbare tekst van een hyperlink hoeft niet overeen te komen met de URL waarnaar de link daadwerkelijk verwijst \autocite{Veit2025}. De gebruiker ziet daardoor niet de werkelijke bestemming van de link, al kan deze wel uit de onderliggende HTML-code worden afgeleid. Volgens \textcite{Chen2020} kunnen aanvallers deze verschillen misbruiken om toch een legitiem ogende mail te fabriceren.
 
-Een toepassing die een e-mail wil beoordelen, heeft dus het originele bericht nodig en niet enkel de weergave ervan. Hieronder worden de mogelijkheden om een originele mail te verkrijgen, besproken:
+Een toepassing die een e-mail wil beoordelen, heeft dus het originele bericht nodig en niet enkel de weergave ervan. Hieronder worden de mogelijkheden om een originele mail te verkrijgen besproken:
 
 \begin{enumerate}
     \item \textbf{\texttt{.eml}-bestanden.} Een \texttt{.eml}-bestand bevat een volledige e-mail in het formaat volgens RFC~5322 \parencite{Resnick2008}, inclusief de headers die de ontvangende server heeft toegevoegd. Dit formaat komt overeen met dat van de datasets uit sectie~\ref{subsubsec:datasets}.

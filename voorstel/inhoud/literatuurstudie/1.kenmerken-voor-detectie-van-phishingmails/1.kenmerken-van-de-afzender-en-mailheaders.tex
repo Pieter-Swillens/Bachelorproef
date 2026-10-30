@@ -59,7 +59,7 @@ Er zijn drie mechanismen om te controleren of een e-mail daadwerkelijk afkomstig
 De ontvangende server legt de resultaten van deze controles vast in het headerveld \emph{Authen\-tication-Results} \autocite{Kucherawy2019}. Mogelijke waarden zijn \emph{pass}, \emph{fail} of \emph{none}. Zo'n resultaat geeft aan wat een controle heeft opgeleverd, maar is op zichzelf geen oordeel over de betrouwbaarheid van een bericht.
 Authenticatie kan namelijk ook falen bij legitieme berichten. Wanneer een e-mail wordt doorgestuurd, kan SPF mislukken omdat de doorsturende server niet op de lijst van het oorspronkelijke domein staat. Bij mailinglijsten kan een aangepast bericht dan weer een DKIM-handtekening ongeldig maken \autocite{Herr2026}. Authenticated Received Chain (ARC) werd ontwikkeld om de eerdere authenticatieresultaten tijdens het doorsturen te bewaren \autocite{Andersen2019}.
 
-Omgekeerd garandeert een geslaagde authenticatie niet dat een bericht betrouwbaar is. Een aanvaller immers een eigen domein registreren en daarvoor geldige SPF-, DKIM- en DMARC-in\-stellingen configureren. Een geldig DMARC-resul\-taat toont enkel dat het gebruik van het domein is goedgekeurd door de domeineigenaar, en zegt dus niets over de betrouwbaarheid van het bericht of de afzender \autocite{Herr2026}. 
+Omgekeerd garandeert een geslaagde authenticatie niet dat een bericht betrouwbaar is. Een aanvaller kan immers een eigen domein registreren en daarvoor geldige SPF-, DKIM- en DMARC-in\-stellingen configureren. Een geldig DMARC-resul\-taat toont enkel dat het gebruik van het domein is goedgekeurd door de domeineigenaar, en zegt dus niets over de betrouwbaarheid van het bericht of de afzender \autocite{Herr2026}. 
 Een aanvaller kan via DMARC dus geen bericht versturen uit naam van een domein dat hijzelf niet beheert. Wél kan de aanvaller een gelijkaardig domein registreren dat er visueel gelijkaardig uitziet \autocite{Herr2026}. \textcite{Hu2018} stelden daarnaast vast dat de meeste geteste e-mailproviders vervalste berichten ondanks beschikbare authenticatieprotocollen toch aan gebruikers leverden.
 
 Authenticatieresultaten zijn daarom bruikbare signalen voor phishingdetectie, maar moeten samen met andere kenmerken worden beoordeeld. Ze zeggen iets over de authenticatie van een domein en de integriteit van bepaalde berichtonderdelen, maar volstaan niet om een e-mail als legitiem of kwaadaardig te classificeren.
@@ -67,7 +67,7 @@ Authenticatieresultaten zijn daarom bruikbare signalen voor phishingdetectie, ma
 
 \paragraph{Transport- en infrastructuurkenmerken.}
 \label{subsubsec:Afzender en e-mailheaders:transport}
-Naast de afzendergegevens en de authenticatieresultaten bevat de header ook technische informatie over hoe een bericht is verstuurd. De drie belangrijkste kenmerken zijn:
+Naast de afzendergegevens en de authenticatieresultaten bevat de header ook technische informatie over hoe een bericht is verstuurd. De belangrijkste kenmerken zijn:
 
 \begin{enumerate}
     \item \textbf{De Received-keten.} Elke mailserver die een bericht verwerkt, voegt een Received-header toe met informatie over de ontvangst ervan. Deze informatie omvat een timestamp en gegevens over de betrokken servers \autocite{Resnick2008}. Samen geven deze headers inzicht in de route die een e-mail heeft afgelegd. Mogelijke detectiekenmerken zijn het aantal hops, afwijkende ontvangsttijdstippen en de reputatie of geografische locatie van betrokken IP-adressen.

@@ -8,10 +8,10 @@ Phishingdetectie wordt in de literatuur beschouwd als een binair classificatiepr
     \item \textbf{True positive (TP):} een phishingmail die als phishing wordt herkend;
     \item \textbf{True negative (TN):} een legitieme e-mail die als legitiem wordt herkend;
     \item \textbf{False positive (FP):} een legitieme e-mail die onterecht als phishing wordt ingeschat;
-    \item \textbf{False negative (FN):} een phishingmail die als onterecht legitiem wordt ingeschat.
+    \item \textbf{False negative (FN):} een phishingmail die onterecht als legitiem wordt ingeschat.
 \end{itemize}
 
-De uitkomsten worden gevisualiseerd in een confusion-matrix zoals in tabel \ref{tab:confusion-matrix}.
+De uitkomsten worden gevisualiseerd in een confusionmatrix zoals in tabel \ref{tab:confusion-matrix}.
 
 \begin{table}[htbp]
     \centering
@@ -30,7 +30,7 @@ De uitkomsten worden gevisualiseerd in een confusion-matrix zoals in tabel \ref{
     \label{tab:confusion-matrix}
 \end{table}
 
-Op basis van de aantallen uit deze matrix worden evaluatieformules afgeleid, zoals beschreven door \textcite{Sokolova2009}
+Op basis van de aantallen uit deze matrix worden evaluatieformules afgeleid, zoals beschreven door \textcite{Sokolova2009}.
 \bigskip
 
 \emph{Precision} meet de betrouwbaarheid van de positieve voorspellingen door te bepalen welk aandeel hiervan daadwerkelijk correct is:
@@ -43,7 +43,7 @@ Op basis van de aantallen uit deze matrix worden evaluatieformules afgeleid, zoa
     \text{Recall} = \frac{TP}{TP + FN}
 \end{equation*}
 
-Het \emph{false-positive-percentage} (FPR) toont welk deel van de legitieme e-mails ten onrechte als phishing wordt ingeschat:
+Het \emph{false-positive-rate} (FPR) toont welk deel van de legitieme e-mails ten onrechte als phishing wordt ingeschat:
 \begin{equation*}
     \text{FPR} = \frac{FP}{FP + TN}
 \end{equation*}

@@ -25,7 +25,7 @@ De hierboven besproken modellen leveren een antwoord op de vraag of een e-mail p
 
 \paragraph{Logistische regressie.}
 \label{subsubsec:logistische-regressie}
-Een model dat voor phishingdetectie goede prestaties behaalt en bovendien interpreteerbaar is, is logistische regressie \autocite{Alhuzali2025}. Elk kenmerk krijgt daarbij een gewicht dat aangeeft hoeveel het bijdraagt aan de score. Dat is vergelijkbaar met de gewogen scores bij rulebasede systemen (zie Sectie~\ref{subsubsec:rulebased-detectie}), maar met gewichten die uit data worden geleerd.
+Een model dat voor phishingdetectie goede prestaties behaalt en bovendien interpreteerbaar is, is logistische regressie \autocite{Alhuzali2025}. Elk kenmerk krijgt daarbij een gewicht dat aangeeft hoeveel het bijdraagt aan de score. Dat is vergelijkbaar met de gewogen scores bij rule-based systemen (zie Sectie~\ref{subsubsec:rulebased-detectie}), maar met gewichten die uit data worden geleerd.
 
 \paragraph{Nadelen.}
 \label{subsubsec:machinelearning-detectie:nadelen}
@@ -33,4 +33,4 @@ Machine learning lost het probleem van handmatig ingestelde gewichten op, maar b
 
 Een tweede nadeel is dat phishingaanvallen voortdurend evolueren. Hierdoor vertonen nieuwe berichten andere kenmerken dan de berichten uit de trainingsdata. \textcite{Fernando2026} beschrijven dit als \emph{concept drift}. Het gevolg hiervan is dat het model geleidelijk minder goed gaat presteren, omdat het op oude data is getraind.
 
-Tot slot komen er voor LLM's nog twee specifieke nadelen bovenom. De verklaring die een LLM bij zijn beoordeling geeft, hoeft niet de werkelijke reden van de beslissing weer te geven, waardoor ze overtuigend kan klinken zonder correct te zijn \autocite{Turpin2023}. Verder kan een aanvaller via \emph{indirect prompt injection} instructies in de e-mailinhoud verwerken om de beoordeling van het model te beïnvloeden \autocite{Greshake2023}.
+Tot slot komen er voor LLM's nog twee specifieke nadelen bovenop. De verklaring die een LLM bij zijn beoordeling geeft, hoeft niet de werkelijke reden van de beslissing weer te geven, waardoor ze overtuigend kan klinken zonder correct te zijn \autocite{Turpin2023}. Verder kan een aanvaller via \emph{indirect prompt injection} instructies in de e-mailinhoud verwerken om de beoordeling van het model te beïnvloeden \autocite{Greshake2023}.

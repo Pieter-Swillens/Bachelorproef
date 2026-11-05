@@ -1,0 +1,121 @@
+\chapter{Kenmerkextractie}%
+\label{ch:kenmerkextractie}
+
+In dit hoofdstuk wordt beschreven welke kandidaat-kenmerken uit de e-mails worden gehaald en hoe de extractors zijn opgebouwd. De kenmerken volgen uit de literatuurstudie (sectie~\ref{sec:kenmerken-detectie}) en uit de afbakening in sectie~\ref{sec:afbakening-scope}. De extractors werken op de data uit Hoofdstuk~\ref{ch:data}. Hun uitvoer vormt de basis voor de uitleg in Hoofdstuk~\ref{ch:uitleg}.
+
+\section{Kandidaat-kenmerken}%
+\label{sec:kandidaat-kenmerken}
+
+Uit elk bericht worden de kenmerken afgeleid die in sectie~\ref{sec:afbakening-scope} binnen de scope vallen, voor zover ze rechtstreeks uit de datasets van Hoofdstuk~\ref{ch:data} komen of eruit af te leiden zijn. Het gaat om vier families die besproken werden in sectie~\ref{sec:kenmerken-detectie}.
+
+De kenmerken worden eerst allemaal berekend als kandidaat-kenmerken. Welke ervan in het uiteindelijke model blijven, wordt bepaald aan de hand van L1-regularisatie, besproken in sectie~\ref{subsec:machinelearning-detectie}.
+
+\paragraph{Opbouw van de extractors.}
+Elke extractor levert twee elementen: een numerieke waarde voor het model en het concrete bewijs in de e-mail waarop die waarde berust. Zo kan de uitleg later controleerbaar naar de e-mail zelf verwijzen, wat requirement R2 (sectie~\ref{sec:requirements}) vertaalt.
+
+\paragraph{Afzenderidentiteit.}
+De kenmerken in Tabel~\ref{tab:kenmerken-afzender} volgen uit sectie~\ref{subsec:afzender-headers}. De controle op domeinen die lijken op legitieme domeinen en de controle op merken in de weergavenaam (A7) hangen af van een referentielijst.
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} l p{0.7\linewidth} p{0.2\linewidth} @{}}
+        \toprule
+        \textbf{ID} & \textbf{Kenmerk} & \textbf{Waarde} \\
+        \midrule
+        \textbf{A1} & \texttt{From} wijkt af van \texttt{Reply-To} & boolean \\
+        \textbf{A2} & \texttt{From} wijkt af van \texttt{Return-Path} & boolean \\
+        \textbf{A3} & \texttt{Reply-To} wijkt af van \texttt{Return-Path} & boolean \\
+        \textbf{A4} & Aantal verschillende domeinen over A1--A3 & int (1--3) \\
+        \textbf{A5} & Weergavenaam bevat een adres of domein dat afwijkt van het echte adres & boolean \\
+        \textbf{A6} & Weergavenaam deelt geen token met het adres & boolean \\
+        \textbf{A7} & Merknaam in weergavenaam, maar niet in het domein & boolean \\
+        \textbf{A8} & Tekens uit meerdere alfabetten in het \texttt{From}-domein & int \\
+        \textbf{A9} & \texttt{From}-domein is geen geldig registreerbaar domein & boolean \\
+        \textbf{A10} & Lengte van het \texttt{From}-domein & int \\
+        \textbf{A11} & Cijfers in het \texttt{From}-domein & int \\
+        \textbf{A12} & Aantal koppeltekens in \texttt{From}-domein & int \\
+        \textbf{A13} & Labels in het \texttt{From}-domein & int \\
+        \bottomrule
+    \end{tabular*}
+    \caption[Kandidaat-kenmerken afzenderidentiteit]{\label{tab:kenmerken-afzender}Kandidaat-kenmerken voor afzenderidentiteit.}
+\end{table}
+
+\paragraph{Transportkenmerken.}
+De kenmerken in Tabel~\ref{tab:kenmerken-transport} worden eveneens besproken in sectie~\ref{subsec:afzender-headers:transport}.
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} l p{0.7\linewidth} p{0.2\linewidth} @{}}
+        \toprule
+        \textbf{ID} & \textbf{Kenmerk} & \textbf{Waarde} \\
+        \midrule
+        \textbf{B1} & Domein van de \texttt{Message-ID} wijkt af van het \texttt{From}-domein & boolean \\
+        \textbf{B2} & \texttt{Message-ID} is ongeldig opgebouwd & boolean \\
+        \textbf{B3} & Domein van de \texttt{Message-ID} is geen geldig domein & boolean \\
+        \textbf{B4} & Aantal \texttt{Received}-headers na opschoning & int \\
+        \textbf{B5} & Verschil tussen \texttt{Date} en oudste \texttt{Received}-tijdstempel & float \\
+        \textbf{B6} & \texttt{Received}-tijdstempels zijn niet monotoon & boolean \\
+        \bottomrule
+    \end{tabular*}
+    \caption[Kandidaat-kenmerken transport]{\label{tab:kenmerken-transport}Kandidaat-kenmerken voor transport.}
+\end{table}
+
+Kenmerk B4 telt het aantal hops in de \texttt{Received}-keten. Kenmerk B5 meet het verschil tussen het \texttt{Date}-veld en het oudste \texttt{Received}-tijdstempel. Omdat \texttt{Date} door de afzender zelf wordt ingesteld en de \texttt{Received}-tijdstempels door de betrokken servers worden toegevoegd, kan een groot verschil wijzen op manipulatie. Kenmerk B6 controleert ten slotte of de tijdstempels van opeenvolgende hops chronologisch oplopen, aangezien een afwijkende volgorde kan wijzen op een toegevoegde of aangepaste \texttt{Received}-header.
+
+\paragraph{Lexicale URL-kenmerken.}
+De kenmerken in Tabel~\ref{tab:kenmerken-url} volgen uit sectie~\ref{subsec:urls-hyperlinks}.
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} l p{0.7\linewidth} p{0.2\linewidth} @{}}
+        \toprule
+        \textbf{ID} & \textbf{Kenmerk} & \textbf{Waarde} \\
+        \midrule
+        \textbf{C1} & Aantal unieke URL's & int \\
+        \textbf{C2} & Maximale URL-lengte & aantal tekens \\
+        \textbf{C3} & Maximaal aantal subdomeinen & int \\
+        \textbf{C4} & Maximaal aantal punten in de host & int \\
+        \textbf{C5} & Maximaal aantal koppeltekens in de host & int \\
+        \textbf{C6} & \texttt{@} in de URL & boolean \\
+        \textbf{C7} & Verdachte woorden in host, pad of gebruikersinfo & int (woordenlijst) \\
+        \textbf{C8} & Merknaam in host, pad of gebruikersinfo buiten het registreerbare domein & boolean (referentielijst) \\
+        \textbf{C9} & Registreerbaar domein valt onder de private sectie van de Public Suffix List & boolean \\
+        \textbf{C10} & Host is een IP-adres & boolean \\
+        \textbf{C11} & Meerdere alfabetten in de link-host & boolean \\
+        \bottomrule
+    \end{tabular*}
+    \caption[Kandidaat-kenmerken lexicale URL-kenmerken]{\label{tab:kenmerken-url}Kandidaat-kenmerken voor lexicale URL-kenmerken.}
+\end{table}
+
+C9 steunt op de private sectie van de Public Suffix List, die onder meer gratis hostingplatformen bevat die ook door aanvallers worden misbruikt.
+
+\paragraph{Misleidende hyperlinks.}
+De kenmerken in Tabel~\ref{tab:kenmerken-hyperlinks} volgen uit sectie~\ref{subsec:urls-hyperlinks:misleidende-hyperlinks}.
+Deze kenmerken zijn enkel van toepassing op e-mails waarvan de body een HTML-deel bevat. Bij platte tekst is de weergegeven tekst tegelijk de bestemming, terwijl deze bij HTML van elkaar kunnen afwijken.
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} l p{0.7\linewidth} p{0.2\linewidth} @{}}
+        \toprule
+        \textbf{ID} & \textbf{Kenmerk} & \textbf{Waarde} \\
+        \midrule
+        \textbf{D1} & Link mismatch: getoonde tekst komt niet overeen met achterliggende bestemming & boolean? \\
+        \textbf{D2} & Geëncodeerde host in de \texttt{href} & boolean \\
+        \textbf{D3} & Valse tooltip: \texttt{title}-attribuut bevat een URL met ander registreerbaar domein dan de \texttt{href} & boolean \\
+        \bottomrule
+    \end{tabular*}
+    \caption[Kandidaat-kenmerken misleidende hyperlinks]{\label{tab:kenmerken-hyperlinks}Kandidaat-kenmerken voor misleidende hyperlinks.}
+\end{table}
+
+\section{Niet-bepaalbare kenmerken}%
+\label{sec:niet-bepaalbare-kenmerken}
+
+Sommige kandidaat-kenmerken zijn niet voor elke e-mail te bepalen, bijvoorbeeld omdat het bericht geen HTML-deel of geen \texttt{Reply-To} bevat. In dat geval wordt het kenmerk expliciet als ``niet van toepassing'' vastgelegd. Dit mag niet gelijkgesteld worden met een waarde van 0 of \emph{false}, want dit betekent dat een controle werd uitgevoerd en geen afwijking vond. Omdat logistische regressie geen ontbrekende waarden kan verwerken, worden de kenmerken gestandaardiseerd en wordt een niet-bepaalbaar kenmerk op de gemiddelde waarde van de trainingsdata gezet. Daardoor draagt het niets bij aan de risicoscore en wordt het niet als reden weergegeven.

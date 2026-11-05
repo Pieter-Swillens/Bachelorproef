@@ -1,0 +1,34 @@
+\chapter{Requirements en ontwerpkeuzes}%
+\label{ch:requirements}
+
+In dit hoofdstuk worden eerst de eisen vastgelegd waaraan de risicoscore moet voldoen. Daarna volgen de ontwerpkeuzes die uit die eisen en uit de literatuurstudie (Hoofdstuk~\ref{ch:stand-van-zaken}) voortvloeien, samen met de afbakening van het onderzoek. Hoofdstuk~\ref{ch:data} bouwt hierop voort door de dataset te beschrijven waarop het model wordt getraind.
+
+\section{Requirements}%
+\label{sec:requirements}
+
+Deelvraag 1 vraagt aan welke eisen een risicoscore moet voldoen om gebruikers te ondersteunen bij het beoordelen van e-mails. Het effect op gebruikers valt buiten de scope van dit onderzoek. De eisen worden afgeleid uit sectie~\ref{subsec:uitleg-voor-gebruikers}.
+
+\begin{description}
+  \item[R1: weinig \emph{false positives}.] Gebruikers wennen aan foutieve waarschuwingen die ze herhaaldelijk zien \autocite{Anderson2015}. False positives moeten daarom zo veel mogelijk vermeden worden.
+  \item[R2: aanwijzingen bij de bron.] Waarschuwingen werken beter dicht bij de verdachte link \autocite{Petelka2019}. De uitleg moet gebruikers dus kunnen wijzen op de plaats in de e-mail waar de aanwijzing staat.
+  \item[R3: begrijpelijke taal.] Veel gebruikers begrijpen technische waarschuwingen niet \autocite{Egelman2008}. De uitleg moet dus in gewone taal en zonder jargon zijn geschreven.
+  \item[R4: geen overdreven zekerheid.] Een overtuigende uitleg kan tot \emph{overreliance} leiden \autocite{Bucinca2021}. De uitleg mag dus geen overdreven zekerheid uitstralen en moet overeenkomen met de werkelijke beoordeling.
+\end{description}
+
+\section{Ontwerpkeuzes en scopeafbakening}%
+\label{sec:afbakening-scope}
+
+De oplossing kent aan een e-mail een risicoscore toe die aangeeft hoe sterk de aangeboden input op phishing wijst. De input volgt het formaat van RFC~5322 \autocite{Resnick2008}.
+
+Gelet op de eis van uitlegbaarheid, wordt gekozen voor een interpreteerbaar model. Zoals besproken in sectie~\ref{subsec:machinelearning-detectie:logistische-regressie} is logistische regressie een geschikte kandidaat, aangezien elk kenmerk een gewicht krijgt dat rechtstreeks aangeeft hoe het de risicoscore beïnvloedt. Verder kan er voor elke beslissing vooraf een uitleg worden gedefinieerd die dan in het uiteindelijke antwoord kan worden gecapteerd.
+
+De kenmerken waarop het model getraind zal worden, worden berekend uit de datasets die worden besproken in Hoofdstuk~\ref{ch:data}.
+
+Wat buiten de scope van dit onderzoek valt en dus niet wordt opgenomen:
+\begin{enumerate}
+    \item \textbf{Bijlagen als detectiekenmerk.} Zoals aangehaald in sectie~\ref{subsec:bijlagen} blijken bijlagekenmerken volgens \textcite{Mendes2025} slechts een beperkte bijdrage te hebben aan het eindoordeel van het model. De geringe meerwaarde weegt niet op tegen de bijkomende complexiteit;
+    \item \textbf{LLM's voor beoordeling en uitleg.} Op basis van de bevindingen van \textcite{Turpin2023} valt een LLM af als generator van uitleg, aangezien de uitleg waarheidsgetrouw moet zijn, en dat kan een LLM niet in elk geval garanderen. Ook \emph{indirect prompt injection} \autocite{Greshake2023} (sectie~\ref{subsec:machinelearning-detectie:nadelen}) vormt een risico voor de correcte werking van de oplossing. De inhoud van een phishingmail wordt immers door een aanvaller bepaald en kan dus ongewenste instructies voor de LLM bevatten;
+    \item \textbf{Inhoudelijke (lexicale) kenmerken.} GenAI stelt foutloze en overtuigende teksten makkelijk op, waardoor taalkenmerken minder betrouwbaar worden dan structurele kenmerken. Verder zijn de beschikbare corpora overwegend Engelstalig \autocite{Pajola2025} (sectie~\ref{subsec:datasets}), wat maakt dat een model dat op woordgebruik wordt getraind niet voor een andere taal kan worden ingezet;
+    \item \textbf{Stilometrische kenmerken.} Deze kenmerken vergelijken het schrijfgedrag in een bericht met de gebruikelijke schrijfstijl van de afzender. Dat vereist voldoende eerdere berichten van dezelfde afzender \autocite{Stringhini2014} (sectie~\ref{subsec:inhoud-taalgebruik:stilometrische-kenmerken}), terwijl het algoritme telkens één afzonderlijk bericht beoordeelt;
+    \item \textbf{Authenticatiekenmerken.} De resultaten van SPF-, DKIM- en DMARC-controles (sectie~\ref{subsec:afzender-headers:authenticatiekenmerken}) worden niet als kenmerk opgenomen. De legitieme e-mails uit het SpamAssassin Public Corpus dateren van vóór de wijdverspreide invoering van deze authenticatiemechanismen en bevatten daardoor doorgaans geen \texttt{Authentication-Results}-header, terwijl de recente phishingmails uit de dataset die header vaak wel bevatten. Het model zou de aanwezigheid van die header dan als signaal voor phishing kunnen leren, terwijl ze enkel het tijdperk van de e-mail weerspiegelt. Moderne legitieme e-mails zouden daardoor ten onrechte als phishing worden aangemerkt, wat de \emph{false-positive-rate} (R1) zou verhogen.
+\end{enumerate}

@@ -2,37 +2,42 @@
 %% Inleiding
 %%=============================================================================
 
-\chapter{\IfLanguageName{dutch}{Inleiding}{Introduction}}%
+\chapter{Inleiding}
 \label{ch:inleiding}
 
-De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
+Phishing, het misleiden van mensen om geld of persoonsgegevens te bemachtigen, is een veelvoorkomende vorm van cybercriminaliteit. De omvang ervan blijkt onder meer uit recente cijfers uit België.
 
-\begin{itemize}
-  \item context, achtergrond
-  \item afbakenen van het onderwerp
-  \item verantwoording van het onderwerp, methodologie
-  \item probleemstelling
-  \item onderzoeksdoelstelling
-  \item onderzoeksvraag
-  \item \ldots
-\end{itemize}
+In 2025 stuurden burgers bijna 10 miljoen verdachte berichten door naar \url{verdacht@safeonweb.be}\footfullcite{Ccb2026}. Ook de financiële schade is aanzienlijk, want volgens \textcite{Febelfin2025} maakten fraudeurs in 2024 ongeveer 49 miljoen euro buit.
 
-\section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
+Hoewel phishing via verschillende kanalen verloopt, blijft misleiding via e-mail volgens \textcite{Veit2025} een van de grootste beveiligingsrisico's voor zowel bedrijven als alledaagse internetgebruikers. Wanneer zo'n phishingmail de filters van de mailclient passeert, is het de verantwoordelijkheid van de gebruiker om in te schatten of de mail te vertrouwen is of niet. Deze beoordeling wordt verder bemoeilijkt door de opkomst van GenAI, die aanvallers in staat stelt om overtuigende en gepersonaliseerde phishingberichten te creëren in een handomdraai \autocite{SchmittFlechais2024}.
+
+\section{Probleemstelling}
 \label{sec:probleemstelling}
 
-Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's'', systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+Hoewel sensibilisering gebruikers kan helpen om phishingmails te herkennen, volstaat ze niet om het risico op succesvolle aanvallen volledig weg te nemen. Onderzoek toont aan dat gebruikers ook na phishing\-training kwetsbaar blijven voor dergelijke aanvallen \autocite{Marshall2024}. Mailclients tonen bovendien vaak alleen de oppervlakkige weergave van een e-mail, waardoor structurele aanwijzingen voor phishing, zoals de volledige afzender of de werkelijke bestemming van een link, voor de gebruiker verborgen blijven \autocite{Veit2025}. Aanvullende ondersteuning die deze aanwijzingen zichtbaar maakt, is daarom een plausibele aanvulling op sensibilisering.
 
-\section{\IfLanguageName{dutch}{Onderzoeksvraag}{Research question}}%
+\section{Onderzoeksvraag}
 \label{sec:onderzoeksvraag}
 
-Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+Deze bachelorproef onderzoekt daarom de volgende centrale onderzoeksvraag: \emph{``Hoe kan een interpreteerbare risicoscore voor phishingmails worden opgebouwd uit structurele e-mail\-ken\-mer\-ken, zodat phishing met een lage false-positive-rate wordt gedetecteerd en elke score herleidbaar is tot controleerbaar bewijs in de e-mail?''}
 
-\section{\IfLanguageName{dutch}{Onderzoeksdoelstelling}{Research objective}}%
+Om de centrale onderzoeksvraag te beantwoorden, worden de volgende deelvragen behandeld:
+
+\begin{enumerate}
+  \item \emph{Aan welke eisen moet een risicoscore voldoen om gebruikers te ondersteunen bij het beoordelen van e-mails?}
+  \item \emph{Welke structurele kenmerken van e-mails zijn relevant voor phishingdetectie?}
+  \item \emph{Hoe kunnen deze kenmerken automatisch uit een e-mail worden gehaald?}
+  \item \emph{Hoe kunnen deze kenmerken worden gecombineerd tot een interpreteerbare risicoscore?}
+\end{enumerate}
+
+\section{Onderzoeksdoelstelling}
 \label{sec:onderzoeksdoelstelling}
 
-Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk. Gaat het bv.\ om een proof-of-concept, een prototype, een verslag met aanbevelingen, een vergelijkende studie, enz.
+Naast de scriptie levert het onderzoek een proof of concept op dat de technische basis vormt voor een dergelijke risicoscore. De focus ligt op het technische aspect van de probleemstelling, waardoor de optimale verwoording van de uitleg en de effecten ervan op gebruikers buiten de scope van dit onderzoek vallen.
 
-\section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this bachelor thesis}}%
+Het onderzoek wordt als geslaagd beschouwd wanneer het model op de testset een false-positive-rate van hoogstens 3\% en een precision van minstens 95\% behaalt, en wanneer in een steekproef van 50 e-mails uit die testset elk kenmerk dat bijdraagt aan de risicoscore verwijst naar een concreet, controleerbaar bewijs in de oorspronkelijke e-mail.
+
+\section{Opzet van deze bachelorproef}
 \label{sec:opzet-bachelorproef}
 
 % Het is gebruikelijk aan het einde van de inleiding een overzicht te

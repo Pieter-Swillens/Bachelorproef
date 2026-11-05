@@ -1,0 +1,22 @@
+\chapter{Uitleg}%
+\label{ch:uitleg}
+
+Dit hoofdstuk beschrijft hoe de risicoscore wordt omgezet in een uitleg voor de eindgebruiker. De uitleg bouwt voort op de kenmerken en het bewijs uit Hoofdstuk~\ref{ch:kenmerkextractie} en op de requirements uit sectie~\ref{sec:requirements}. In Hoofdstuk~\ref{ch:evaluatie} wordt nagegaan in hoeverre de uitleg aan de gestelde uitgangspunten voldoet.
+
+\section{Uitgangspunten}%
+\label{sec:uitgangspunten-uitleg}
+
+De uitleg beantwoordt de vraag waarom het systeem een e-mail als risicovol beoordeelt en wordt in gewone taal aan de eindgebruiker voorgelegd. Zoals besproken in sectie~\ref{subsec:vormen-van-uitlegbaarheid} is hiervoor een lokale uitleg het meest geschikt, aangezien die de beoordeling van één individuele e-mail verduidelijkt \autocite{Guidotti2018}.
+
+Bij het opstellen van de uitlegregels worden de volgende uitgangspunten gehanteerd, die requirement R2 tot en met R4 vertalen uit sectie~\ref{sec:requirements}:
+\begin{enumerate}
+    \item \textbf{Suggestief.} De verantwoordelijkheid voor de interpretatie blijft bij de eindgebruiker. De uitlegregels mogen dus geen definitief oordeel over de e-mail uitbrengen, maar dienen de gebruiker met voorzichtige formuleringen zoals ``kan wijzen op'' te informeren;
+    \item \textbf{Waarheidsgetrouw.} Elke reden komt rechtstreeks uit de berekening van de score en berust op kenmerken die in het bericht daadwerkelijk worden vastgesteld. Kenmerken die niet of onvoldoende aanwezig zijn, worden niet als reden opgenomen;
+    \item \textbf{Controleerbaar.} Elke reden verwijst naar concreet bewijs uit het bericht. Dat bewijs wordt samen met de kenmerkwaarde door de extractors bijgehouden (Hoofdstuk~\ref{ch:kenmerkextractie}), zodat de gebruiker elke reden zelf in de e-mail kan nagaan;
+    \item \textbf{Toegankelijk.} De uitleg is geschreven in gewone taal en vermijdt jargon.
+\end{enumerate}
+
+\section{Kanttekening bij uitleg in deze bachelorproef}%
+\label{sec:kanttekening-uitleg}
+
+De uitleg is een essentieel onderdeel van het algoritme, want ondersteuning van de gebruiker vraagt niet enkel om een score, maar ook om de redenen erachter (sectie~\ref{sec:uitlegbaarheid-gebruikersondersteuning}). Dit onderzoek toont aan dat die redenen rechtstreeks uit de berekening van de score kunnen worden afgeleid, naar concreet bewijs in de e-mail verwijzen en in gewone taal kunnen worden weergegeven. De formulering wordt niet bij gebruikers getoetst en het effect op hun begrip, vertrouwen en beslissingen, inclusief \emph{overreliance} (sectie~\ref{subsec:uitleg-voor-gebruikers}), valt buiten de scope.

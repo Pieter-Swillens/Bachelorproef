@@ -138,3 +138,9 @@ out/
 # vscode folder
 .vscode/*
 .DS_Store
+
+# POC ignores
+.idea/
+.gradle
+build/
+datasets/

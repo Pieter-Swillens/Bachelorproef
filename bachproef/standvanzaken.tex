@@ -1,51 +1,348 @@
-\chapter{\IfLanguageName{dutch}{Stand van zaken}{State of the art}}%
+%%=============================================================================
+%% Stand van zaken
+%%=============================================================================
+
+\chapter{Stand van zaken}%
 \label{ch:stand-van-zaken}
 
-% Tip: Begin elk hoofdstuk met een paragraaf inleiding die beschrijft hoe
-% dit hoofdstuk past binnen het geheel van de bachelorproef. Geef in het
-% bijzonder aan wat de link is met het vorige en volgende hoofdstuk.
+Dit hoofdstuk geeft een overzicht van de stand van zaken rond de detectie van phishingmails en vormt het theoretisch kader bij de onderzoeksvragen uit Hoofdstuk~\ref{ch:inleiding}. Eerst worden de detectiekenmerken besproken die uit een e-mail kunnen worden afgeleid. Daarna komen de extractie van die kenmerken, de methoden voor phishingdetectie, uitlegbaarheid en gebruikersondersteuning en de evaluatiecriteria aan bod. De bevindingen uit dit hoofdstuk vormen de basis voor de methodologie in Hoofdstuk~\ref{ch:methodologie}.
 
-% Pas na deze inleidende paragraaf komt de eerste sectiehoofding.
+%%=============================================================================
+\section{Detectiekenmerken van phishingmails}%
+\label{sec:kenmerken-detectie}
 
-Dit hoofdstuk bevat je literatuurstudie. De inhoud gaat verder op de inleiding, maar zal het onderwerp van de bachelorproef *diepgaand* uitspitten. De bedoeling is dat de lezer na lezing van dit hoofdstuk helemaal op de hoogte is van de huidige stand van zaken (state-of-the-art) in het onderzoeksdomein. Iemand die niet vertrouwd is met het onderwerp, weet nu voldoende om de rest van het verhaal te kunnen volgen, zonder dat die er nog andere informatie moet over opzoeken \autocite{Pollefliet2011}.
+Een detectiekenmerk is een meetbare eigenschap van een e-mail die kan helpen om phishing te herkennen. Met het doel van deze bachelorproef in gedachten, wordt een selectie gemaakt van relevante detectiekenmerken. De kenmerken die verder worden besproken vormen dus geen exhaustieve lijst.
 
-Je verwijst bij elke bewering die je doet, vakterm die je introduceert, enz.\ naar je bronnen. In \LaTeX{} kan dat met het commando \texttt{$\backslash${textcite\{\}}} of \texttt{$\backslash${autocite\{\}}}. Als argument van het commando geef je de ``sleutel'' van een ``record'' in een bibliografische databank in het Bib\LaTeX{}-formaat (een tekstbestand). Als je expliciet naar de auteur verwijst in de zin (narratieve referentie), gebruik je \texttt{$\backslash${}textcite\{\}}. Soms is de auteursnaam niet expliciet een onderdeel van de zin, dan gebruik je \texttt{$\backslash${}autocite\{\}} (referentie tussen haakjes). Dit gebruik je bv.~bij een citaat, of om in het bijschrift van een overgenomen afbeelding, broncode, tabel, enz. te verwijzen naar de bron. In de volgende paragraaf een voorbeeld van elk.
+%%-----------------------------------------------------------------------------
+\subsection{Afzender en e-mail\-headers}%
+\label{subsec:afzender-headers}
 
-\textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
+Detectiekenmerken met betrekking tot afzendergegevens en e-mailheaders worden afgeleid uit velden die zijn vastgelegd in RFC~5322 \autocite{Resnick2008}, de standaard voor het formaat van een e-mail. De header van een e-mail bevat onder andere metadata over de afzender, het transport en de authenticatie van een bericht.
 
-Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je verwijst meteen naar een bron in de eerste zin die erop gebaseerd is, dus niet pas op het einde van een paragraaf.
+SMTP, het protocol waarmee e-mail wordt getransporteerd, controleert niet of de afzender werkelijk is wie hij beweert te zijn. Een aanvaller kan daardoor willekeurige waarden invullen in afzendervelden en zo een vertrouwde afzender imiteren \autocite{Hu2018}. Voor phishingdetectie is het daarom belangrijk om velden die de afzender kan manipuleren te onderscheiden van velden die de ontvangende mailserver toevoegt en die dus betrouwbaarder zijn.
 
-\begin{figure}
+\paragraph{Consistentie van de afzenderidentiteit.}
+Een e-mail verwijst via meerdere headervelden naar een afzender:
+\begin{enumerate}
+    \item \textbf{From}: het e-mailadres en de eventuele weergavenaam van de afzender, zoals weergegeven aan de ontvanger;
+    \item \textbf{Reply-To}: het adres waarnaar het antwoord wordt verstuurd;
+    \item \textbf{Return-Path}: het adres waarnaar een onbezorgbaar bericht wordt teruggestuurd.
+\end{enumerate}
+
+Bij een legitieme e-mail verwijzen deze velden doorgaans naar dezelfde persoon of hetzelfde domein. Een aanvaller kan echter één of meerdere van deze velden vervalsen, zodat het bericht betrouwbaar overkomt en antwoorden toch naar de aanvaller worden gestuurd \autocite{Hu2018}.
+
+Op basis van de technieken die \textcite{Veit2025} beschrijven, kunnen vier controles op deze headervelden worden onderscheiden:
+\begin{enumerate}
+    \item \textbf{Controle op domeinconsistentie in afzendervelden.} De domeinen in de velden \emph{From}, \emph{Reply-To} en \emph{Return-Path} worden vergeleken om afwijkingen tussen het vermelde afzenderadres, het antwoordadres en het retouradres te detecteren.
+    \item \textbf{Controle op consistentie tussen weergavenaam en e-mailadres.} De weergegeven naam van de afzender wordt vergeleken met het bijbehorende e-mailadres om mogelijke discrepanties in de afzenderidentiteit te identificeren. Bij \emph{display-name spoofing} komt de weergegeven naam niet overeen met de naam in het e-mailadres. Deze techniek wordt volgens \textcite{Cidon2019} frequent ingezet bij \emph{business email compromise}, waarbij de aanvaller zich voordoet als een vertrouwde persoon, zoals een collega of leidinggevende.
+    \item \textbf{Controle op homografische domeinnamen.} De domeinnaam wordt gecontroleerd op tekens uit meerdere alfabetten. Bij een homograafaanval vervangt de aanvaller namelijk tekens in een domeinnaam door tekens uit een ander alfabet die er visueel identiek uitzien, zodat de domeinnaam op die van een legitieme organisatie lijkt \autocite{Sawabe2019}. Tabel~\ref{tab:homograaf} toont hoe de ontvanger geen verschil ziet tussen twee varianten van \emph{paypal.com}, terwijl het wel degelijk om twee verschillende domeinen gaat.
+    \item \textbf{Gelijkenis met legitieme domeinen.} Een aanvaller kan een domein registreren dat op dat van een bekende organisatie lijkt, zodat het adres op het eerste gezicht betrouwbaar overkomt. Veelvoorkomende technieken zijn:
+        \begin{itemize}
+        \item \emph{typografische variaties}, zoals \emph{rn} in plaats van \emph{m};
+        \item \emph{toegevoegde woorden}, zoals \emph{secure} in \url{secure-paypal.com};
+        \item \emph{een afwijkend topniveaudomein}, zoals \url{paypal.org} in plaats van \url{paypal.com};
+        \item \emph{een merknaam als subdomein}, zoals \url{paypal.phishing-example.com}. Het adres lijkt dan naar PayPal te verwijzen, terwijl het geregistreerde domein \url{phishing-example.com} is.
+        \end{itemize}
+\end{enumerate}
+
+De eerste drie controles zijn rechtstreeks uit de header af te leiden. De vierde vereist een referentielijst van legitieme domeinen en is zonder die context onbetrouwbaar. Geen van deze controles bewijst op zich phishing. Een afwijkend \emph{Reply-To} komt bijvoorbeeld ook voor bij nieuwsbrieven die via een externe verzenddienst worden verstuurd.
+
+\begin{table}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{grail.jpg}
-  \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
-\end{figure}
-
-\begin{listing}
-  \begin{minted}{python}
-    import pandas as pd
-    import seaborn as sns
-
-    penguins = sns.load_dataset('penguins')
-    sns.relplot(data=penguins, x="flipper_length_mm", y="bill_length_mm", hue="species")
-  \end{minted}
-  \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
-\end{listing}
-
-\lipsum[7-20]
-
-\begin{table}
-  \centering
-  \begin{tabular}{lcr}
+  \begin{tabular}{llll}
     \toprule
-    \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
-    $\alpha$         & $\beta$          & $\gamma$         \\
+    \textbf{Woord} & \textbf{Letter} & \textbf{Alfabet} & \textbf{Unicode} \\
     \midrule
-    A                & 10.230           & a                \\
-    B                & 45.678           & b                \\
-    C                & 99.987           & c                \\
+    paypal & a & Latijns    & U+0061 \\
+    paypal & а & Cyrillisch & U+0430 \\
     \bottomrule
   \end{tabular}
-  \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
+  \caption[Voorbeeld van homografische domeinnamen]{\label{tab:homograaf}Voorbeeld van visueel gelijkende tekens in een domeinnaam \autocite{Davis2026}.}
 \end{table}
 
+\paragraph{Authenticatiekenmerken.}
+\label{subsec:afzender-headers:authenticatiekenmerken}
+Er zijn drie mechanismen om te controleren of een e-mail daadwerkelijk afkomstig is van het gebruikte domein: SPF \autocite{Kitterman2014}, DKIM \autocite{Crocker2011} en DMARC \autocite{Herr2026}. Elk mechanisme controleert een ander aspect van de herkomst en integriteit van een bericht en levert informatie op die als detectiekenmerk kan dienen.
+
+\begin{enumerate}
+    \item \textbf{SPF-controle.} De domeineigenaar bepaalt via DNS welke mailservers e-mails namens zijn domein mogen versturen. De ontvangende server controleert of de verzendende server gemachtigd is. Hierbij wordt het domein uit de SMTP-envelope gecontroleerd, dat niet noodzakelijk overeenkomt met het zichtbare \emph{From}-adres \autocite{Kitterman2014}.
+    \item \textbf{DKIM-controle.} De verzendende partij voegt een digitale handtekening toe aan bepaalde onderdelen van de e-mail. De ontvangende server controleert deze handtekening met een publieke sleutel die via DNS beschikbaar is \autocite{Crocker2011}. Een geldige handtekening bevestigt dat de ondertekende onderdelen niet zijn gewijzigd. Het domein waarvoor de handtekening geldig is, hoeft niet overeen te komen met het domein in het zichtbare \emph{From}-adres.
+    \item \textbf{DMARC-controle.} DMARC controleert of SPF of DKIM slaagt en of het bijbehorende domein overeenkomt met het domein in het zichtbare \emph{From}-veld. Deze overeenkomst heet \emph{alignering} \autocite{Herr2026}. De domeineigenaar kan ook aangeven hoe ontvangers berichten moeten behandelen die niet aan deze voorwaarden voldoen: niets doen (\emph{none}), als verdacht behandelen (\emph{quarantine}) of weigeren (\emph{reject}). De ontvanger is echter niet verplicht dit advies te volgen \autocite{Herr2026}.
+\end{enumerate}
+
+De ontvangende server legt de resultaten van deze controles vast in het headerveld \emph{Authen\-tication-Results} \autocite{Kucherawy2019}. Mogelijke waarden zijn \emph{pass}, \emph{fail} of \emph{none}. Zo'n resultaat geeft aan wat een controle heeft opgeleverd, maar is op zichzelf geen oordeel over de betrouwbaarheid van een bericht.
+Authenticatie kan namelijk ook falen bij legitieme berichten. Wanneer een e-mail wordt doorgestuurd, kan SPF mislukken omdat de doorsturende server niet op de lijst van het oorspronkelijke domein staat. Bij mailinglijsten kan een aangepast bericht dan weer een DKIM-handtekening ongeldig maken \autocite{Herr2026}. Authenticated Received Chain (ARC) werd ontwikkeld om de eerdere authenticatieresultaten tijdens het doorsturen te bewaren \autocite{Andersen2019}.
+
+Omgekeerd garandeert een geslaagde authenticatie niet dat een bericht betrouwbaar is. Een aanvaller kan immers een eigen domein registreren en daarvoor geldige SPF-, DKIM- en DMARC-in\-stellingen configureren. Een geldig DMARC-resul\-taat toont enkel dat het gebruik van het domein is goedgekeurd door de domeineigenaar, en zegt dus niets over de betrouwbaarheid van het bericht of de afzender \autocite{Herr2026}.
+Een aanvaller kan via DMARC dus geen bericht versturen uit naam van een domein dat hijzelf niet beheert. Wél kan de aanvaller een gelijkaardig domein registreren dat er visueel gelijkaardig uitziet \autocite{Herr2026}. \textcite{Hu2018} stelden daarnaast vast dat de meeste geteste e-mailproviders vervalste berichten ondanks beschikbare authenticatieprotocollen toch aan gebruikers leverden.
+
+Authenticatieresultaten zijn daarom bruikbare signalen voor phishingdetectie, maar moeten samen met andere kenmerken worden beoordeeld. Ze zeggen iets over de authenticatie van een domein en de integriteit van bepaalde berichtonderdelen, maar volstaan niet om een e-mail als legitiem of kwaadaardig te classificeren.
+
+\paragraph{Transport- en infrastructuurkenmerken.}
+\label{subsec:afzender-headers:transport}
+Naast de afzendergegevens en de authenticatieresultaten bevat de header ook technische informatie over hoe een bericht is verstuurd. De belangrijkste kenmerken zijn:
+
+\begin{enumerate}
+    \item \textbf{De Received-keten.} Elke mailserver die een bericht verwerkt, voegt een Received-header toe met informatie over de ontvangst ervan. Deze informatie omvat een timestamp en gegevens over de betrokken servers \autocite{Resnick2008}. Samen geven deze headers inzicht in de route die een e-mail heeft afgelegd. Mogelijke detectiekenmerken zijn het aantal hops, afwijkende ontvangsttijdstippen en de reputatie of geografische locatie van betrokken IP-adressen.
+    \item \textbf{De \emph{Message-ID}.} Dit veld bevat een unieke identificatie van de e-mail, doorgaans in de vorm \emph{<uniek-id@domein.be>} \autocite{Resnick2008}. Het domein na het \emph{@}-teken kan worden vergeleken met het domein in het \emph{From}-adres.
+\end{enumerate}
+
+\textcite{Gascon2018} bewezen dat kenmerken die onafhankelijk zijn van de berichtinhoud, zoals de header- en transportgegevens van een e-mail, afwijkende patronen in het e-mailverkeer kunnen herkennen. Aangezien de berichttekst hiervoor niet hoeft te worden geanalyseerd, biedt dit ook bijkomende privacyvoordelen.
+
+%%-----------------------------------------------------------------------------
+\subsection{Inhoud en taalgebruik}%
+\label{subsec:inhoud-taalgebruik}
+
+Lexicale kenmerken beschrijven het woordgebruik en de tekstuele patronen van een bericht. Volgens \textcite{Salloum2022} worden voor phishingdetectie verschillende technieken gebruikt om deze kenmerken om te zetten in informatie die door classificatiemodellen kan worden verwerkt. Veelgebruikte methoden zijn:
+\begin{enumerate}
+    \item \textbf{TF-IDF.} \emph{TF-IDF} staat voor \emph{Term Frequency–Inverse Document Frequency} \autocite{ElKhair2009}. Het is een veelgebruikte techniek binnen \emph{natural language processing} om woorden in documenten een gewicht toe te kennen. De techniek wordt vaak toegepast in combinatie met het \emph{Bag-of-Words (BoW)}-model \autocite{Salloum2022}. \emph{BoW} registreert hoe vaak elk woord in een document voorkomt, terwijl de \emph{inverse document frequency} rekening houdt met de verspreiding van dat woord over de volledige documentverzameling. Hierbij wordt een logaritmische functie gebruikt om woorden die in veel documenten voorkomen een lager gewicht toe te kennen. Zo krijgen algemene woorden, zoals ``de'', ``het'' en ``een'', doorgaans een lager gewicht dan woorden die slechts in een beperkt aantal documenten voorkomen en daardoor mogelijk meer onderscheidende informatie bevatten.
+    \item \textbf{Trefwoordlijsten.} Phishingmails doen zich vaak voor als een vertrouwde organisatie die de ontvanger vraagt om bijvoorbeeld inloggegevens of persoonsgegevens te geven om een vermeend probleem met een account op te lossen \autocite{Fette2007}. Een vooraf opgestelde lijst van woorden en woordgroepen rond bepaalde thema's maakt dit taalgebruik meetbaar. \textcite{Akinyelu2014} gebruikten zo'n referentielijst als invoer voor hun random-forestclassifier, die hij uitwerkte in het kader van zijn onderzoek.
+\end{enumerate}
+
+\paragraph{Syntactische en stilometrische kenmerken.}
+\label{subsec:inhoud-taalgebruik:stilometrische-kenmerken}
+Syntactische kenmerken beschrijven hoe zinnen zijn opgebouwd en stilometrische kenmerken patronen in schrijfstijl. Het domein kent een breed scala aan zulke kenmerken, waarvan hier slechts een greep wordt besproken. Voorbeelden zijn de frequentie van leestekens en hoofdletters en stijlmetingen zoals het aantal alinea's \autocite{Stringhini2014}. Ook woord- en zinslengte, spelfouten en generieke aanspreekvormen zoals \emph{Geachte klant} kunnen als kenmerk dienen.
+
+\textcite{Duman2016} combineerden onder andere stilometrische kenmerken met headerkenmerken in EmailProfiler om spearphishing te detecteren. Het uitgangspunt is dat afwijkingen van het gebruikelijke schrijfgedrag van een afzender kunnen wijzen op een poging tot imitatie. De betrouwbaarheid van deze aanpak hangt echter af van de beschikbaarheid van voldoende vergelijkbare berichten, aangezien de normale schrijfstijl van de afzender gemodelleerd dient te worden. Daarom zijn stilometrische kenmerken minder geschikt wanneer slechts één korte e-mail beschikbaar is, omdat die onvoldoende informatie bevat om een betrouwbare vergelijking met de gebruikelijke schrijfstijl van de afzender te maken \autocite{Stringhini2014}.
+
+\paragraph{Neurale modellen.}
+Neurale modellen kunnen verbanden tussen woorden en hun context leren herkennen. In tegenstelling tot methoden die bijvoorbeeld tellen hoe vaak bepaalde woorden voorkomen, kunnen deze modellen ook complexere patronen in de tekst leren \autocite{Salloum2022}. Hiervoor wordt de tekst omgezet in numerieke representaties die het model gebruikt om e-mails als phishing of legitiem te classificeren.
+
+\begin{enumerate}
+    \item \textbf{\emph{Word embeddings}.} Word embeddings stellen woorden voor als vectoren die verbanden tussen woorden vastleggen. Woorden die in vergelijkbare contexten voorkomen, krijgen vergelijkbare representaties, zodat een model verwante formuleringen kan herkennen \autocite{Salloum2022}. Traditionele word embeddings kennen één vaste vector toe aan elk woord en houden daarom geen rekening met de context.
+    \item \textbf{\emph{Transformers}.} Transformers modelleren relaties tussen woorden op basis van een \emph{attentionmechanism} \autocite{Vaswani2017}.\\ BERT is een voorbeeld dat contextafhankelijke representaties leert op basis van zowel de voorafgaande als de volgende tekst \autocite{Devlin2019}.
+\end{enumerate}
+
+Hoewel neurale modellen complexe patronen kunnen aanleren, hangen prestaties sterk af van de gegevens waarop ze zijn getraind \autocite{Hammoudeh2024}. Verder zijn hun voorspellingen minder rechtstreeks interpreteerbaar dan die van eenvoudige kenmerken, zoals de aanwezigheid van een specifiek trefwoord \autocite{Rudin2019}.
+
+%%-----------------------------------------------------------------------------
+\subsection{URL's en hyperlinks}%
+\label{subsec:urls-hyperlinks}
+
+Phishingmails kunnen links bevatten die de ontvanger naar nagemaakte websites leiden, waar wordt geprobeerd gevoelige informatie, zoals inloggegevens, te verkrijgen \autocite{Varshney2016}.
+URL- en hyperlinkkenmerken beschrijven de opbouw van die links, het domein waarnaar ze verwijzen en of de zichtbare link overeenkomt met de werkelijke bestemming.
+
+\paragraph{Lexicale URL-kenmerken.}
+Lexicale kenmerken beschrijven de tekstuele structuur van de URL zelf, zoals:
+\begin{enumerate}
+    \item \textbf{Lengte en opbouw.} Een lange URL met veel punten, streepjes of subdomeinen kan het echte domein verbergen. Neem bijvoorbeeld \url{bank.be.phishing.com}. Hoewel het domein eigendom lijkt te zijn van een bank, is het eigenlijke domein \emph{phishing.com} \autocite{Ma2009};
+    \item \textbf{Misbruik van user info.} Wanneer er een \emph{@} in de URL voorkomt, zal de browser alles voor dit teken, de zogenaamde \emph{user info}, negeren \autocite{Berners2005}. Een link als \url{https://voorbeeldbank.be@phishing.com} routeert dus naar \emph{phishing.com};
+    \item \textbf{Verdachte woorden of merknamen.} Woorden als \emph{pay}, \emph{login}, \emph{update} of \emph{app} en bekende merknamen in het domein of pad wekken vertrouwen, ook al behoort het domein niet toe aan de organisatie \autocite{Tupsamudre2021}.
+\end{enumerate}
+
+Met URLNet toonden \textcite{Le2018} aan dat een neuraal netwerk in staat is om zelf kenmerken te ontdekken uit een URL en dit zowel op teken- als op woordniveau. Het nadeel van een neuraal netwerk is echter dat een groot deel van de uitlegbaarheid daardoor verloren gaat.
+
+\paragraph{Misleidende hyperlinks.}
+\label{subsec:urls-hyperlinks:misleidende-hyperlinks}
+
+De zichtbare tekst van een hyperlink hoeft niet overeen te komen met de werkelijke bestemming. \textcite{Veit2025} identificeerden verschillende linkgerelateerde misleidingstechnieken, waaronder technieken die rechtstreeks uit de HTML-structuur van een e-mail kunnen worden afgeleid:
+
+\begin{enumerate}
+    \item \textbf{Link mismatch.} De tekst die door de link wordt getoond komt niet overeen met de werkelijke bestemming \autocite{Fette2007,Veit2025};
+    \item \textbf{Valse tooltip.} Een tooltip is een klein venster dat extra informatie toont wanneer de gebruiker met de muis over een link beweegt. Een aanvaller kan daarin een betrouwbaar ogende bestemming tonen, terwijl de link naar een kwaadaardige webpagina leidt, waardoor de controle van de gebruiker misleid wordt \autocite{Veit2025};
+    \item \textbf{Hexadecimale codering.} Een aanvaller kan hexadecimaal geëncodeerde tekens gebruiken om zo de link onleesbaar te maken voor personen. \textcite{Veit2025} geven aan dat een geëncodeerd domein vaak wordt bijgestaan door een leesbaar subdomein dat het vertrouwen van het slachtoffer weet te wekken.
+\end{enumerate}
+
+%%-----------------------------------------------------------------------------
+\subsection{Bijlagen}%
+\label{subsec:bijlagen}
+
+Een bijlage kan schadelijke code uitvoeren op het toestel van het slachtoffer van zodra het bestand wordt geopend.
+Detectiekenmerken voor bijlagen zijn te vinden in de bestandsnaam en metadata, alsook in de statische documentkenmerken. Deze kenmerken leveren informatie op zonder dat de bijlage wordt uitgevoerd.
+
+\begin{enumerate}
+    \item \textbf{Dubbele bestandsextensie.} Aanvallers kunnen een uitvoerbaar bestand verbergen achter een onschuldig ogende extensie, zoals \emph{example.jpg.exe} \autocite{Alazab2016}. Enkel de laatste extensie bepaalt het bestandstype.
+    \item \textbf{Metadata-kenmerken.} Het MIME-type geeft aan om welk soort bestand het gaat. Een discrepantie tussen het MIME-type en de extensie kan erop wijzen dat een bijlage een ander bestandstype is dan gedacht \autocite{Mendes2025}. Ook de bestandsgrootte kan als detectiekenmerk dienen, bijvoorbeeld bij bijlagen met een ongewoon grote omvang \autocite{Mendes2025}.
+    \item \textbf{Statische documentkenmerken.} Bij PDF- en Office-documenten kan de interne structuur worden onderzocht op kwaadaardige JavaScript-code \autocite{Srndic2013}. Hiervoor hoeft het document niet geopend te worden.
+\end{enumerate}
+
+Kenmerken van bijlagen kunnen bruikbare signalen zijn voor phishingdetectie, maar blijken uit de experimenten van \textcite{Mendes2025} geen doorslaggevende factor te zijn. De toevoeging van bijlagekenmerken aan een model gebaseerd op tekstkenmerken heeft geleid tot een verbetering van slechts 0,2 procentpunt.
+
+%%=============================================================================
+\section{Extractie van detectiekenmerken uit e-mails}%
+\label{sec:extractie-detectiekenmerken}
+
+Zoals reeds besproken in sectie~\ref{subsec:afzender-headers} volgt een e-mail de standaard uit RFC~5322 \autocite{Resnick2008}. Een e-mail bestaat dus uit headers en een body, die kan bestaan uit platte tekst, HTML, bijlagen of een combinatie van elementen. Een mailclient vertaalt dit onderliggende bericht naar een weergave die de gebruiker kan lezen en interpreteren. Daarbij kan echter informatie verloren gaan. Zo toont een mailclient vaak enkel de weergavenaam van de afzender en niet het volledige e-mailadres. Ook de zichtbare tekst van een hyperlink hoeft niet overeen te komen met de URL waarnaar de link daadwerkelijk verwijst \autocite{Veit2025}. De gebruiker ziet daardoor niet de werkelijke bestemming van de link, al kan deze wel uit de onderliggende HTML-code worden afgeleid. Volgens \textcite{Chen2020} kunnen aanvallers deze verschillen misbruiken om toch een legitiem ogende mail te fabriceren.
+
+Een toepassing die een e-mail wil beoordelen, heeft dus het originele bericht nodig en niet enkel de weergave ervan. Hieronder worden de mogelijkheden om een originele mail te verkrijgen besproken:
+
+\begin{enumerate}
+    \item \textbf{\texttt{.eml}-bestanden.} Een \texttt{.eml}-bestand bevat een volledige e-mail in het formaat volgens RFC~5322 \autocite{Resnick2008}, inclusief de headers die de ontvangende server heeft toegevoegd. Dit formaat komt overeen met dat van de datasets uit sectie~\ref{subsec:datasets}.
+    \item \textbf{API.} Veel mailproviders bieden een API aan waarmee een toepassing, mits toestemming van de gebruiker, een bericht rechtstreeks kan opvragen. Bij de Gmail API kan de e-mail bijvoorbeeld zowel als origineel bericht als in een door Gmail gestructureerde weergave worden opgehaald\footfullcite{GmailMessagesGet}.
+\end{enumerate}
+
+De verkregen gegevens zijn niet altijd onmiddellijk bruikbaar voor kenmerkextractie, omdat de headers en de berichtinhoud uit verschillende tekensets en coderingen kunnen bestaan \autocite{Koide2025}. Zo beschrijft RFC~2047 \autocite{Moore1996} hoe niet-ASCII-tekst in headers wordt weergegeven met behulp van zogenaamde \emph{encoded-words}, die moeten worden gedecodeerd om de oorspronkelijke tekst te achterhalen. Ook de wijze van aanlevering kan een codering toevoegen. De Gmail API levert namelijk het volledige bericht bij \texttt{format=raw} als base64 URL-gecodeerde tekenreeks\footfullcite{GmailMessages}. Waar nodig dienen de gegevens daarom eerst gedecodeerd te worden vooraleer kenmerken eruit kunnen worden afgeleid.
+
+%%=============================================================================
+\section{Methoden om phishingmails te detecteren}%
+\label{sec:methoden-detectie}
+
+Een afzonderlijk detectiekenmerk volstaat zelden om een e-mail als phishing te classificeren, aangezien dezelfde signalen ook bij legitieme berichten kunnen voorkomen. Een detectiesysteem moet daarom meerdere kenmerken combineren tot één beoordeling en bepalen hoe zwaar elk kenmerk doorweegt in de eindscore. Dit onderdeel bespreekt twee manieren om dat te doen: \emph{rule-based} detectie en detectie op basis van \emph{machine learning}.
+
+%%-----------------------------------------------------------------------------
+\subsection{Rule-based detectie}%
+\label{subsec:rulebased-detectie}
+
+Rule-based detectie is de meest directe vertaling van de detectiekenmerken uit sectie~\ref{sec:kenmerken-detectie} naar een werkend systeem. Elk kenmerk wordt daarbij uitgedrukt als een expliciete, deterministische beslisregel die op een e-mail kan worden toegepast.
+
+Het grootste voordeel van rule-based detectie is de transparantie. Voor elke inschatting is exact na te gaan welke regels hebben bijgedragen tot het resultaat \autocite{Rudin2019}. Deze regels kunnen verder vertaald worden naar een begrijpelijke uitleg voor eindgebruikers.
+
+Daarnaast is het toetsen van een regel computationeel goedkoop, waardoor e-mails snel kunnen worden geanalyseerd. Omdat de regels rechtstreeks door mensen opgesteld dienen te worden, is er geen trainingsdata nodig om tot een resultaat te komen.
+
+Naast deze voordelen kent rule-based detectie ook enkele nadelen. Een eerste nadeel is dat detectiekenmerken die vaak bij phishing voorkomen, ook in legitieme e-mails kunnen voorkomen. \textcite{Fette2007} tonen bijvoorbeeld aan dat bepaalde kenmerken zowel bij phishingmails als bij niet-phishingmails aanwezig zijn. Een afzonderlijk detectiekenmerk vormt bijgevolg slechts een aanwijzing voor mogelijke phishing. Pas een combinatie van meerdere kenmerken laat toe om met enige zekerheid van phishing uit te gaan.
+
+Een tweede nadeel is dat regels kunnen worden omzeild. Omdat het merendeel van de regels openlijk beschreven is, kunnen aanvallers hun berichten zo opstellen dat ze de gedocumenteerde regels vermijden en onder de drempelwaarde voor een phishingclassificatie blijven \autocite{Biggio2017}. Op die manier bereiken ze hun slachtoffer toch.
+
+Een laatste nadeel schuilt in het onderhoud. Regels moeten immers handmatig worden opgesteld en bijgehouden, wat volgens \textcite{Sebastiani2001} een groot nadeel is ten opzichte van self-learning methoden. Ook de bijdrage van individuele regels aan een totaalscore vraagt om de nodige aandacht. \textcite{Basnet2012} stelden vast dat een eenvoudige configuratie waarbij alle regels even zwaar doorwegen, niet de beste balans oplevert tussen vermijden van \emph{false negatives} en beperken van \emph{false positives}. Daarbij komt dat phishingmails evolueren, waardoor regels en gewichten voortdurend moeten worden herzien. Een systeem dat volledig op regels gebaseerd is, vergt blijvend onderhoud.
+
+%%-----------------------------------------------------------------------------
+\subsection{Detectie op basis van machine learning}%
+\label{subsec:machinelearning-detectie}
+
+\emph{Machine learning (ML)} vervangt de handmatig ingestelde gewichten door modellen \autocite{Salloum2022}. Deze modellen worden getraind op échte phishingmails en leren zelf de correlatie tussen kenmerken die frequent voorkomen bij phishingmails. De regels zelf verdwijnen dus niet, enkel de manier waarop ze worden gecombineerd verandert.
+
+\paragraph{Kenmerkselectie.}
+Bij kenmerkselectie wordt getracht enkel de kenmerken te behouden die bijdragen aan het onderscheiden tussen phishingmails en legitieme e-mails. Op die manier wordt het model sneller en minder gevoelig voor ruis. \textcite{Guyon2003} onderscheiden drie families van methoden om relevante kenmerken te selecteren:
+
+\begin{enumerate}
+    \item \textbf{Filtermethoden.} Bij filtermethoden wordt elk kenmerk afzonderlijk beoordeeld, nog voordat het model wordt getraind. Een veelgebruikte maatstaf is \emph{information gain}, die meet in welke mate de waarde van een kenmerk de onzekerheid over de klasse (phishing of legitiem) vermindert \autocite{Forman2003}. Kenmerken die laag scoren, worden verwijderd. Filtermethoden zijn snel en onafhankelijk van het gekozen model, maar houden geen rekening met de samenhang tussen kenmerken. Twee kenmerken die afzonderlijk zwak scoren, kunnen samen toch een belangrijke meerwaarde bieden \autocite{Guyon2003}.
+    \item \textbf{Wrappermethoden.} Bij wrappermethoden wordt het model getraind op verschillende subsets van kenmerken, waarna de subset met de beste prestatie wordt behouden \autocite{Kohavi1997}. Op die manier wordt er wel rekening gehouden met de samenhang tussen kenmerken. Het nadeel is de sterk oplopende rekenkost, want het aantal mogelijke subsets groeit exponentieel met het aantal kenmerken, en het model moet tegen elke subset getraind worden \autocite{Kohavi1997}.
+    \item \textbf{Embedded methoden.} Bij embedded methoden gebeurt de selectie tijdens het trainen van het model zelf \autocite{Guyon2003}. Een voorbeeld is L1-regula\-risatie. Daarbij kent het model aan elk kenmerk een gewicht toe dat aangeeft in welke mate dat kenmerk meetelt in de uiteindelijke beslissing. De som van de absolute waarden van alle gewichten wordt beperkt, zodat het model maar over een beperkt budget beschikt en niet elk kenmerk zwaar kan laten doorwegen. Het model moet dus kiezen aan welke kenmerken het gewicht wordt besteed. Kenmerken die weinig bijdragen aan de classificatie krijgen een gewicht van exact nul en spelen dan geen rol meer in het model \autocite{Fatih2024}. Hoe streng dit budget is, wordt bepaald door een instelbare parameter, waarbij geldt dat een strenger budget leidt tot minder kenmerken.
+\end{enumerate}
+
+\paragraph{Veelgebruikte modellen.}
+Voor phishingdetectie kunnen verschillende modellen gebruikt worden:
+
+\begin{enumerate}
+    \item \textbf{Gradient boosting.} Gradient boosting is geschikt voor gestructureerde, tabulaire data, zoals de header-, authenticatie- en URL-ken\-merken uit sectie~\ref{sec:kenmerken-detectie}. Het bouwt een reeks kleine beslissingsbomen, waarbij elke nieuwe boom probeert de fouten van de voorgaande bomen te corrigeren. Een beslissingsboom bestaat uit opeenvolgende vragen over de kenmerken van een e-mail. Op basis van de antwoorden wordt het bericht naar een classificatie geleid. Onderzoek van \textcite{Grinsztajn2022} toont aan dat boomgebaseerde modellen, zoals gradient boosting, op tabulaire data vaak competitief blijven met \emph{deep learning}-methoden, terwijl ze minder rekenkracht vereisen. XGBoost is een veelgebruikte implementatie van gradient boosting \autocite{Chen2016}.
+    \item \textbf{Transformermodels.} Transformermodels zijn het meest geschikt voor ongestructureerde data, zoals de tekstinhoud van een bericht. Modellen zoals BERT worden eerst op grote hoeveelheden tekst voorgetraind en daarna bijgetraind op als phishing bestempelde e-mails \autocite{Devlin2019}. Ze houden rekening met de volledige context van een zin.
+    \item \textbf{Large Language Models (LLM).} \emph{LLM's} kunnen ook zonder taakspecifieke training worden ingezet. \textcite{Koide2025} ontwikkelden een systeem waarbij inhoud van een e-mail als prompt aan een LLM werd aangeboden, waarna het model een beoordeling teruggaf.
+\end{enumerate}
+
+De hierboven besproken modellen leveren een antwoord op de vraag of een e-mail phishing is of niet. Echter blijken veel classifiers volgens \textcite{Niculescu-Mizil2005} geen kansen te produceren die goed gekalibreerd zijn, waardoor een extra kalibratiestap nodig is.
+
+\paragraph{Logistische regressie.}
+\label{subsec:machinelearning-detectie:logistische-regressie}
+Een model dat voor phishingdetectie goede prestaties behaalt en bovendien interpreteerbaar is, is logistische regressie \autocite{Alhuzali2025}. Elk kenmerk krijgt daarbij een gewicht dat aangeeft hoeveel het bijdraagt aan de score. Dat is vergelijkbaar met de gewogen scores bij rule-based systemen (zie sectie~\ref{subsec:rulebased-detectie}), maar met gewichten die uit data worden geleerd.
+
+\paragraph{Nadelen.}
+\label{subsec:machinelearning-detectie:nadelen}
+Machine learning lost het probleem van handmatig ingestelde gewichten op, maar brengt eigen nadelen met zich mee. Een eerste nadeel is de afhankelijkheid van data. Een model leert enkel wat in de trainingsdata aanwezig is, waardoor de kwaliteit rechtstreeks afhangt van de kwaliteit en de representativiteit ervan \autocite{Mendes2025}.
+
+Een tweede nadeel is dat phishingaanvallen voortdurend evolueren. Hierdoor vertonen nieuwe berichten andere kenmerken dan de berichten uit de trainingsdata. \textcite{Fernando2026} beschrijven dit als \emph{concept drift}. Het gevolg hiervan is dat het model geleidelijk minder goed gaat presteren, omdat het op oude data is getraind.
+
+Tot slot komen er voor LLM's nog twee specifieke nadelen bovenop. De verklaring die een LLM bij zijn beoordeling geeft, hoeft niet de werkelijke reden van de beslissing weer te geven, waardoor ze overtuigend kan klinken zonder correct te zijn \autocite{Turpin2023}. Verder kan een aanvaller via \emph{indirect prompt injection} instructies in de e-mailinhoud verwerken om de beoordeling van het model te beïnvloeden \autocite{Greshake2023}.
+
+%%=============================================================================
+\section{Uitlegbaarheid en gebruikersondersteuning}%
+\label{sec:uitlegbaarheid-gebruikersondersteuning}
+
+Deze bachelorproef wil de basis leggen voor ondersteuning van de gebruiker bij de beoordeling van potentiële phishingmails. Een cruciaal onderdeel daarvan is een uitleg over waarom een mail een bepaalde risicoscore krijgt. Het onderzoeksveld dat zich hiermee bezighoudt, heet \emph{Explainable AI} (XAI) en richt zich op methoden die de beslissingen van AI-systemen begrijpelijk maken voor mensen \autocite{Guidotti2018}.
+
+%%-----------------------------------------------------------------------------
+\subsection{Vormen van uitlegbaarheid}%
+\label{subsec:vormen-van-uitlegbaarheid}
+
+Binnen het onderzoek naar XAI staan methoden centraal die de beslissingen en voorspellingen van AI-systemen begrijpelijk maken voor mensen \autocite{Miller2017}. De termen \emph{interpretability} en \emph{explainability} worden niet altijd op dezelfde manier gebruikt, en ze hebben ook geen eenduidige definitie \autocite{Lipton2016}.
+
+In deze bachelorproef wordt uitlegbaarheid opgevat als de mate waarin een systeem de redenen voor zijn beoordeling kan weergeven op een manier die een mens kan volgen. Op basis van inzichten uit de sociale wetenschappen stelt \textcite{Miller2017} dat mensen daarbij geen volledige opsomming van oorzaken verwachten, maar een selectie van de belangrijkste factoren die tot een resultaat bijdragen.
+
+\paragraph{Uitleg per type model.}
+Hoe een uitleg tot stand komt, hangt rechtstreeks samen met het type model. Neem een interpreteerbaar model dat op regels gebaseerd is, zoals besproken in sectie~\ref{subsec:rulebased-detectie}. De werking van zo'n model is goed te volgen en te reproduceren: elke regel is een expliciete test met een binaire uitkomst, en aan elke regel kan vooraf een uitleg worden gekoppeld die wordt getoond wanneer de regel van toepassing is. Bij de \emph{machine learning}-methoden uit sectie~\ref{subsec:machinelearning-detectie} is dat moeilijker af te dwingen, omdat de uitleg achteraf moet worden opgebouwd. In de literatuur heet dit \emph{post-hoc} uitleg, die met \emph{XAI}-technieken wordt verkregen.
+Voorbeelden van zulke technieken zijn LIME \autocite{Ribeiro2016} en SHAP \autocite{Lundberg2017}, die per voorspelling aangeven welke kenmerken het meest hebben bijgedragen. Post-hoc uitleg is echter niet zonder risico. Beide technieken benaderen het model en kunnen zich laten misleiden, waardoor de uitleg een gunstiger beeld schetst dan het model verdient \autocite{Slack2019}. \textcite{Rudin2019} pleit er daarom voor om interpreteerbare modellen te verkiezen, zeker naarmate de impact van een beslissing groter wordt.
+
+\paragraph{Globale en lokale uitleg.}
+Tot slot kan er een onderscheid worden gemaakt tussen globale en lokale uitleg. Globale uitleg geeft inzicht in de werking van een model als geheel, bijvoorbeeld door aan te tonen welke kenmerken een belangrijke rol spelen bij het detecteren van phishingmails. Lokale uitleg richt zich daarentegen op een individuele voorspelling en verduidelijkt welke kenmerken hebben bijgedragen aan de risicoscore van een specifieke e-mail \autocite{Guidotti2018}.
+
+%%-----------------------------------------------------------------------------
+\subsection{Uitleg voor gebruikers}%
+\label{subsec:uitleg-voor-gebruikers}
+
+Browsers en mailclients waarschuwen gebruikers al langer om waakzaam te zijn voor online fraude. De effectiviteit van die waarschuwingen blijkt echter beperkt. \textcite{Egelman2008} toonden aan dat een groot deel van de gebruikers waarschuwingen voor phishingwebsites negeerden. Gewenning speelt hierbij een belangrijke rol, aangezien gebruikers steeds minder aandacht besteden aan waarschuwingen die ze herhaaldelijk te zien krijgen \autocite{Anderson2015}.
+
+Naast gewenning is ook de plaatsing van een waarschuwing bepalend voor haar effectiviteit. \textcite{Petelka2019} onderzochten waarschuwingen in e-mailclients en vonden dat een waarschuwing die dicht bij de verdachte link staat, beter werkt dan een algemene melding elders in het bericht.
+
+Naast de plaatsing speelt ook de inhoud van een waarschuwing een rol. \textcite{Egelman2008} concludeerden namelijk dat veel gebruikers de waarschuwingen van webbrowsers voor phishingwebsites niet begrepen. Technische signalen, zoals de resultaten van \emph{SPF}- of \emph{DMARC}-controles, zijn voor wie geen technische achtergrond heeft, moeilijk te interpreteren. Het omzetten van die signalen naar begrijpelijke taal is echter niet vanzelfsprekend, aangezien de uitleg de betekenis moet verduidelijken zonder de bewijskracht ervan te overdrijven of af te zwakken.
+
+Een begrijpelijke uitleg garandeert echter niet noodzakelijk een betere beslissing. Onderzoek naar AI-gedreven beslissingsondersteuning toont namelijk aan dat uitleg gebruikers ertoe kan brengen het AI-systeem te volgen, ook wanneer het fout is \autocite{Bucinca2021}. Dit fenomeen wordt \emph{overreliance} genoemd. Bij phishingdetectie kan een overtuigende uitleg ervoor zorgen dat de gebruiker een foutief oordeel zal vertrouwen.
+
+%%=============================================================================
+\section{Evaluatiecriteria}%
+\label{sec:evaluatiecriteria}
+
+De prestaties van een detectiesysteem hangen sterk af van twee keuzes: de data waarop het wordt getest en de metrieken waarmee de uitkomst wordt beoordeeld \autocite{Salloum2022}. Dit onderdeel bespreekt daarom eerst de beschikbare datasets en hun beperkingen, en vervolgens de gangbare evaluatiemetrieken.
+
+%%-----------------------------------------------------------------------------
+\subsection{Datasets}%
+\label{subsec:datasets}
+
+Er bestaan verschillende datasets die worden gebruikt om modellen te trainen en de prestaties van detectiesystemen te evalueren \autocite{Salloum2022}. Zo introduceerden \textcite{Mendes2025} MeAJOR, een verzameling van bestaande e-mailcorpora die onder meer bestaat uit de Enron-corpus \autocite{klimt2004}, met voornamelijk legitieme e-mails, en de Nazario-corpus\footfullcite{Nazario2025}, die phishingmails bevat.
+
+Er zijn volgens \textcite{Pajola2025} wel enkele beperkingen aan de bestaande corpora:
+\begin{enumerate}
+    \item \textbf{Verouderde data.} Heel wat corpora kennen hun oorsprong van voor 2010 en capteren daarom de huidige aanvalstechnieken onvoldoende;
+    \item \textbf{Taal.} De meeste corpora bevatten Engelstalige e-mails, wat de bruikbaarheid voor andere talen beperkt;
+    \item \textbf{Ongelijkvormige data.} Niet elk corpus bewaart dezelfde (meta)data, waardoor kenmerken die headers of HTML vereisen niet in elke dataset kunnen worden geëxtraheerd.
+\end{enumerate}
+
+%%-----------------------------------------------------------------------------
+\subsection{Evaluatiemetrieken voor phishingdetectie}%
+\label{subsec:evaluatiemetrieken}
+
+\paragraph{Confusion matrix.}
+Phishingdetectie wordt in de literatuur beschouwd als een binair classificatieprobleem, waarbij een e-mail als phishing of als legitiem wordt geclassificeerd. Door de inschatting te vergelijken met de werkelijkheid, kunnen vier mogelijke uitkomsten worden onderscheiden \autocite{Powers2020}:
+
+\begin{itemize}
+    \item \textbf{True positive (TP):} een phishingmail die als phishing wordt herkend;
+    \item \textbf{True negative (TN):} een legitieme e-mail die als legitiem wordt herkend;
+    \item \textbf{False positive (FP):} een legitieme e-mail die onterecht als phishing wordt ingeschat;
+    \item \textbf{False negative (FN):} een phishingmail die onterecht als legitiem wordt ingeschat.
+\end{itemize}
+
+De uitkomsten worden gevisualiseerd in een confusionmatrix zoals in Tabel~\ref{tab:confusion-matrix}.
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{lcc}
+        \toprule
+        & \begin{tabular}{c}\textbf{Ingeschat}\\\textbf{phishing}\end{tabular}
+        & \begin{tabular}{c}\textbf{Ingeschat}\\\textbf{legitiem}\end{tabular} \\
+        \midrule
+        \textbf{Werkelijk phishing} & TP & FN \\
+        \textbf{Werkelijk legitiem} & FP & TN \\
+        \bottomrule
+    \end{tabular}
+    \caption[Confusion matrix voor phishingdetectie]{\label{tab:confusion-matrix}Confusion matrix voor phishingdetectie \autocite{Salloum2022}.}
+\end{table}
+
+Op basis van de aantallen uit deze matrix worden evaluatieformules afgeleid, zoals beschreven door \textcite{Sokolova2009}.
+\bigskip
+
+\emph{Precision} meet de betrouwbaarheid van de positieve voorspellingen door te bepalen welk aandeel hiervan daadwerkelijk correct is:
+\begin{equation*}
+    \text{Precision} = \frac{TP}{TP + FP}
+\end{equation*}
+
+\emph{Recall} meet de volledigheid van de positieve voorspellingen door te bepalen welk aandeel van de daadwerkelijk positieve gevallen door het model is geïdentificeerd:
+\begin{equation*}
+    \text{Recall} = \frac{TP}{TP + FN}
+\end{equation*}
+
+De \emph{false-positive-rate} (FPR) toont welk deel van de legitieme e-mails ten onrechte als phishing wordt ingeschat:
+\begin{equation*}
+    \text{FPR} = \frac{FP}{FP + TN}
+\end{equation*}
+
+De \emph{F1-score} combineert precision en recall in één getal. Ze wordt berekend als het harmonisch gemiddelde van beide, waardoor ze enkel hoog is wanneer zowel precision als recall hoog zijn:
+\begin{equation*}
+    \text{F1-score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{equation*}
+
+Tot slot geeft \emph{accuracy} het aandeel correcte classificaties over alle e-mails:
+\begin{equation*}
+    \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+\end{equation*}
+
+In de praktijk worden deze maten niet even vaak gebruikt. In de analyse van \textcite{Salloum2022} was accuracy de meest gerapporteerde maat (83 experimenten), gevolgd door de F1-score (38), de confusion matrix (36) en precision en recall (elk 35) \autocite{Salloum2022}.

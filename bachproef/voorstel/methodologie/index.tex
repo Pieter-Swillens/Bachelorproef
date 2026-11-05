@@ -1,0 +1,122 @@
+\section{Methodologie}
+\label{sec:methodologie}
+
+Om de onderzoeksvraag te kunnen beantwoorden, wordt een proof of concept ontwikkeld.
+
+\subsection{Requirements}
+\label{subsec:requirements}
+Deelvraag 1 vraagt aan welke eisen een risicoscore moet voldoen om gebruikers te ondersteunen bij het beoordelen van e-mails. Het effect op gebruikers valt buiten de scope van dit onderzoek. De eisen worden afgeleid uit sectie~\ref{subsubsec:uitleg-voor-gebruikers}.
+
+\begin{description}
+  \item[R1: weinig \emph{false positives}.] Gebruikers wennen aan foutieve waarschuwingen die ze herhaaldelijk zien \autocite{Anderson2015}. False positives moeten daarom zo veel mogelijk vermeden worden.
+  \item[R2: aanwijzingen bij de bron.] Waarschuwingen werken beter dicht bij de verdachte link \autocite{Petelka2019}. De uitleg moet gebruikers dus kunnen wijzen op de plaats in de e-mail waar de aanwijzing staat.
+  \item[R3: begrijpelijke taal.] Veel gebruikers begrijpen technische waarschuwingen niet \autocite{Egelman2008}. De uitleg moet dus in gewone taal en zonder jargon zijn geschreven.
+  \item[R4: geen overdreven zekerheid.] Een overtuigende uitleg kan tot \emph{overreliance} leiden \autocite{Bucinca2021}. De uitleg mag dus geen overdreven zekerheid uitstralen en moet overeenkomen met de werkelijke beoordeling.
+\end{description}
+
+\subsection{Ontwerpkeuzes en scopeafbakening}
+\label{subsec:afbakening-scope}
+De oplossing kent aan een e-mail een risicoscore toe die aangeeft hoe sterk de aangeboden input op phishing wijst. De input volgt het formaat van RFC~5322 \autocite{Resnick2008}.
+
+Gelet op de eis van uitlegbaarheid, wordt gekozen voor een interpreteerbaar model. Zoals besproken in sectie~\ref{subsubsec:logistische-regressie} is logistische regressie een geschikte kandidaat, aangezien elk kenmerk een gewicht krijgt dat rechtstreeks aangeeft hoe het de risicoscore beïnvloedt. Verder kan er voor elke beslissing vooraf een uitleg worden gedefinieerd die dan in het uiteindelijke antwoord kan worden gecapteerd.
+
+De kenmerken waarop het model getraind zal worden, worden berekend uit de datasets die worden besproken in sectie~\ref{subsec:voorbereiding-data}. 
+
+Wat buiten de scope van dit onderzoek valt en dus niet wordt opgenomen:
+\begin{enumerate}
+    \item \textbf{Bijlagen als detectiekenmerk.} Zoals aangehaald in sectie \ref{subsubsec:bijlagen} blijken bijlagekenmerken volgens \textcite{Mendes2025} slechts een beperkte bijdrage te hebben aan het eindoordeel van het model. De geringe meerwaarde weegt niet op tegen de bijkomende complexiteit;
+    \item \textbf{LLM's voor beoordeling en uitleg.} Op basis van de bevindingen van \textcite{Turpin2023} valt een LLM af als generator van uitleg, aangezien de uitleg waarheidsgetrouw moet zijn, en dat kan een LLM niet in elk geval garanderen. Ook \emph{indirect prompt injection} \autocite{Greshake2023} (sectie~\ref{subsubsec:machinelearning-detectie:nadelen}) vormt een risico voor de correcte werking van de oplossing. De inhoud van een phishingmail wordt immers door een aanvaller bepaald en kan dus ongewenste instructies voor de LLM bevatten;
+    \item \textbf{Inhoudelijke (lexicale) kenmerken.} GenAI stelt foutloze en overtuigende teksten makkelijk op, waardoor taalkenmerken minder betrouwbaar worden dan structurele kenmerken. Verder zijn de beschikbare corpora overwegend Engelstalig \autocite{Pajola2025} (sectie~\ref{subsubsec:datasets}), wat maakt dat een model dat op woordgebruik wordt getraind niet voor een andere taal kan worden ingezet;
+    \item \textbf{Stilometrische kenmerken.} Deze kenmerken vergelijken het schrijfgedrag in een bericht met de gebruikelijke schrijfstijl van de afzender. Dat vereist voldoende eerdere berichten van dezelfde afzender \autocite{Stringhini2014} (sectie~\ref{subsubsec:inhoud-taalgebruik:stilometrische-kenmerken}), terwijl het algoritme telkens één afzonderlijk bericht beoordeelt;
+    \item \textbf{Authenticatiekenmerken.} De resultaten van SPF-, DKIM- en DMARC-controles (sectie~\ref{subsubsec:Afzender en e-mailheaders:authenticatiekenmerken}) worden niet als kenmerk opgenomen. De legitieme e-mails uit het SpamAssassin Public Corpus dateren van vóór de wijdverspreide invoering van deze authenticatiemechanismen en bevatten daardoor doorgaans geen \texttt{Authentication-Results}-header, terwijl de recente phishingmails uit de dataset die header vaak wel bevatten. Het model zou de aanwezigheid van die header dan als signaal voor phishing kunnen leren, terwijl ze enkel het tijdperk van de e-mail weerspiegelt. Moderne legitieme e-mails zouden daardoor ten onrechte als phishing worden aangemerkt, wat de \emph{false-positive-rate} (R1) zou verhogen.
+\end{enumerate}
+
+\subsection{Voorbereiding data}
+\label{subsec:voorbereiding-data}
+
+De in sectie~\ref{subsubsec:datasets} besproken corpora zijn niet geschikt voor dit onderzoek, omdat ze niet de vereiste e-mailheaders bevatten. Daarom wordt geen gebruik gemaakt van MeAJOR \autocite{Mendes2025}, Enron \autocite{klimt2004} of Nazario\footfullcite{Nazario2025}.
+
+De dataset waarop de oplossing wordt getraind, wordt opgebouwd uit de volgende twee datasets:
+\begin{enumerate}
+    \item \textbf{Phishing Pot.} Een verzameling phishingmails die actief onderhouden wordt door \textcite{PhishingPot};
+    \item \textbf{SpamAssassin Public Corpus.} Een verzameling e-mailberichten uit de vroege jaren 2000, met zowel ongewenste als legitieme e-mails\footfullcite{SpamAssassinCorpus}. Voor dit onderzoek wordt echter uitsluitend gebruikgemaakt van de partities \emph{easy\_ham} en \emph{hard\_ham}, die beide bestaan uit legitieme e-mails.
+\end{enumerate}
+
+\paragraph{Voorbereiding.} 
+Elke e-mail wordt ingelezen en omgezet naar een verwerkbare vorm. Indien nodig worden headers met \emph{encoded-words} (RFC~2047 \autocite{Moore1996}) of een base64-gecodeerde body eerst gedecodeerd.
+ 
+Vervolgens wordt de dataset opgesplitst in een trainingsset van 70\% en een testset van 30\%. Hierbij blijft de verhouding tussen phishingmails en legitieme e-mails in beide sets behouden. Een vaste seed zorgt ervoor dat de opsplitsing bij herhaaldelijke uitvoering reproduceerbaar is.
+
+Uit elk bericht worden vervolgens de kenmerken berekend. Deze kenmerken, samen met de indeling van de berichten in trainings- en testset, worden opgeslagen. Zo hoeven de berichten niet bij elk experiment opnieuw te worden verwerkt, en worden alle modelconfiguraties op dezelfde gegevens getraind.
+
+De parameters van het model, waaronder de beslissingsdrempel, worden afgesteld via \emph{cross-validation} op de trainingsset. Hierbij wordt de trainingsset in gelijke deelsets opgesplitst en wordt het model telkens getraind op alle deelsets behalve één, waarop het vervolgens wordt gevalideerd. 
+
+De drempel is de score vanaf waar een e-mail als phishing wordt aangeduid. Ze wordt zo gekozen dat de FPR in de validatiedeelsets het streefdoel van 3\% niet overschrijdt (\ref{subsec:requirements}, R1). De testset wordt pas daarna gebruikt, uitsluitend om het eindresultaat te rapporteren.
+
+\paragraph{Beperkingen van de data.}
+Voor zover bekend is er geen recente, publiek beschikbare dataset van legitieme e-mails die de volledige, ongewijzigde headers bewaart. Het SpamAssassin Public Corpus is daarom de enige bruikbare bron van legitieme e-mails met headers, ook al dateert het van begin jaren 2000 en raadt het project zelf aan om de legitieme set niet meer te gebruiken wanneer die ouder is dan 18 maanden.\footfullcite{SpamAssassinCorpusPolicy}
+Het risico bestaat dat het hedendaagse mailverkeer op punten afwijkt van deze verouderde data, wat de resultaten van het model kan beïnvloeden. Dit potentiële risico wordt meegenomen in de evaluatie van het model.
+
+\subsection{Kenmerkextractie}%
+\label{sec:kenmerkextractie}
+
+Uit elk bericht worden de kenmerken afgeleid die in sectie~\ref{subsec:afbakening-scope} binnen de scope vallen, voor zover ze rechtstreeks uit de datasets van sectie~\ref{subsec:voorbereiding-data} komen of eruit af te leiden zijn. Het gaat om vier families die besproken werden in sectie~\ref{subsec:kenmerken-detectie}. 
+
+De kenmerken worden eerst allemaal berekend als kandidaat-kenmerken. Welke ervan in het uiteindelijke model blijven, wordt bepaald aan de hand van L1-regularisatie, besproken in sectie~\ref{subsubsec:machinelearning-detectie}.
+
+\paragraph{Opbouw van de extractors.}
+Elke extractor levert twee elementen: een numerieke waarde voor het model en het concrete bewijs in de e-mail waarop die waarde berust. Zo kan de uitleg later controleerbaar naar de e-mail zelf verwijzen, wat requirement R2 (\ref{subsec:requirements}) vertaalt.
+
+\paragraph{Afzenderidentiteit.}
+De kenmerken in tabel~\ref{tab:kenmerken-afzender} volgen uit sectie~\ref{subsubsec:Afzender en e-mailheaders}. De controle op domeinen die lijken op legitieme domeinen en de controle op merken in de weergavenaam (A7) hangen af van een referentielijst.
+
+\input{voorstel/methodologie/tabellen/3.1.tabel-kenmerken-afzender.tex}
+
+\paragraph{Transportkenmerken.}
+De kenmerken in tabel~\ref{tab:kenmerken-transport} worden eveneens besproken in sectie~\ref{subsubsec:Afzender en e-mailheaders:transport}.
+
+\input{voorstel/methodologie/tabellen/3.2.tabel-kenmerken-transport.tex}
+
+Kenmerk B4 telt het aantal hops in de \texttt{Received}-keten. Kenmerk B5 meet het verschil tussen het \texttt{Date}-veld en het oudste \texttt{Received}-tijdstempel. Omdat \texttt{Date} door de afzender zelf wordt ingesteld en de \texttt{Received}-tijdstempels door de betrokken servers worden toegevoegd, kan een groot verschil wijzen op manipulatie. Kenmerk B6 controleert ten slotte of de tijdstempels van opeenvolgende hops chronologisch oplopen, aangezien een afwijkende volgorde kan wijzen op een toegevoegde of aangepaste \texttt{Received}-header.
+
+\paragraph{Lexicale URL-kenmerken.}
+De kenmerken in tabel~\ref{tab:kenmerken-url} volgen uit sectie~\ref{subsubsec:urls-hyperlinks}.
+
+\input{voorstel/methodologie/tabellen/3.3.tabel-url.tex}
+
+C9 steunt op de private sectie van de Public Suffix List, die onder meer gratis hostingplatformen bevat die ook door aanvallers worden misbruikt.
+
+\paragraph{Misleidende hyperlinks.}
+De kenmerken in tabel~\ref{tab:kenmerken-hyperlinks} volgen uit sectie~\ref{subsubsec:urls-hyperlinks::misleidende-hyperlinks}.
+Deze kenmerken zijn enkel van toepassing op e-mails waarvan de body een HTML-deel bevat. Bij platte tekst is de weergegeven tekst tegelijk de bestemming, terwijl deze bij HTML van elkaar kunnen afwijken. 
+
+\input{voorstel/methodologie/tabellen/3.4.tabel-hyperlinks.tex}
+
+\paragraph{Niet-bepaalbare kenmerken.}
+Sommige kan\-di\-daat-kenmerken zijn niet voor elke e-mail te bepalen, bijvoorbeeld omdat het bericht geen HTML-deel of geen \texttt{Reply-To} bevat. In dat geval wordt het kenmerk expliciet als ``niet van toepassing'' vastgelegd. Dit mag niet gelijkgesteld worden met een waarde van 0 of \emph{false}, want dit betekent dat een controle werd uitgevoerd en geen afwijking vond. Omdat logistische regressie geen ontbrekende waarden kan verwerken, worden de kenmerken gestandaardiseerd en wordt een niet-bepaalbaar kenmerk op de gemiddelde waarde van de trainingsdata gezet. Daardoor draagt het niets bij aan de risicoscore en wordt het niet als reden weergegeven.
+
+\subsection{Uitleg}
+\label{subsec:uitleg}
+
+De uitleg beantwoordt de vraag waarom het systeem een e-mail als risicovol beoordeelt en wordt in gewone taal aan de eindgebruiker voorgelegd. Zoals besproken in sectie~\ref{subsubsec:vormen-van-uitlegbaarheid} is hiervoor een lokale uitleg het meest geschikt, aangezien die de beoordeling van één individuele e-mail verduidelijkt \autocite{Guidotti2018}.
+
+Bij het opstellen van de uitlegregels worden de volgende uitgangspunten gehanteerd, die requirement R2 tot en met R4 vertalen uit sectie~\ref{subsec:requirements}:
+\begin{enumerate}
+    \item \textbf{Suggestief.} De verantwoordelijkheid voor de interpretatie blijft bij de eindgebruiker. De uitlegregels mogen dus geen definitief oordeel over de e-mail uitbrengen, maar dienen de gebruiker met voorzichtige formuleringen zoals ``kan wijzen op'' te informeren;
+    \item \textbf{Waarheidsgetrouw.} Elke reden komt rechtstreeks uit de berekening van de score en berust op kenmerken die in het bericht daadwerkelijk worden vastgesteld. Kenmerken die niet of onvoldoende aanwezig zijn, worden niet als reden opgenomen;
+    \item \textbf{Controleerbaar.} Elke reden verwijst naar concreet bewijs uit het bericht. Dat bewijs wordt samen met de kenmerkwaarde door de extractors bijgehouden (sectie~\ref{sec:kenmerkextractie}), zodat de gebruiker elke reden zelf in de e-mail kan nagaan;
+     \item \textbf{Toegankelijk.} De uitleg is geschreven in gewone taal en vermijdt jargon.
+\end{enumerate}
+
+\paragraph{Kanttekening bij uitleg in deze scriptie.}
+De uitleg is een essentieel onderdeel van het algoritme, want ondersteuning van de gebruiker vraagt niet enkel om een score, maar ook om de redenen erachter (sectie~\ref{subsec:uitlegbaarheid-en-gebruikersondersteuning}). Dit onderzoek toont aan dat die redenen rechtstreeks uit de berekening van de score kunnen worden afgeleid, naar concreet bewijs in de e-mail verwijzen en in gewone taal kunnen worden weergegeven. De formulering wordt niet bij gebruikers getoetst en het effect op hun begrip, vertrouwen en beslissingen, inclusief \emph{overreliance} (sectie~\ref{subsubsec:uitleg-voor-gebruikers}), valt buiten de scope.
+
+\subsection{Evaluatie}
+\label{sec:evaluatie}
+
+Om de classificatieprestaties van het algoritme te evalueren, wordt gebruikgemaakt van de testset die tijdens de voorbereiding van de data werd afgesplitst (sectie~\ref{subsec:voorbereiding-data}). De resultaten van het model worden gerapporteerd aan de hand van de metrieken uit sectie~\ref{subsubsec:evaluatiemetrieken}, met het false-positive-rate (\emph{FPR}) als de belangrijkste, conform R1 uit sectie~\ref{subsec:requirements}. Deze metriek geeft immers aan hoe vaak het algoritme een legitieme e-mail ten onrechte als phishing aanduidt. 
+
+Zoals besproken in sectie~\ref{subsubsec:uitleg-voor-gebruikers}, besteden gebruikers steeds minder aandacht aan waarschuwingen die ze herhaaldelijk te zien krijgen \autocite{Anderson2015}. Een hoge \emph{FPR} brengt dan ook het risico mee dat gebruikers aan de waarschuwingen van het algoritme wennen, waardoor dit onderzoek zijn doel mist. 
+
+Naast de classificatieprestaties wordt nagegaan of de uitleg voldoet aan de uitgangspunten \emph{waarheidsgetrouw} en \emph{controleerbaar} uit sectie~\ref{subsec:uitleg}. Daarmee worden requirement R2 en het waarheidsgetrouwe deel van requirement R4 uit sectie~\ref{subsec:requirements} getoetst. 
+Om dit te rapporteren, wordt op een willekeurige steekproef van 50 e-mails uit de testset nagegaan of elk kenmerk dat bijdraagt tot de risicoscore effectief in de e-mail wordt vastgesteld en verwijst naar concreet bewijs in het oorspronkelijke bericht. De uitleg voldoet aan beide uitgangspunten wanneer dit voor alle bijdragende kenmerken in alle e-mails uit de steekproef het geval is. De uitgangspunten \emph{suggestief} en \emph{toegankelijk} betreffen daarentegen de formulering van de uitleg en kunnen enkel via gebruikers worden getoetst. Dit valt buiten de scope van dit onderzoek, waardoor requirement R3 en het suggestieve deel van requirement R4 niet worden getoetst.

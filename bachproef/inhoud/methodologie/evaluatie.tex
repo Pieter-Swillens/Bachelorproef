@@ -1,0 +1,20 @@
+\chapter{Evaluatie}%
+\label{ch:evaluatie}
+
+Dit hoofdstuk beschrijft hoe het proof of concept wordt geëvalueerd. Eerst komt de evaluatie van de classificatieprestaties aan bod, daarna die van de uitleg. De evaluatie toetst de succescriteria uit de onderzoeksdoelstelling (sectie~\ref{sec:onderzoeksdoelstelling}) en de requirements uit sectie~\ref{sec:requirements}.
+
+section{Classificatieprestaties}%
+\label{sec:evaluatie-classificatie}
+
+Om de classificatieprestaties van het algoritme te evalueren, wordt gebruikgemaakt van de testset die tijdens de voorbereiding van de data werd afgesplitst (Hoofdstuk~\ref{ch:data}). De resultaten van het model worden gerapporteerd aan de hand van de metrieken uit sectie~\ref{subsec:evaluatiemetrieken}, met de false-positive-rate (\emph{FPR}) als de belangrijkste, conform R1 uit sectie~\ref{sec:requirements}. Deze metriek geeft immers aan hoe vaak het algoritme een legitieme e-mail ten onrechte als phishing aanduidt.
+
+Zoals besproken in sectie~\ref{subsec:uitleg-voor-gebruikers}, besteden gebruikers steeds minder aandacht aan waarschuwingen die ze herhaaldelijk te zien krijgen \autocite{Anderson2015}. Een hoge \emph{FPR} brengt dan ook het risico mee dat gebruikers aan de waarschuwingen van het algoritme wennen, waardoor dit onderzoek zijn doel mist.
+
+\section{Kwaliteit van de uitleg}%
+\label{sec:evaluatie-uitleg}
+
+Naast de classificatieprestaties wordt nagegaan of de uitleg voldoet aan de uitgangspunten \emph{waarheidsgetrouw} en \emph{controleerbaar} uit sectie~\ref{sec:uitgangspunten-uitleg}. Daarmee worden requirement R2 en het waarheidsgetrouwe deel van requirement R4 uit sectie~\ref{sec:requirements} getoetst.
+
+Om dit te rapporteren, wordt op een willekeurige steekproef van 50 e-mails uit de testset nagegaan of elk kenmerk dat bijdraagt tot de risicoscore effectief in de e-mail wordt vastgesteld en verwijst naar concreet bewijs in het oorspronkelijke bericht. De uitleg voldoet aan beide uitgangspunten wanneer dit voor alle bijdragende kenmerken in alle e-mails uit de steekproef het geval is.
+
+De uitgangspunten \emph{suggestief} en \emph{toegankelijk} betreffen daarentegen de formulering van de uitleg en kunnen enkel via gebruikers worden getoetst. Dit valt buiten de scope van dit onderzoek, waardoor requirement R3 en het suggestieve deel van requirement R4 niet worden getoetst.

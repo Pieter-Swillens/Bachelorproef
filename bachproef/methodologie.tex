@@ -1,30 +1,20 @@
-%%=============================================================================
-%% Methodologie
-%%=============================================================================
-
-\chapter{\IfLanguageName{dutch}{Methodologie}{Methodology}}%
+\chapter{Methodologie}%
 \label{ch:methodologie}
 
-%% TODO: In dit hoofstuk geef je een korte toelichting over hoe je te werk bent
-%% gegaan. Verdeel je onderzoek in grote fasen, en licht in elke fase toe wat
-%% de doelstelling was, welke deliverables daar uit gekomen zijn, en welke
-%% onderzoeksmethoden je daarbij toegepast hebt. Verantwoord waarom je
-%% op deze manier te werk gegaan bent.
-%% 
-%% Voorbeelden van zulke fasen zijn: literatuurstudie, opstellen van een
-%% requirements-analyse, opstellen long-list (bij vergelijkende studie),
-%% selectie van geschikte tools (bij vergelijkende studie, "short-list"),
-%% opzetten testopstelling/PoC, uitvoeren testen en verzamelen
-%% van resultaten, analyse van resultaten, ...
-%%
-%% !!!!! LET OP !!!!!
-%%
-%% Het is uitdrukkelijk NIET de bedoeling dat je het grootste deel van de corpus
-%% van je bachelorproef in dit hoofstuk verwerkt! Dit hoofdstuk is eerder een
-%% kort overzicht van je plan van aanpak.
-%%
-%% Maak voor elke fase (behalve het literatuuronderzoek) een NIEUW HOOFDSTUK aan
-%% en geef het een gepaste titel.
+Om de onderzoeksvraag te kunnen beantwoorden, wordt een proof of concept ontwikkeld dat uit een e-mail een interpreteerbare risicoscore berekent. Dit hoofdstuk geeft een overzicht van de fasen waarin het onderzoek is verlopen. Elke fase, behalve de literatuurstudie, wordt in een eigen hoofdstuk uitgewerkt.
 
-\lipsum[21-25]
+\begin{enumerate}
+    \item \textbf{Requirements en ontwerpkeuzes (Hoofdstuk~\ref{ch:requirements}).} Op basis van de literatuurstudie worden de functionele en inhoudelijke vereisten voor de risicoscore vastgelegd. Hiermee wordt deelvraag 1 beantwoord. De literatuurstudie en de afbakening van de onderzoeksscope leveren daarnaast de theoretische onderbouwing voor deelvraag 2. De requirements vormen vervolgens het uitgangspunt voor de verdere afbakening en het ontwerp van het proof of concept.
+    \item \textbf{Voorbereiding van de data (Hoofdstuk~\ref{ch:data}).} Er wordt een dataset samengesteld met zowel phishingmails als legitieme e-mails. Na de nodige voorbereiding wordt deze opgesplitst in een trainings- en testset, zodat het model onafhankelijk kan worden geëvalueerd.
+    \item \textbf{Kenmerkextractie (Hoofdstuk~\ref{ch:kenmerkextractie}).} Vervolgens worden mechanismen ontwikkeld om relevante kenmerken automatisch uit e-mails te extraheren. Elke extractor levert niet alleen een kenmerkwaarde op, maar registreert ook het bijbehorende bewijs in de oorspronkelijke e-mail. Deze fase biedt antwoord op deelvraag 3.
+    \item \textbf{Uitleg (Hoofdstuk~\ref{ch:uitleg}).} De geëxtraheerde kenmerken en hun bijdrage aan de risicoscore worden vertaald naar niet technische verklaringen. Hiervoor worden uitlegregels opgesteld die aangeven welke elementen uit een e-mail aan de uiteindelijke beoordeling bijdragen. Hiermee wordt ook deelvraag 4 van antwoord voorzien.
+    \item \textbf{Evaluatie (Hoofdstuk~\ref{ch:evaluatie}).} Tot slot wordt nagegaan in welke mate het proof of concept aan de vooropgestelde succescriteria voldoet.
+\end{enumerate}
 
+Deze volgorde is bewust gekozen, omdat elke fase voortbouwt op de vorige. De requirements bepalen de ontwerpkeuzes, die op hun beurt bepalen welke data en kenmerken nodig zijn. De uitleg is gekoppeld aan de kenmerken, en de evaluatie toetst of de requirements zijn gehaald.
+
+\input{inhoud/methodologie/requirements.tex}
+\input{inhoud/methodologie/data.tex}
+\input{inhoud/methodologie/kenmerkextractie.tex}
+\input{inhoud/methodologie/uitleg.tex}
+\input{inhoud/methodologie/evaluatie.tex}

@@ -12,3 +12,6 @@ dependencyResolutionManagement {
 
 include(":domain")
 project(":domain").projectDir = file("code/application/domain")
+
+include(":vocabulary")
+project(":vocabulary").projectDir = file("code/vocabulary")

@@ -24,5 +24,7 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+        outputs.cacheIf { false }
+        outputs.upToDateWhen { false }
     }
 }

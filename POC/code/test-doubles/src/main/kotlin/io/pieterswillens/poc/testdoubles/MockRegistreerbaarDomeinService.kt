@@ -6,8 +6,8 @@ import io.pieterswillens.poc.vocabulary.EmailAdres
 
 class MockRegistreerbaarDomeinService : RegistreerbaarDomeinService {
 
-    override fun bepaalRegistreerbaarDomein(emailAdres: EmailAdres): BepaalRegistreerbaarDomeinResponse {
-        val registreerbaarDomeinParts = emailAdres.domeinnaam
+    override fun bepaalRegistreerbaarDomein(domeinnaam: EmailAdres.Domeinnaam): BepaalRegistreerbaarDomeinResponse {
+        val registreerbaarDomeinParts = domeinnaam.value
             .lowercase()
             .split(".")
 

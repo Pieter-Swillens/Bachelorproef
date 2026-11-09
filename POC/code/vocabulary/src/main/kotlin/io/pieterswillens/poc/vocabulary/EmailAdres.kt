@@ -1,8 +1,12 @@
 package io.pieterswillens.poc.vocabulary
 
+
 data class EmailAdres private constructor(val value: String) {
-    val lokaalDeel = value.substringBeforeLast('@')
-    val domeinnaam = value.substringAfterLast('@')
+    val lokaalDeel = LokaalDeel(value.substringBeforeLast('@'))
+    val domeinnaam = Domeinnaam(value.substringAfterLast('@'))
+
+    data class LokaalDeel internal constructor(val value: String)
+    data class Domeinnaam internal constructor(val value: String)
 
     override fun toString() = value
 

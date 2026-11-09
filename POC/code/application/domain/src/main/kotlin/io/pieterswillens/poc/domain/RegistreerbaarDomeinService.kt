@@ -3,7 +3,7 @@ package io.pieterswillens.poc.domain
 import io.pieterswillens.poc.vocabulary.EmailAdres
 
 interface RegistreerbaarDomeinService {
-    fun bepaalRegistreerbaarDomein(emailAdres: EmailAdres): BepaalRegistreerbaarDomeinResponse
+    fun bepaalRegistreerbaarDomein(domeinnaam: EmailAdres.Domeinnaam): BepaalRegistreerbaarDomeinResponse
 }
 
 sealed interface BepaalRegistreerbaarDomeinResponse {

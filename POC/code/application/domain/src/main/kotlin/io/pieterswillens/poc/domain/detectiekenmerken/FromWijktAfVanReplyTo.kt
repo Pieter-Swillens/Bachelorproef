@@ -17,7 +17,7 @@ class FromWijktAfVanReplyTo(private val registreerbaarDomeinService: Registreerb
         }
     }
 
-    private fun EmailAdres.toRegistreerbaarDomein() = when (val response = registreerbaarDomeinService.bepaalRegistreerbaarDomein(this)) {
+    private fun EmailAdres.toRegistreerbaarDomein() = when (val response = registreerbaarDomeinService.bepaalRegistreerbaarDomein(this.domeinnaam)) {
         is BepaalRegistreerbaarDomeinResponse.Ok -> response.registreerbaarDomein
         BepaalRegistreerbaarDomeinResponse.Ongeldig -> null
     }

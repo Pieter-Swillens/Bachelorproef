@@ -20,7 +20,7 @@ interface RegistreerbaarDomeinServiceTest {
     @ParameterizedTest
     @ArgumentsSource(ValidExamples::class)
     fun `when domainname has parsable registreerbaar domein then the registreerbaar domein Ok is returned containing registreerbaar domein`(input: EmailAdres, expectedRegistreerbaarDomein: String) {
-        val response = service().bepaalRegistreerbaarDomein(input)
+        val response = service().bepaalRegistreerbaarDomein(input.domeinnaam)
 
         assertThat(response).isInstanceOfSatisfying(BepaalRegistreerbaarDomeinResponse.Ok::class.java) {
             assertThat(it.registreerbaarDomein).isEqualTo(expectedRegistreerbaarDomein)
@@ -30,7 +30,7 @@ interface RegistreerbaarDomeinServiceTest {
     @ParameterizedTest
     @ArgumentsSource(InvalidExamples::class)
     fun `when domainname has no parsable registreerbaar domein then Ongelidg is returned`(input: EmailAdres) {
-        val response = service().bepaalRegistreerbaarDomein(input)
+        val response = service().bepaalRegistreerbaarDomein(input.domeinnaam)
 
         assertThat(response).isEqualTo(BepaalRegistreerbaarDomeinResponse.Ongeldig)
     }

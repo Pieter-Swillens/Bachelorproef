@@ -18,12 +18,12 @@ class EmailAdresTest {
 
         @Test
         fun `then the local part is everything before the at sign`() {
-            assertThat(adres.lokaalDeel).isEqualTo("test")
+            assertThat(adres.lokaalDeel.value).isEqualTo("test")
         }
 
         @Test
         fun `then the domain name is everything after the at sign`() {
-            assertThat(adres.domeinnaam).isEqualTo("email.be")
+            assertThat(adres.domeinnaam.value).isEqualTo("email.be")
         }
 
     }

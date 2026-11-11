@@ -12,6 +12,8 @@ dependencyResolutionManagement {
 
 include(":domain")
 project(":domain").projectDir = file("code/application/domain")
+include(":use-cases")
+project(":use-cases").projectDir = file("code/application/use-cases")
 
 include(":guava-adapter")
 project(":guava-adapter").projectDir = file("code/infra/backend-adapters/guava-adapter")

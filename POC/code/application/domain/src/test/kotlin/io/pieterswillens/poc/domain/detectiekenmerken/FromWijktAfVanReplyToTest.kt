@@ -1,9 +1,11 @@
 package io.pieterswillens.poc.domain.detectiekenmerken
 
 import io.pieterswillens.poc.domain.Email
+import io.pieterswillens.poc.domain.EmailSnapshot
 import io.pieterswillens.poc.testdoubles.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
+import io.pieterswillens.poc.vocabulary.EmailMessageId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -15,6 +17,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.support.ParameterDeclarations
+import java.util.*
 import java.util.stream.Stream
 
 @DisplayName("Given an extractor to check whether From and Reply-To headers refer to the same organisation")
@@ -45,10 +48,13 @@ class FromWijktAfVanReplyToTest {
     internal inner class `when registreerbaar domein in From header is not the same as the one in the ReplyTo header`{
 
         private lateinit var result: ExtractieResult
-        private val email = Email(
-            emailId = EmailId.createNew(),
-            fromEmail = EmailAdres.from("test@valid.com"),
-            replyToEmail = EmailAdres.from("test@phishing.com")
+        private val email = Email.fromSnapshot(
+            EmailSnapshot(
+                emailId = EmailId.createNew(),
+                fromEmail = EmailAdres.from("test@valid.com"),
+                replyToEmail = EmailAdres.from("test@phishing.com"),
+                emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+            )
         )
 
         @BeforeEach
@@ -89,10 +95,44 @@ class FromWijktAfVanReplyToTest {
             context: ExtensionContext
         ): Stream<out Arguments> {
             return Stream.of(
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email.be"), replyToEmail = EmailAdres.from("test@email.be"))),
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email.be"), replyToEmail = EmailAdres.from("nogeentest@email.be"))),
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email.be"), replyToEmail = EmailAdres.from("test@subdomein.email.be"))),
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@EMAIL.be"), replyToEmail = EmailAdres.from("test@email.BE")))
+                Arguments.of(
+                    Email.fromSnapshot(EmailSnapshot(
+                        emailId = EmailId.createNew(),
+                        fromEmail = EmailAdres.from("test@email.be"),
+                        replyToEmail = EmailAdres.from("test@email.be"),
+                        emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                    ))
+                ),
+                Arguments.of(
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@email.be"),
+                            replyToEmail = EmailAdres.from("nogeentest@email.be"),
+                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        )
+                    )
+                ),
+                Arguments.of(
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@email.be"),
+                            replyToEmail = EmailAdres.from("test@subdomein.email.be"),
+                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        )
+                    )
+                ),
+                Arguments.of(
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@EMAIL.be"),
+                            replyToEmail = EmailAdres.from("test@email.BE"),
+                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        )
+                    )
+                ),
             )
         }
     }
@@ -103,10 +143,46 @@ class FromWijktAfVanReplyToTest {
             context: ExtensionContext
         ): Stream<out Arguments> {
             return Stream.of(
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@localhost"), replyToEmail = EmailAdres.from("test@email.be"))),
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email.be"), replyToEmail = EmailAdres.from("test@localhost"))),
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email!be"), replyToEmail = EmailAdres.from("test@email.be"))),
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email.be"), replyToEmail = EmailAdres.from("test@email!be")))
+                Arguments.of(
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@localhost"),
+                            replyToEmail = EmailAdres.from("test@email.be"),
+                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        )
+                    )
+                ),
+                Arguments.of(
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@email.be"),
+                            replyToEmail = EmailAdres.from("test@localhost"),
+                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        )
+                    )
+                ),
+                Arguments.of(
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@email!be"),
+                            replyToEmail = EmailAdres.from("test@email.be"),
+                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        )
+                    )
+                ),
+                Arguments.of(
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@email.be"),
+                            replyToEmail = EmailAdres.from("test@email!be"),
+                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        )
+                    )
+                ),
             )
         }
     }

@@ -11,6 +11,8 @@ data class EmailAdres private constructor(val value: String) {
     override fun toString() = value
 
     companion object {
+        val noOps = EmailAdres("noOps@pieterswillens.be")
+
         fun from(input: String): EmailAdres {
             val scheiding = input.lastIndexOf('@')
 

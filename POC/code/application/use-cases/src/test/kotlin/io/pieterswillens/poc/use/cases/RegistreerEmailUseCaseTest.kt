@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.*
 
 @DisplayName("Given a use case to registreer an email")
 class RegistreerEmailUseCaseTest {
@@ -44,9 +43,9 @@ class RegistreerEmailUseCaseTest {
         @Test
         fun `then the parsed email is stored`() {
             assertThat(emailRepository.storedItems).anySatisfy { email ->
-                assertThat(email.fromEmail.toString()).isEqualTo(aParsedEmail.from)
-                assertThat(email.replyToEmail.toString()).isEqualTo(aParsedEmail.replyTo)
-                assertThat(email.emailMessageId.value).isEqualTo(aParsedEmail.messageId)
+                assertThat(email.fromEmail).isEqualTo(aParsedEmail.from)
+                assertThat(email.replyToEmail).isEqualTo(aParsedEmail.replyTo)
+                assertThat(email.emailMessageId).isEqualTo(aParsedEmail.messageId)
             }
             assertThat(emailParser.usedEmail).isEqualTo(rawEmail.content)
         }
@@ -76,9 +75,9 @@ class RegistreerEmailUseCaseTest {
                 Email.fromSnapshot(
                     EmailSnapshot(
                         emailId = EmailId.createNew(),
-                        fromEmail = EmailAdres.from(aParsedEmail.from),
-                        replyToEmail = EmailAdres.from(aParsedEmail.replyTo),
-                        emailMessageId = EmailMessageId.from(aParsedEmail.messageId)
+                        fromEmail = aParsedEmail.from,
+                        replyToEmail = aParsedEmail.replyTo,
+                        emailMessageId = aParsedEmail.messageId
                     )
                 )
             )
@@ -147,9 +146,9 @@ class RegistreerEmailUseCaseTest {
     }
 
     private val aParsedEmail = ParsedEmail(
-        replyTo = EmailAdres.noOps.toString(),
-        from = EmailAdres.noOps.toString(),
-        messageId = UUID.randomUUID().toString()
+        replyTo = EmailAdres.noOps,
+        from = EmailAdres.noOps,
+        messageId = EmailMessageId.random()
     )
 
     open class FailingRegistreerEmailPresenter: RegistreerEmailPresenter {
@@ -165,9 +164,9 @@ class StubbedEmailParser : EmailParser {
     var usedEmail: ByteArray? = null
         private set
     private var toReturn = ParsedEmail(
-        replyTo = EmailAdres.noOps.toString(),
-        from = EmailAdres.noOps.toString(),
-        messageId = UUID.randomUUID().toString()
+        replyTo = EmailAdres.noOps,
+        from = EmailAdres.noOps,
+        messageId = EmailMessageId.random()
     )
 
     override fun parse(email: ByteArray): EmailParsingResult {

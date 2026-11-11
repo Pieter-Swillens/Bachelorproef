@@ -16,8 +16,7 @@ class Email private constructor(
             emailUniquenessValidator: EmailUniquenessValidator,
             presenter: RegistreerEmailDomainPresenter
         ): Email? {
-            val messageId = EmailMessageId.from(parsedEmail.messageId)
-            return when (val uniquenessValidationResult = emailUniquenessValidator.validate(messageId)) {
+            return when (val uniquenessValidationResult = emailUniquenessValidator.validate(parsedEmail.messageId)) {
                 is EmailUniquenessValidationResult.BestaatAl -> {
                     presenter.emailAlreadyRegistered(uniquenessValidationResult.emailId)
                     null
@@ -25,9 +24,9 @@ class Email private constructor(
 
                 EmailUniquenessValidationResult.BestaatNogNiet -> Email(
                     emailId = EmailId.createNew(),
-                    fromEmail = EmailAdres.from(parsedEmail.from),
-                    replyToEmail = EmailAdres.from(parsedEmail.replyTo),
-                    emailMessageId = EmailMessageId.from(parsedEmail.messageId)
+                    fromEmail = parsedEmail.from,
+                    replyToEmail = parsedEmail.replyTo,
+                    emailMessageId = parsedEmail.messageId
                 )
 
             }

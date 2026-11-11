@@ -1,0 +1,5 @@
+From: this.is.not.an.email
+Message-ID: <invalid-email@example.com>
+Content-Type: text/plain
+
+Invalid email adress

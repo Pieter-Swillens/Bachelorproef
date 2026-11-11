@@ -17,6 +17,8 @@ project(":use-cases").projectDir = file("code/application/use-cases")
 
 include(":guava-adapter")
 project(":guava-adapter").projectDir = file("code/infra/backend-adapters/guava-adapter")
+include(":jakarta-mail-adapter")
+project(":jakarta-mail-adapter").projectDir = file("code/infra/backend-adapters/jakarta-mail-adapter")
 
 include(":test-doubles")
 project(":test-doubles").projectDir = file("code/test-doubles")

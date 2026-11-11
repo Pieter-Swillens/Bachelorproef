@@ -17,7 +17,6 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.support.ParameterDeclarations
-import java.util.*
 import java.util.stream.Stream
 
 @DisplayName("Given an extractor to check whether From and Reply-To headers refer to the same organisation")
@@ -53,7 +52,7 @@ class FromWijktAfVanReplyToTest {
                 emailId = EmailId.createNew(),
                 fromEmail = EmailAdres.from("test@valid.com"),
                 replyToEmail = EmailAdres.from("test@phishing.com"),
-                emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                emailMessageId = EmailMessageId.random()
             )
         )
 
@@ -100,7 +99,7 @@ class FromWijktAfVanReplyToTest {
                         emailId = EmailId.createNew(),
                         fromEmail = EmailAdres.from("test@email.be"),
                         replyToEmail = EmailAdres.from("test@email.be"),
-                        emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                        emailMessageId = EmailMessageId.random()
                     ))
                 ),
                 Arguments.of(
@@ -109,7 +108,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
                             replyToEmail = EmailAdres.from("nogeentest@email.be"),
-                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                            emailMessageId = EmailMessageId.random()
                         )
                     )
                 ),
@@ -119,7 +118,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
                             replyToEmail = EmailAdres.from("test@subdomein.email.be"),
-                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                            emailMessageId = EmailMessageId.random()
                         )
                     )
                 ),
@@ -129,7 +128,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@EMAIL.be"),
                             replyToEmail = EmailAdres.from("test@email.BE"),
-                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                            emailMessageId = EmailMessageId.random()
                         )
                     )
                 ),
@@ -149,7 +148,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@localhost"),
                             replyToEmail = EmailAdres.from("test@email.be"),
-                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                            emailMessageId = EmailMessageId.random()
                         )
                     )
                 ),
@@ -159,7 +158,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
                             replyToEmail = EmailAdres.from("test@localhost"),
-                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                            emailMessageId = EmailMessageId.random()
                         )
                     )
                 ),
@@ -169,7 +168,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email!be"),
                             replyToEmail = EmailAdres.from("test@email.be"),
-                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                            emailMessageId = EmailMessageId.random()
                         )
                     )
                 ),
@@ -179,7 +178,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
                             replyToEmail = EmailAdres.from("test@email!be"),
-                            emailMessageId = EmailMessageId.from(UUID.randomUUID().toString())
+                            emailMessageId = EmailMessageId.random()
                         )
                     )
                 ),

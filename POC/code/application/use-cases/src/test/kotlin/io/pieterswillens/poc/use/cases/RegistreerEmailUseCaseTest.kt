@@ -1,8 +1,12 @@
 package io.pieterswillens.poc.use.cases
 
-import io.pieterswillens.poc.domain.*
+import io.pieterswillens.poc.api.RegistreerEmailPresenter
+import io.pieterswillens.poc.domain.Email
+import io.pieterswillens.poc.domain.EmailSnapshot
+import io.pieterswillens.poc.domain.ParsedEmail
 import io.pieterswillens.poc.testdoubles.MockEmailRepository
 import io.pieterswillens.poc.testdoubles.RawEmailTestBuilder
+import io.pieterswillens.poc.testdoubles.StubbedEmailParser
 import io.pieterswillens.poc.testdoubles.TestUtils
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
@@ -156,34 +160,4 @@ class RegistreerEmailUseCaseTest {
         override fun emailAlreadyRegistered(emailId: EmailId) = TestUtils.fail()
         override fun emailRegistrationFailed() = TestUtils.fail()
     }
-}
-
-class StubbedEmailParser : EmailParser {
-    private var failOnNext = false
-    
-    var usedEmail: ByteArray? = null
-        private set
-    private var toReturn = ParsedEmail(
-        replyTo = EmailAdres.noOps,
-        from = EmailAdres.noOps,
-        messageId = EmailMessageId.random()
-    )
-
-    override fun parse(email: ByteArray): EmailParsingResult {
-        this.usedEmail = email
-        return if (failOnNext) {
-            EmailParsingResult.Mislukt
-        } else {
-            EmailParsingResult.Ok(toReturn)
-        }
-    }
-
-    fun setEmailToReturn(parsedEmail: ParsedEmail) {
-        toReturn = parsedEmail
-    }
-
-    fun failOnNextCall() {
-        this.failOnNext = true
-    }
-
 }

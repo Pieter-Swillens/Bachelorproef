@@ -23,4 +23,8 @@ class MockEmailRepository: EmailRepository, EmailUniquenessValidator {
         }
     }
 
+    fun clear() {
+        this.storedItems.clear()
+    }
+
 }

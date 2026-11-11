@@ -103,8 +103,6 @@ class FromWijktAfVanReplyToTest {
             context: ExtensionContext
         ): Stream<out Arguments> {
             return Stream.of(
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = null, replyToEmail = EmailAdres.from("test@email.be"))),
-                Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email.be"), replyToEmail = null)),
                 Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@localhost"), replyToEmail = EmailAdres.from("test@email.be"))),
                 Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email.be"), replyToEmail = EmailAdres.from("test@localhost"))),
                 Arguments.of(Email(emailId = EmailId.createNew(), fromEmail = EmailAdres.from("test@email!be"), replyToEmail = EmailAdres.from("test@email.be"))),

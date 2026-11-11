@@ -7,8 +7,8 @@ import io.pieterswillens.poc.vocabulary.EmailAdres
 
 class FromWijktAfVanReplyTo(private val registreerbaarDomeinService: RegistreerbaarDomeinService) {
     fun evaluate(email: Email): ExtractieResult {
-        val fromDomein = email.fromEmail?.toRegistreerbaarDomein() ?: return ExtractieResult.NietBepaalbaar
-        val replyToDomein = email.replyToEmail?.toRegistreerbaarDomein() ?: return ExtractieResult.NietBepaalbaar
+        val fromDomein = email.fromEmail.toRegistreerbaarDomein() ?: return ExtractieResult.NietBepaalbaar
+        val replyToDomein = email.replyToEmail.toRegistreerbaarDomein() ?: return ExtractieResult.NietBepaalbaar
 
         return if (fromDomein == replyToDomein) {
             ExtractieResult.NietAfwijkend

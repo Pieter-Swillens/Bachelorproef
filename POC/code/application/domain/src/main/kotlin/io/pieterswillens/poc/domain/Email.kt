@@ -5,6 +5,6 @@ import io.pieterswillens.poc.vocabulary.EmailId
 
 data class Email(
     val emailId: EmailId,
-    val fromEmail: EmailAdres?,
-    val replyToEmail: EmailAdres?
+    val fromEmail: EmailAdres,
+    val replyToEmail: EmailAdres
 )

@@ -24,6 +24,8 @@ project(":jakarta-mail-adapter").projectDir = file("code/infra/backend-adapters/
 
 include(":acceptance-tests-adapter")
 project(":acceptance-tests-adapter").projectDir = file("code/infra/frontend-adapters/acceptance-tests")
+include(":cli-adapter")
+project(":cli-adapter").projectDir = file("code/infra/frontend-adapters/cli-adapter")
 
 include(":test-doubles")
 project(":test-doubles").projectDir = file("code/test-doubles")

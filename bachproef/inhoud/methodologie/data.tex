@@ -1,7 +1,7 @@
 \chapter{Voorbereiding van de data}%
 \label{ch:data}
 
-Dit hoofdstuk beschrijft de dataset waarop het model wordt getraind en getest, en hoe die wordt voorbereid. De keuze van de dataset volgt uit de beperkingen van de bestaande corpora uit sectie~\ref{subsec:datasets} en uit de scopeafbakening in sectie~\ref{sec:afbakening-scope}. De voorbereide data vormen de invoer voor de kenmerkextractie in Hoofdstuk~\ref{ch:kenmerkextractie}.
+Dit hoofdstuk beschrijft de dataset waarop het model wordt getraind en getest. De keuze van de dataset volgt uit de beperkingen van de bestaande corpora uit sectie~\ref{subsec:datasets} en uit de scopeafbakening in sectie~\ref{sec:afbakening-scope}. De voorbereide data vormen de invoer voor de kenmerkextractie in Hoofdstuk~\ref{ch:kenmerkextractie}.
 
 \section{Gebruikte datasets}%
 \label{sec:gebruikte-datasets}
@@ -17,31 +17,31 @@ De dataset waarop de oplossing wordt getraind, wordt opgebouwd uit de volgende t
 \section{Consolidatie van het SpamAssassin-corpus}%
 \label{sec:consolidatie-spamassassin}
 
-De geselecteerde partities van het SpamAssassin Public Corpus worden samengebracht in één dataset. Elk bericht bestaat uit een tekstbestand met de ruwe e-mail en een bijbehorend JSON-bestand met metadata, waaronder de MD5-checksum van het tekstbestand. Omdat voor dit onderzoek enkel de ruwe berichten nodig zijn, brengt een Bash-script de tekstbestanden samen in één map en verwijdert het de JSON-bestanden.
+De geselecteerde partities van het SpamAssassin Public Corpus worden samengebracht in één dataset. Elk bericht bestaat uit een tekstbestand met de ruwe e-mail en een JSON-bestand met de inhoud van het bericht en metadata, waaronder de MD5-checksum. Omdat voor dit onderzoek enkel de ruwe berichten nodig zijn, brengt een Bash-script de tekstbestanden samen in één map en verwijdert het de JSON-bestanden.
 
-Tijdens deze consolidatie wordt voor elk bericht gecontroleerd of de MD5-checksum van het tekstbestand overeenkomt met de checksum in het bijbehorende JSON-bestand. Eén bericht uit \emph{*hard\_ham\_1*} vertoonde een afwijkende checksum en wordt daarom uitgesloten, aangezien de integriteit ervan niet kan worden aangetoond. De resulterende dataset bevat 4149 legitieme e-mails: 2500 uit \emph{easy\_ham\_1}, 1400 uit \emph{easy\_ham\_2} en 249 uit \emph{hard\_ham\_1}.
+Tijdens deze consolidatie wordt voor elk bericht gecontroleerd of de MD5-checksum van het tekstbestand overeenkomt met de checksum in het bijbehorende JSON-bestand. Eén bericht uit \emph{hard\_ham\_1} vertoonde een afwijkende checksum en wordt daarom niet opgenomen, aangezien de integriteit ervan niet kan worden aangetoond. De resulterende dataset bevat 4149 legitieme e-mails: 2500 uit \emph{easy\_ham\_1}, 1400 uit \emph{easy\_ham\_2} en 249 uit \emph{hard\_ham\_1}.
 
 Omdat de identificatienummers enkel binnen een partitie uniek zijn, krijgt elk bestand de naam van zijn oorspronkelijke partitie als prefix, bijvoorbeeld \texttt{easy-ham-1\_00001.txt}.
 
-Tot slot genereert het script een bestand \texttt{manifest.jsonl} met één JSON-object per bericht. Dit bevat onder meer de bestandsnaam, de partitie, het label (legitiem) en de checksum. Het manifest registreert zo de herkomst en integriteit van elk bericht en dient als centrale referentie voor de verdere voorbereiding van de dataset.
+Tot slot genereert het script een bestand \texttt{manifest.jsonl} met één JSON-object per bericht. Dit bevat onder meer de bestandsnaam, de partitie, een label en de checksum. Deze data wordt gegenereerd om de herkomst van de data bij te houden.
 
 
 \section{Voorbereiding}%
 \label{sec:voorbereiding}
 
-Na de eventuele consolidatie van de bronbestanden wordt elke e-mail ingelezen en omgezet naar een verwerkbare vorm. Indien nodig worden headers met \emph{encoded-words} (RFC~2047 \autocite{Moore1996}) of een base64-gecodeerde body eerst gedecodeerd.
+Na de eventuele consolidatie van de bronbestanden wordt elke e-mail ingelezen en omgezet naar een verwerkbare vorm. Indien nodig, worden headers met \emph{encoded-words} of een base64-gecodeerde body eerst gedecodeerd.
 
 Vervolgens wordt de dataset opgesplitst in een trainingsset van 70\% en een testset van 30\%. Hierbij blijft de verhouding tussen phishingmails en legitieme e-mails in beide sets behouden. Een vaste seed zorgt ervoor dat de opsplitsing bij herhaaldelijke uitvoering reproduceerbaar is.
 
-Uit elk bericht worden vervolgens de kenmerken berekend. Deze kenmerken, samen met de indeling van de berichten in trainings- en testset, worden opgeslagen. Zo hoeven de berichten niet bij elk experiment opnieuw te worden verwerkt, en worden alle modelconfiguraties op dezelfde gegevens getraind.
+Vervolgens worden de kenmerken uit elk bericht berekend en opgeslagen, samen met de indeling van de berichten in trainings- en testset. Hierdoor hoeven de berichten niet bij elke trainingsronde opnieuw te worden verwerkt en worden alle modelconfiguraties op dezelfde gegevens getraind.
 
-De parameters van het model, waaronder de beslissingsdrempel, worden afgesteld via \emph{cross-validation} op de trainingsset. Hierbij wordt de trainingsset in gelijke deelsets opgesplitst en wordt het model telkens getraind op alle deelsets behalve één, waarop het vervolgens wordt gevalideerd.
+De parameters van het model, waaronder de beslissingsdrempel, worden afgesteld via \emph{cross-validation} op de trainingsset. Hierbij wordt de trainingsset in gelijke deelsets opgesplitst en wordt het model telkens getraind op alle deelsets behalve één. Op de afgezonderde deelset worden de resultaten vervolgens gevalideerd.
 
 De drempel is de score vanaf waar een e-mail als phishing wordt aangeduid. Ze wordt zo gekozen dat de FPR in de validatiedeelsets het streefdoel van 3\% niet overschrijdt (sectie~\ref{sec:requirements}, R1). De testset wordt pas daarna gebruikt, uitsluitend om het eindresultaat te rapporteren.
 
 \section{Beperkingen van de data}%
 \label{sec:beperkingen-data}
 
-Voor zover bekend is er geen recente, publiek beschikbare dataset van legitieme e-mails die de volledige, ongewijzigde headers bewaart. Het SpamAssassin Public Corpus is daarom de enige bruikbare bron van legitieme e-mails met headers, ook al dateert het van begin jaren 2000 en raadt het project zelf aan om de legitieme set niet meer te gebruiken wanneer die ouder is dan 18 maanden.\footfullcite{SpamAssassinCorpusPolicy}
+Voor zover bekend, is er geen recente, publiek beschikbare dataset van legitieme e-mails die de volledige, ongewijzigde headers bewaart. Het SpamAssassin Public Corpus is daarom de enige bruikbare bron van legitieme e-mails met headers, ook al dateert het van begin jaren 2000 en raadt het project zelf aan om de legitieme set niet meer te gebruiken wanneer die ouder is dan 18 maanden.\footfullcite{SpamAssassinCorpusPolicy}
 
-Het risico bestaat dat het hedendaagse mailverkeer op punten afwijkt van deze verouderde data, wat de resultaten van het model kan beïnvloeden. Dit potentiële risico wordt meegenomen in de evaluatie van het model.
+De modelresultaten kunnen bijgevolg worden beïnvloed doordat het hedendaagse e-mailverkeer op verschillende punten afwijkt van de e-mails in het gebruikte corpus. Dit risico wordt meegenomen in de evaluatie.

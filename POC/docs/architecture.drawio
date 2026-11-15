@@ -1,0 +1,115 @@
+<mxfile host="drawio-plugin" modified="2026-11-15T22:35:46.478Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="22.1.22" etag="1vRSxd2ajcN1Lzey-Wpt" type="embed">
+  <diagram id="VO_rg3YYS4XCycVm5P-N" name="Page-1">
+    <mxGraphModel dx="1289" dy="1068" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Hexagonale opbouw: afhankelijkheden wijzen naar het domein" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="8" width="1500" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="frontend-adapters" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="api (poorten in)" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="50" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="use-cases" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="50" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="domain (+ poorten uit)" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="50" width="330" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="backend-adapters" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="50" width="320" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="&lt;b&gt;cli-adapter&lt;/b&gt;&lt;br&gt;picocli-commando&#39;s: registreer, train, beoordeel, cli presenters" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#D7EEDD;strokeColor=#3E8E2A;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="&lt;b&gt;acceptance-tests&lt;/b&gt;&lt;br&gt;blackbox tests tegen de api" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#D7EEDD;strokeColor=#3E8E2A;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="&lt;b&gt;dataset-script&lt;/b&gt;&lt;br&gt;Bash: consolidatie, MD5-controle, manifest" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#D7EEDD;strokeColor=#3E8E2A;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="&lt;b&gt;api&lt;/b&gt;&lt;br&gt;use-case-interfaces en presenters: RegistreerEmail, TrainModel, BeoordeelEmail,..." style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#DCE8FB;strokeColor=#4A6FA5;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="400" y="90" width="260" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="&lt;b&gt;use-cases&lt;/b&gt;&lt;br&gt;RegistreerEmailUseCase, TrainModelUseCase, BeoordeelEmailUseCase,..." style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#DCE8FB;strokeColor=#4A6FA5;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="90" width="260" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="&lt;b&gt;domain&lt;/b&gt;&lt;br&gt;Aggregates: Email, Kenmerkprofiel, RisicoscoreModel, Beoordeling, Evaluatie,...&lt;br&gt;Poorten: EmailParser, EmailRepository, EmailUniquenessValidator, RegistreerbaarDomeinService, presenters,..." style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#FFF3A0;strokeColor=#9E8600;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="90" width="330" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="&lt;b&gt;jakarta-mail-adapter&lt;/b&gt;&lt;br&gt;implementeert EmailParser" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#F9D5E5;strokeColor=#B03A74;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="90" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="&lt;b&gt;guava-adapter&lt;/b&gt;&lt;br&gt;implementeert RegistreerbaarDomeinService (Public Suffix List)" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#F9D5E5;strokeColor=#B03A74;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="200" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="&lt;b&gt;persistentie-adapter&lt;/b&gt;&lt;br&gt;implementeert EmailRepository en uniekheidscontrole" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#F9D5E5;strokeColor=#B03A74;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="310" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="&lt;b&gt;ml-adapter&lt;/b&gt;&lt;br&gt;L1-logistische regressie, cross-validation, drempelbepaling" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#F9D5E5;strokeColor=#B03A74;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="420" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="&lt;b&gt;referentielijst-adapter?&lt;/b&gt;&lt;br&gt;merken en verdachte woorden" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#F9D5E5;strokeColor=#B03A74;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="530" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="&lt;b&gt;vocabulary (shared kernel)&lt;/b&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#EEEEEE;strokeColor=#777777;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="400" y="660" width="330" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="&lt;b&gt;test-doubles&lt;/b&gt;&lt;br&gt;mocks en stubs van de poorten, test builders" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#EEEEEE;strokeColor=#777777;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="760" y="660" width="330" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="&lt;b&gt;scripts&lt;/b&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=11;fillColor=#EEEEEE;strokeColor=#777777;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="660" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="8" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" parent="1" source="9" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=0;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="12" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" parent="1" source="12" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=0;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.08;entryDx=0;entryDy=0;" edge="1" parent="1" source="14" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=0;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.26;entryDx=0;entryDy=0;" edge="1" parent="1" source="15" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=0;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.44;entryDx=0;entryDy=0;" edge="1" parent="1" source="16" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=0;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.62;entryDx=0;entryDy=0;" edge="1" parent="1" source="17" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=1.5;fontSize=11;labelBackgroundColor=#FFFFFF;endFill=0;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.8;entryDx=0;entryDy=0;" edge="1" parent="1" source="18" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="&lt;b&gt;Frontend-adapters (infralaag)&lt;/b&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=10;fillColor=#D7EEDD;strokeColor=#3E8E2A;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="770" width="170" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="&lt;b&gt;Applicatielaag&lt;/b&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=10;fillColor=#DCE8FB;strokeColor=#4A6FA5;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="230" y="770" width="170" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="&lt;b&gt;Domein&lt;/b&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=10;fillColor=#FFF3A0;strokeColor=#9E8600;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="420" y="770" width="170" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="34" value="&lt;b&gt;Backend-adapters (infralaag)&lt;/b&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=10;fillColor=#F9D5E5;strokeColor=#B03A74;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="610" y="770" width="170" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="&lt;b&gt;Ondersteunend&lt;/b&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fontSize=10;fillColor=#EEEEEE;strokeColor=#777777;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="800" y="770" width="170" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="Volle pijl = gebruikt · gestippelde pijl = implementeert (poort)" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="772" width="700" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

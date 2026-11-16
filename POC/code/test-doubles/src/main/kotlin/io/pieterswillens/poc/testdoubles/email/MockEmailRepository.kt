@@ -1,9 +1,9 @@
-package io.pieterswillens.poc.testdoubles
+package io.pieterswillens.poc.testdoubles.email
 
-import io.pieterswillens.poc.domain.Email
-import io.pieterswillens.poc.domain.EmailRepository
-import io.pieterswillens.poc.domain.EmailUniquenessValidationResult
-import io.pieterswillens.poc.domain.EmailUniquenessValidator
+import io.pieterswillens.poc.domain.email.Email
+import io.pieterswillens.poc.domain.email.EmailRepository
+import io.pieterswillens.poc.domain.email.EmailUniquenessValidationResult
+import io.pieterswillens.poc.domain.email.EmailUniquenessValidator
 import io.pieterswillens.poc.vocabulary.EmailMessageId
 
 class MockEmailRepository: EmailRepository, EmailUniquenessValidator {

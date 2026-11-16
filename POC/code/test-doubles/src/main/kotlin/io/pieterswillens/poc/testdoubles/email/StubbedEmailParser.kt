@@ -1,8 +1,8 @@
-package io.pieterswillens.poc.testdoubles
+package io.pieterswillens.poc.testdoubles.email
 
-import io.pieterswillens.poc.domain.EmailParser
-import io.pieterswillens.poc.domain.EmailParsingResult
-import io.pieterswillens.poc.domain.ParsedEmail
+import io.pieterswillens.poc.domain.email.EmailParser
+import io.pieterswillens.poc.domain.email.EmailParsingResult
+import io.pieterswillens.poc.domain.email.ParsedEmail
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailMessageId
 

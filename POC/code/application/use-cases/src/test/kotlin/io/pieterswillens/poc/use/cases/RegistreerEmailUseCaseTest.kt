@@ -1,13 +1,13 @@
 package io.pieterswillens.poc.use.cases
 
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
-import io.pieterswillens.poc.domain.Email
-import io.pieterswillens.poc.domain.EmailSnapshot
-import io.pieterswillens.poc.domain.ParsedEmail
-import io.pieterswillens.poc.testdoubles.MockEmailRepository
-import io.pieterswillens.poc.testdoubles.RawEmailTestBuilder
-import io.pieterswillens.poc.testdoubles.StubbedEmailParser
+import io.pieterswillens.poc.domain.email.Email
+import io.pieterswillens.poc.domain.email.EmailSnapshot
+import io.pieterswillens.poc.domain.email.ParsedEmail
 import io.pieterswillens.poc.testdoubles.TestUtils
+import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
+import io.pieterswillens.poc.testdoubles.email.RawEmailTestBuilder
+import io.pieterswillens.poc.testdoubles.email.StubbedEmailParser
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
 import io.pieterswillens.poc.vocabulary.EmailMessageId

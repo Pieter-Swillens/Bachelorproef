@@ -1,7 +1,7 @@
 package io.pieterswillens.poc.main
 
 import io.pieterswillens.poc.cli.adapter.CliApplication
-import io.pieterswillens.poc.cli.adapter.registreer.mail.RegistreerEmailCliCommand
+import io.pieterswillens.poc.cli.adapter.registreer.email.RegistreerEmailCliCommand
 import io.pieterswillens.poc.main.dependencies.Dependencies
 import kotlin.system.exitProcess
 

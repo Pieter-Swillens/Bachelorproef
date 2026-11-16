@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.domain
+package io.pieterswillens.poc.domain.email
 
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId

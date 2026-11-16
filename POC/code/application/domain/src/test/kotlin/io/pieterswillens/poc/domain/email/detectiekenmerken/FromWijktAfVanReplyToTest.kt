@@ -1,12 +1,12 @@
-package io.pieterswillens.poc.domain.detectiekenmerken
+package io.pieterswillens.poc.domain.email.detectiekenmerken
 
-import io.pieterswillens.poc.domain.Email
-import io.pieterswillens.poc.domain.EmailSnapshot
-import io.pieterswillens.poc.testdoubles.MockRegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.Email
+import io.pieterswillens.poc.domain.email.EmailSnapshot
+import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
 import io.pieterswillens.poc.vocabulary.EmailMessageId
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -39,7 +39,7 @@ class FromWijktAfVanReplyToTest {
         fun `then extractor should report NietAfwijkend`(email: Email) {
             setUp(email)
 
-            assertThat(result).isEqualTo(ExtractieResult.NietAfwijkend)
+            Assertions.assertThat(result).isEqualTo(ExtractieResult.NietAfwijkend)
         }
     }
 
@@ -63,9 +63,9 @@ class FromWijktAfVanReplyToTest {
 
         @Test
         fun `then extractor should report Afwijkend and provide evidence for the inconsistency`() {
-            assertThat(result).isInstanceOfSatisfying(ExtractieResult.Afwijkend::class.java) {
+            Assertions.assertThat(result).isInstanceOfSatisfying(ExtractieResult.Afwijkend::class.java) {
                 println(it.bewijs)
-                assertThat(it.bewijs).isEqualTo("De afzender van de email (${email.fromEmail}) is niet de ontvanger van je antwoord. Je antwoord wordt verstuurd naar: ${email.replyToEmail}")
+                Assertions.assertThat(it.bewijs).isEqualTo("De afzender van de email (${email.fromEmail}) is niet de ontvanger van je antwoord. Je antwoord wordt verstuurd naar: ${email.replyToEmail}")
             }
         }
     }
@@ -84,7 +84,7 @@ class FromWijktAfVanReplyToTest {
         fun `then extractor should report NietBepaalbaar`(email: Email) {
             setUp(email)
 
-            assertThat(result).isEqualTo(ExtractieResult.NietBepaalbaar)
+            Assertions.assertThat(result).isEqualTo(ExtractieResult.NietBepaalbaar)
         }
     }
 
@@ -95,12 +95,14 @@ class FromWijktAfVanReplyToTest {
         ): Stream<out Arguments> {
             return Stream.of(
                 Arguments.of(
-                    Email.fromSnapshot(EmailSnapshot(
-                        emailId = EmailId.createNew(),
-                        fromEmail = EmailAdres.from("test@email.be"),
-                        replyToEmail = EmailAdres.from("test@email.be"),
-                        emailMessageId = EmailMessageId.random()
-                    ))
+                    Email.fromSnapshot(
+                        EmailSnapshot(
+                            emailId = EmailId.createNew(),
+                            fromEmail = EmailAdres.from("test@email.be"),
+                            replyToEmail = EmailAdres.from("test@email.be"),
+                            emailMessageId = EmailMessageId.random()
+                        )
+                    )
                 ),
                 Arguments.of(
                     Email.fromSnapshot(

@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.cli.adapter
+package io.pieterswillens.poc.cli.adapter.shell
 
 import java.io.BufferedReader
 import java.io.PrintWriter

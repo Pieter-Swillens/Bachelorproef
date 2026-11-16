@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.cli.adapter.registreer.mail
+package io.pieterswillens.poc.cli.adapter.registreer.email
 
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.cli.adapter.CliPresenter

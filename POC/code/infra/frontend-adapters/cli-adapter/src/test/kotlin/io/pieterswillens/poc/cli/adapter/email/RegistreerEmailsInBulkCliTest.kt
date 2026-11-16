@@ -1,8 +1,8 @@
-package io.pieterswillens.poc.cli.adapter
+package io.pieterswillens.poc.cli.adapter.email
 
 import io.pieterswillens.poc.cli.adapter.config.CliTest
 import io.pieterswillens.poc.cli.adapter.mocks.MockRegistreerEmail
-import io.pieterswillens.poc.testdoubles.RawEmailTestBuilder
+import io.pieterswillens.poc.testdoubles.email.RawEmailTestBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

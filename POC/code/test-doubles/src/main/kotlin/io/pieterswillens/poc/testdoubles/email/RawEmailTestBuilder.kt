@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.testdoubles
+package io.pieterswillens.poc.testdoubles.email
 
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.RawEmail

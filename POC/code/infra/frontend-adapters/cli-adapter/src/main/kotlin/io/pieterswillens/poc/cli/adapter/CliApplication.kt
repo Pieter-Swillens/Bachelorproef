@@ -1,5 +1,6 @@
 package io.pieterswillens.poc.cli.adapter
 
+import io.pieterswillens.poc.cli.adapter.shell.InteractiveShell
 import picocli.CommandLine
 import java.io.InputStream
 import java.io.PrintStream

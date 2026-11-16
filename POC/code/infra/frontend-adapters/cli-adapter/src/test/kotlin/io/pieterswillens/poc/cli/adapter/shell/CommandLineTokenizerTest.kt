@@ -1,6 +1,6 @@
-package io.pieterswillens.poc.cli.adapter
+package io.pieterswillens.poc.cli.adapter.shell
 
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
@@ -16,7 +16,7 @@ class CommandLineTokenizerTest {
     @ParameterizedTest(name = "[{index}] <{0}> is split into {1}")
     @ArgumentsSource(TestParams::class)
     fun `when a line is tokenized then it is split into arguments`(line: String, expected: List<String>) {
-        assertThat(CommandLineTokenizer.tokenize(line)).isEqualTo(expected)
+        Assertions.assertThat(CommandLineTokenizer.tokenize(line)).isEqualTo(expected)
     }
 
     class TestParams: ArgumentsProvider {

@@ -3,7 +3,7 @@ package io.pieterswillens.poc.cli.adapter.config
 import io.pieterswillens.poc.cli.adapter.CliApplication
 import io.pieterswillens.poc.cli.adapter.mocks.MockApplicationApi
 import io.pieterswillens.poc.cli.adapter.mocks.MockRegistreerEmail
-import io.pieterswillens.poc.cli.adapter.registreer.mail.RegistreerEmailCliCommand
+import io.pieterswillens.poc.cli.adapter.registreer.email.RegistreerEmailCliCommand
 import java.io.PrintStream
 
 class CliApplicationContext {

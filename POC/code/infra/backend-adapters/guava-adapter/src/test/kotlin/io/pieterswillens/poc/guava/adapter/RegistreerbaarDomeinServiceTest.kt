@@ -1,8 +1,8 @@
 package io.pieterswillens.poc.guava.adapter
 
-import io.pieterswillens.poc.domain.BepaalRegistreerbaarDomeinResponse
-import io.pieterswillens.poc.domain.RegistreerbaarDomeinService
-import io.pieterswillens.poc.testdoubles.MockRegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.BepaalRegistreerbaarDomeinResponse
+import io.pieterswillens.poc.domain.email.RegistreerbaarDomeinService
+import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName

@@ -3,7 +3,7 @@ package io.pieterswillens.poc.use.cases
 import io.pieterswillens.poc.api.RegistreerEmail
 import io.pieterswillens.poc.api.RegistreerEmailInput
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
-import io.pieterswillens.poc.domain.*
+import io.pieterswillens.poc.domain.email.*
 import io.pieterswillens.poc.vocabulary.RawEmail
 
 class RegistreerEmailUseCase(

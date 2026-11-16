@@ -1,8 +1,8 @@
 package io.pieterswillens.poc.acceptance.tests.config
 
 import io.pieterswillens.poc.api.RegistreerEmail
-import io.pieterswillens.poc.testdoubles.MockEmailRepository
-import io.pieterswillens.poc.testdoubles.StubbedEmailParser
+import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
+import io.pieterswillens.poc.testdoubles.email.StubbedEmailParser
 import io.pieterswillens.poc.use.cases.RegistreerEmailUseCase
 
 class BlackboxApplicationContext {

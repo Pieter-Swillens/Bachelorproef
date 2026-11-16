@@ -1,8 +1,8 @@
-package io.pieterswillens.poc.domain.detectiekenmerken
+package io.pieterswillens.poc.domain.email.detectiekenmerken
 
-import io.pieterswillens.poc.domain.BepaalRegistreerbaarDomeinResponse
-import io.pieterswillens.poc.domain.Email
-import io.pieterswillens.poc.domain.RegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.BepaalRegistreerbaarDomeinResponse
+import io.pieterswillens.poc.domain.email.Email
+import io.pieterswillens.poc.domain.email.RegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 
 class FromWijktAfVanReplyTo(private val registreerbaarDomeinService: RegistreerbaarDomeinService) {

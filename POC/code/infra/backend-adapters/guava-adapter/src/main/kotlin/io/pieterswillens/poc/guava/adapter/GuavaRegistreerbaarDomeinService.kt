@@ -1,8 +1,8 @@
 package io.pieterswillens.poc.guava.adapter
 
 import com.google.common.net.InternetDomainName
-import io.pieterswillens.poc.domain.BepaalRegistreerbaarDomeinResponse
-import io.pieterswillens.poc.domain.RegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.BepaalRegistreerbaarDomeinResponse
+import io.pieterswillens.poc.domain.email.RegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 
 class GuavaRegistreerbaarDomeinService: RegistreerbaarDomeinService {

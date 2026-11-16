@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.cli.adapter
+package io.pieterswillens.poc.cli.adapter.shell
 
 internal object CommandLineTokenizer {
     private val QUOTES = setOf('"', '\'')

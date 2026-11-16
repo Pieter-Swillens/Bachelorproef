@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.domain.detectiekenmerken
+package io.pieterswillens.poc.domain.email.detectiekenmerken
 
 sealed interface ExtractieResult {
     data object NietAfwijkend: ExtractieResult

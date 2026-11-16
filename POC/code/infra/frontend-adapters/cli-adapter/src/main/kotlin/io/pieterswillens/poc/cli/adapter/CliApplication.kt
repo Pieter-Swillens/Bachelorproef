@@ -1,7 +1,7 @@
-package io.pieterswillens.poc.cli.adapter.config
+package io.pieterswillens.poc.cli.adapter
 
-import io.pieterswillens.poc.cli.adapter.PocCli
 import picocli.CommandLine
+import java.io.InputStream
 import java.io.PrintStream
 import java.io.PrintWriter
 
@@ -27,5 +27,15 @@ class CliApplication(
         outWriter.flush()
         errWriter.flush()
         return exitCode
+    }
+
+    fun runInteractive(input: InputStream = System.`in`): Int {
+        InteractiveShell(
+            input = input.bufferedReader(),
+            out = outWriter,
+            execute = { args -> run(args.toTypedArray()) },
+            printHelp = { commandLine.usage(outWriter) },
+        ).run()
+        return ExitCode.OK
     }
 }

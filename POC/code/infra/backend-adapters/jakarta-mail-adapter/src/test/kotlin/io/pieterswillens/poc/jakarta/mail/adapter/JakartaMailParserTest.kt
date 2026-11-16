@@ -19,7 +19,7 @@ import java.util.stream.Stream
 class JakartaMailParserTest {
 
     val parser = JakartaMailParser(
-        session = JakartaMailParserConfig.session()
+        config = JakartaMailParserConfig
     )
 
     @ParameterizedTest

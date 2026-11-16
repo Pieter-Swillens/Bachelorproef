@@ -33,3 +33,6 @@ include(":vocabulary")
 project(":vocabulary").projectDir = file("code/vocabulary")
 include(":scripts")
 project(":scripts").projectDir = file("code/scripts")
+
+include(":main")
+project(":main").projectDir = file("code/main")

@@ -3,13 +3,16 @@ package io.pieterswillens.poc.use.cases
 import io.pieterswillens.poc.api.RegistreerEmail
 import io.pieterswillens.poc.api.RegistreerEmailInput
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
+import io.pieterswillens.poc.domain.EventPublisher
 import io.pieterswillens.poc.domain.email.*
+import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.vocabulary.RawEmail
 
 class RegistreerEmailUseCase(
     private val emailParser: EmailParser,
     private val emailUniquenessValidator: EmailUniquenessValidator,
-    private val emailRepository: EmailRepository
+    private val emailRepository: EmailRepository,
+    private val eventPublisher: EventPublisher
 ): RegistreerEmail {
 
     override fun registreerEmail(input: RegistreerEmailInput, presenter: RegistreerEmailPresenter) {
@@ -33,6 +36,7 @@ class RegistreerEmailUseCase(
                     presenter = presenter
                 )?.let {
                     emailRepository.save(it)
+                    eventPublisher.publish(EmailGeregistreerd(it.emailId))
                     presenter.emailRegistered(it.emailId)
                 }
             }

@@ -4,6 +4,8 @@ import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.domain.email.Email
 import io.pieterswillens.poc.domain.email.EmailSnapshot
 import io.pieterswillens.poc.domain.email.ParsedEmail
+import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
+import io.pieterswillens.poc.testdoubles.MockEventPublisher
 import io.pieterswillens.poc.testdoubles.TestUtils
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
 import io.pieterswillens.poc.testdoubles.email.RawEmailTestBuilder
@@ -24,7 +26,8 @@ class RegistreerEmailUseCaseTest {
     private val emailParser = StubbedEmailParser()
     private val emailRepository = MockEmailRepository()
     private val emailUniquenessValidator = emailRepository
-    private val useCase = RegistreerEmailUseCase(emailParser, emailUniquenessValidator, emailRepository)
+    private val eventPublisher = MockEventPublisher()
+    private val useCase = RegistreerEmailUseCase(emailParser, emailUniquenessValidator, emailRepository, eventPublisher)
 
     @Nested
     internal inner class `when a new email is registered`: FailingRegistreerEmailPresenter() {
@@ -52,6 +55,11 @@ class RegistreerEmailUseCaseTest {
                 assertThat(email.emailMessageId).isEqualTo(aParsedEmail.messageId)
             }
             assertThat(emailParser.usedEmail).isEqualTo(rawEmail.content)
+        }
+
+        @Test
+        fun `then an EmailGeregistreerdEvent is published`() {
+            assertThat(eventPublisher.lastStoredEvent).isEqualTo(EmailGeregistreerd(presentedEmailId))
         }
 
         @Test
@@ -102,6 +110,11 @@ class RegistreerEmailUseCaseTest {
         }
 
         @Test
+        fun `then no event is published`() {
+            assertThat(eventPublisher.hasNoEventPublished()).isTrue()
+        }
+
+        @Test
         fun `then emailAlreadyRegistered is presented`() {
             assertThat(emailAlreadyRegisteredCalled).isTrue()
             assertThat(presentedEmailId).isNotNull()
@@ -136,6 +149,11 @@ class RegistreerEmailUseCaseTest {
         fun `then no email is stored`() {
             assertThat(emailRepository.storedItems).isEmpty()
             assertThat(emailParser.usedEmail).isEqualTo(rawEmail.content)
+        }
+
+        @Test
+        fun `then no event is published`() {
+            assertThat(eventPublisher.hasNoEventPublished()).isTrue()
         }
 
         @Test

@@ -13,8 +13,9 @@ dependencies {
     implementation(project(":use-cases"))
     implementation(project(":cli-adapter"))
     implementation(project(":jakarta-mail-adapter"))
+    implementation(project(":in-memory-event-publisher"))
 
-    // TODO - delete following dependencies once 'real' impl has been provided
+    // TODO - delete following dependencies once 'real' impl of emailRepository has been provided
     implementation(project(":test-doubles"))
 
     implementation(libs.picocli)

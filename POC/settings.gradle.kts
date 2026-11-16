@@ -21,6 +21,8 @@ include(":guava-adapter")
 project(":guava-adapter").projectDir = file("code/infra/backend-adapters/guava-adapter")
 include(":jakarta-mail-adapter")
 project(":jakarta-mail-adapter").projectDir = file("code/infra/backend-adapters/jakarta-mail-adapter")
+include(":in-memory-event-publisher")
+project(":in-memory-event-publisher").projectDir = file("code/infra/backend-adapters/in-memory-event-publisher")
 
 include(":acceptance-tests-adapter")
 project(":acceptance-tests-adapter").projectDir = file("code/infra/frontend-adapters/acceptance-tests")

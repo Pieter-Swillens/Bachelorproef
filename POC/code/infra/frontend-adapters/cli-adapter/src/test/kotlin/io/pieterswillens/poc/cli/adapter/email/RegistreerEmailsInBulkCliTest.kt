@@ -36,10 +36,16 @@ class RegistreerEmailsInBulkCliTest: CliTest {
         val result = runCli("registreer", bulkArgument, padNaarMap)
 
         assertThat(result.exitCode).isEqualTo(0)
-        assertThat(result.stdout).isEqualTo("""
-            E-mail geregistreerd - emailId: ${context.registreerEmail.emailIds[0].value}
-            E-mail geregistreerd - emailId: ${context.registreerEmail.emailIds[3].value}
-        """.trimIndent())
+        assertThat(result.stdout).contains(
+            "E-mail geregistreerd - emailId: ${context.registreerEmail.emailIds[0].value}",
+            "E-mail geregistreerd - emailId: ${context.registreerEmail.emailIds[3].value}",
+            """
+                Resultaat van de bulk import:
+                    Aantal nieuwe registraties:     2
+                    Aantal reeds geregistreerd:     2
+                    Aantal mislukt:                 2
+            """.trimIndent()
+        )
         assertThat(result.stderr).isEqualTo("""
             E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailIds[1].value}
             E-mail kon niet worden verwerkt: bestand3.eml
@@ -62,7 +68,10 @@ class RegistreerEmailsInBulkCliTest: CliTest {
         val result = runCli("registreer", "--bulk", padNaarMap)
 
         assertThat(result.exitCode).isEqualTo(1)
-        assertThat(result.stdout).isEmpty()
+        assertThat(result.stdout).contains(
+            "Aantal reeds geregistreerd:     2",
+            "Aantal mislukt:                 2"
+        )
         assertThat(result.stderr).isEqualTo("""
             E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailIds[0].value}
             E-mail kon niet worden verwerkt: bestand3.eml

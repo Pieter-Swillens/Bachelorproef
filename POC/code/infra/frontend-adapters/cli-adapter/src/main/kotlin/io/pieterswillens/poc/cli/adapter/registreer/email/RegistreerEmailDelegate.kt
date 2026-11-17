@@ -32,14 +32,31 @@ class RegistreerEmailDelegate(
             .sorted()
             .toList()
 
-        val containsOk = bestanden.map { registreerFile(it) }
-            .any { it == ExitCode.OK }
-        return if (containsOk) ExitCode.OK else ExitCode.MISLUKT
+        val registeredFiles = bestanden.map { registreerFile(it) }
+        return reportResult(registeredFiles)
     }
 
     private fun registreerFile(bestand: Path): Int {
         val presenter = RegistreerEmailCliPresenter(commandLine.out, commandLine.err, path.relativize(bestand).toString())
         registreerEmail.registreerEmail(RegistreerEmailInput(bestand.readBytes()), presenter)
         return presenter.getResponse()
+    }
+
+    private fun reportResult(registeredFiles: List<Int>): Int {
+        commandLine.out.println(
+            """
+                Resultaat van de bulk import:
+                    Aantal nieuwe registraties:     ${registeredFiles.count { it == ExitCode.OK }}
+                    Aantal reeds geregistreerd:     ${registeredFiles.count { it == ExitCode.AL_GEREGISTREERD }}
+                    Aantal mislukt:                 ${registeredFiles.count { it == ExitCode.MISLUKT }}
+            """.trimIndent()
+        )
+
+        val containsOk = registeredFiles.any { it == ExitCode.OK }
+        return if (containsOk) {
+            ExitCode.OK
+        } else {
+            ExitCode.MISLUKT
+        }
     }
 }

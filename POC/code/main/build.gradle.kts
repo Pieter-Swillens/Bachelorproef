@@ -24,4 +24,5 @@ dependencies {
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
+    systemProperty("poc.log.dir", rootProject.layout.projectDirectory.dir("logs").asFile.absolutePath)
 }

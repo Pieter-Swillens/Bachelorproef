@@ -9,6 +9,7 @@ import io.pieterswillens.poc.vocabulary.EmailMessageId
 import jakarta.mail.Address
 import jakarta.mail.internet.InternetAddress
 import jakarta.mail.internet.MimeMessage
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 
 class JakartaMailParser(private val config: JakartaMailParserConfig): EmailParser {
@@ -16,7 +17,8 @@ class JakartaMailParser(private val config: JakartaMailParserConfig): EmailParse
         return try {
             val message = MimeMessage(config.session(), ByteArrayInputStream(email))
             EmailParsingResult.Ok(parsedEmail = message.toParsedEmail())
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            LOGGER.error("Failed to parse email: $e")
             EmailParsingResult.Mislukt
         }
     }
@@ -32,5 +34,9 @@ class JakartaMailParser(private val config: JakartaMailParserConfig): EmailParse
             is InternetAddress -> EmailAdres.from(this.address)
             else -> error("Unknown address type $this")
         }
+    }
+
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(JakartaMailParser::class.java)
     }
 }

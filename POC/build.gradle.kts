@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-
 plugins {
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinPluginSerialization) apply false
@@ -16,6 +14,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
     dependencies {
+        "implementation"(rootProject.libs.bundles.logging)
         "testImplementation"(platform(rootProject.testlibs.junitBom))
         "testImplementation"(rootProject.testlibs.junitJupiter)
         "testImplementation"(rootProject.testlibs.assertjCore)

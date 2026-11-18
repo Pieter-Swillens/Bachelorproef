@@ -1,5 +1,6 @@
 package io.pieterswillens.poc.domain.email
 
+import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReplyTo
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
 import io.pieterswillens.poc.vocabulary.EmailMessageId
@@ -14,6 +15,17 @@ class Email private constructor(
 
     var status: EmailStatus = status
         private set
+
+    fun berekenDetectiekenmerken(
+        registreerbaarDomeinService: RegistreerbaarDomeinService,
+        presenter: BerekenDetectiekenmerkenDomainPresenter,
+    ) {
+        val kenmerk = FromWijktAfVanReplyTo(registreerbaarDomeinService)
+        status = EmailStatus.DetectiekenmerkenBerekend(
+            kenmerkenprofiel = mapOf("A1" to kenmerk.evaluate(this))
+        )
+        presenter.detectieKenmerkenSuccesvolBerekend(emailId)
+    }
 
     companion object {
         fun registreer(

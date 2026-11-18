@@ -3,6 +3,10 @@
 - Some kind of repositoryAssert using a RecursiveComparison?
 - Expose meer uitleg over de email parsing fout naar eindgebruiker?
 - Introduce BufferedEventPublisher to ensure correct order of `save/publish/presenter.success()`?
+- Some kind of eventHandlerAssert - now `MockEventPublisher` is both a spy and a dispatcher
+- Use case contract?
+- Detectiekenmerk contract?
+- Move domain presenters to dedicated subpackage
 
 
 ## Important

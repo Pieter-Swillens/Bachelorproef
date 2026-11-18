@@ -3,6 +3,7 @@ package io.pieterswillens.poc.acceptance.tests
 import io.pieterswillens.poc.acceptance.tests.config.AcceptanceTest
 import io.pieterswillens.poc.api.RegistreerEmailInput
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
+import io.pieterswillens.poc.domain.email.EmailStatus
 import io.pieterswillens.poc.testdoubles.TestUtils
 import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
 import io.pieterswillens.poc.vocabulary.EmailId
@@ -19,6 +20,7 @@ class EmailTest: AcceptanceTest {
     fun `when testing the flow of an email`() {
         whenRegisteringAnEmail()
         thenTheEmailShouldBeSaved()
+        thenTheDetectiekenmerkenShouldBeBerekend()
     }
 
     private fun whenRegisteringAnEmail() {
@@ -35,11 +37,15 @@ class EmailTest: AcceptanceTest {
 
     // TODO: rewrite this to use application api get once it has been implemented
     private fun thenTheEmailShouldBeSaved() {
-        val isSaved = context.emailRepository.storedItems.any { email ->
-            email.emailId == savedEmailId
-        }
+        val savedEmail = context.emailRepository.get(savedEmailId)
 
-        assertThat(isSaved).isTrue()
+        assertThat(savedEmail).isNotNull()
+    }
+
+    private fun thenTheDetectiekenmerkenShouldBeBerekend() {
+        val savedEmail = context.emailRepository.get(savedEmailId)
+
+        assertThat(savedEmail!!.status).isInstanceOf(EmailStatus.DetectiekenmerkenBerekend::class.java)
     }
 
     class RegistreerEmailTestPresenter: RegistreerEmailPresenter {

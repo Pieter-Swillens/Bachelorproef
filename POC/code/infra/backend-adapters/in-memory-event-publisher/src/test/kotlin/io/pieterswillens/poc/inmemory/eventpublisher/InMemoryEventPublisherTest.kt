@@ -1,6 +1,7 @@
 package io.pieterswillens.poc.inmemory.eventpublisher
 
 import io.pieterswillens.poc.domain.Event
+import io.pieterswillens.poc.domain.email.events.DetectiekenmerkenBerekend
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.testdoubles.MockEventHandler
 import io.pieterswillens.poc.vocabulary.EmailId
@@ -70,7 +71,8 @@ class InMemoryEventPublisherTest {
             context: ExtensionContext
         ): Stream<out Arguments> {
             return Stream.of(
-                Arguments.of(EmailGeregistreerd(EmailId.createNew()))
+                Arguments.of(EmailGeregistreerd(EmailId.createNew())),
+                Arguments.of(DetectiekenmerkenBerekend(EmailId.createNew()))
             )
         }
     }

@@ -50,7 +50,7 @@ class RegistreerEmailUseCaseTest {
 
         @Test
         fun `then the parsed email is stored`() {
-            assertThat(emailRepository.storedItems).anySatisfy { email ->
+            assertThat(emailRepository.storedItems.values).anySatisfy { email ->
                 assertThat(email.fromEmail).isEqualTo(aParsedEmail.from)
                 assertThat(email.replyToEmail).isEqualTo(aParsedEmail.replyTo)
                 assertThat(email.emailMessageId).isEqualTo(aParsedEmail.messageId)

@@ -9,8 +9,8 @@ import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.testdoubles.MockEventPublisher
 import io.pieterswillens.poc.testdoubles.TestUtils
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
-import io.pieterswillens.poc.testdoubles.email.RawEmailTestBuilder
 import io.pieterswillens.poc.testdoubles.email.StubbedEmailParser
+import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
 import io.pieterswillens.poc.vocabulary.EmailMessageId

@@ -4,7 +4,7 @@ import io.pieterswillens.poc.acceptance.tests.config.AcceptanceTest
 import io.pieterswillens.poc.api.RegistreerEmailInput
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.testdoubles.TestUtils
-import io.pieterswillens.poc.testdoubles.email.RawEmailTestBuilder
+import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName

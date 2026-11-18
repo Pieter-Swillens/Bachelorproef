@@ -2,7 +2,7 @@ package io.pieterswillens.poc.cli.adapter.shell
 
 import io.pieterswillens.poc.cli.adapter.config.CliTest
 import io.pieterswillens.poc.cli.adapter.mocks.MockRegistreerEmail
-import io.pieterswillens.poc.testdoubles.email.RawEmailTestBuilder
+import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

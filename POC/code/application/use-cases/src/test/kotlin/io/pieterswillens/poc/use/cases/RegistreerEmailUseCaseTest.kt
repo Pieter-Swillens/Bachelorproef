@@ -4,8 +4,8 @@ import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.domain.email.Email
 import io.pieterswillens.poc.domain.email.EmailSnapshot
 import io.pieterswillens.poc.domain.email.EmailStatus
-import io.pieterswillens.poc.domain.email.ParsedEmail
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
+import io.pieterswillens.poc.domain.email.ports.ParsedEmail
 import io.pieterswillens.poc.testdoubles.MockEventPublisher
 import io.pieterswillens.poc.testdoubles.TestUtils
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository

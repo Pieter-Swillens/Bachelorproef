@@ -1,7 +1,7 @@
 package io.pieterswillens.poc.jakarta.mail.adapter
 
-import io.pieterswillens.poc.domain.email.EmailParsingResult
-import io.pieterswillens.poc.domain.email.ParsedEmail
+import io.pieterswillens.poc.domain.email.ports.EmailParsingResult
+import io.pieterswillens.poc.domain.email.ports.ParsedEmail
 import io.pieterswillens.poc.jakarta.mail.adapter.config.JakartaMailParserConfig
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailMessageId

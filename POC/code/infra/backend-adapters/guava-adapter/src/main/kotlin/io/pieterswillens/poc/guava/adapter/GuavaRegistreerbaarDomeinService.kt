@@ -1,8 +1,8 @@
 package io.pieterswillens.poc.guava.adapter
 
 import com.google.common.net.InternetDomainName
-import io.pieterswillens.poc.domain.email.BepaalRegistreerbaarDomeinResponse
-import io.pieterswillens.poc.domain.email.RegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.ports.BepaalRegistreerbaarDomeinResponse
+import io.pieterswillens.poc.domain.email.ports.RegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import org.slf4j.LoggerFactory
 

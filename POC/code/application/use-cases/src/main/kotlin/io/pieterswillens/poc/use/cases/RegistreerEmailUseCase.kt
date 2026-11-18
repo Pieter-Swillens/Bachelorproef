@@ -4,8 +4,12 @@ import io.pieterswillens.poc.api.RegistreerEmail
 import io.pieterswillens.poc.api.RegistreerEmailInput
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.domain.EventPublisher
-import io.pieterswillens.poc.domain.email.*
+import io.pieterswillens.poc.domain.email.Email
+import io.pieterswillens.poc.domain.email.EmailRepository
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
+import io.pieterswillens.poc.domain.email.ports.EmailParser
+import io.pieterswillens.poc.domain.email.ports.EmailParsingResult
+import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidator
 import io.pieterswillens.poc.vocabulary.RawEmail
 
 class RegistreerEmailUseCase(

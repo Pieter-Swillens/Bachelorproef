@@ -1,6 +1,6 @@
 package io.pieterswillens.poc.api
 
-import io.pieterswillens.poc.domain.email.RegistreerEmailDomainPresenter
+import io.pieterswillens.poc.domain.email.presenter.RegistreerEmailDomainPresenter
 import io.pieterswillens.poc.vocabulary.EmailId
 
 fun interface RegistreerEmail {

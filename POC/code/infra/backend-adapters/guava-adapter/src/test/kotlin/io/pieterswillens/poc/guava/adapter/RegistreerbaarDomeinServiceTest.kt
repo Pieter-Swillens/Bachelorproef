@@ -1,7 +1,7 @@
 package io.pieterswillens.poc.guava.adapter
 
-import io.pieterswillens.poc.domain.email.BepaalRegistreerbaarDomeinResponse
-import io.pieterswillens.poc.domain.email.RegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.ports.BepaalRegistreerbaarDomeinResponse
+import io.pieterswillens.poc.domain.email.ports.RegistreerbaarDomeinService
 import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import org.assertj.core.api.Assertions.assertThat

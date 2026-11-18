@@ -1,7 +1,7 @@
 package io.pieterswillens.poc.testdoubles.email
 
-import io.pieterswillens.poc.domain.email.BepaalRegistreerbaarDomeinResponse
-import io.pieterswillens.poc.domain.email.RegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.ports.BepaalRegistreerbaarDomeinResponse
+import io.pieterswillens.poc.domain.email.ports.RegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 
 class MockRegistreerbaarDomeinService : RegistreerbaarDomeinService {

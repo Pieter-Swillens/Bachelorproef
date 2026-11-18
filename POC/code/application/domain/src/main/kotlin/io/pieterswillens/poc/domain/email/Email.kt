@@ -1,6 +1,12 @@
 package io.pieterswillens.poc.domain.email
 
 import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReplyTo
+import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidationResult
+import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidator
+import io.pieterswillens.poc.domain.email.ports.ParsedEmail
+import io.pieterswillens.poc.domain.email.ports.RegistreerbaarDomeinService
+import io.pieterswillens.poc.domain.email.presenter.BerekenDetectiekenmerkenDomainPresenter
+import io.pieterswillens.poc.domain.email.presenter.RegistreerEmailDomainPresenter
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
 import io.pieterswillens.poc.vocabulary.EmailMessageId

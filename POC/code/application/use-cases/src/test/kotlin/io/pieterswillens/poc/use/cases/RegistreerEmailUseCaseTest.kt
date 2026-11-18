@@ -3,6 +3,7 @@ package io.pieterswillens.poc.use.cases
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.domain.email.Email
 import io.pieterswillens.poc.domain.email.EmailSnapshot
+import io.pieterswillens.poc.domain.email.EmailStatus
 import io.pieterswillens.poc.domain.email.ParsedEmail
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.testdoubles.MockEventPublisher
@@ -53,6 +54,7 @@ class RegistreerEmailUseCaseTest {
                 assertThat(email.fromEmail).isEqualTo(aParsedEmail.from)
                 assertThat(email.replyToEmail).isEqualTo(aParsedEmail.replyTo)
                 assertThat(email.emailMessageId).isEqualTo(aParsedEmail.messageId)
+                assertThat(email.status).isInstanceOf(EmailStatus.Geregistreerd::class.java)
             }
             assertThat(emailParser.usedEmail).isEqualTo(rawEmail.content)
         }

@@ -8,8 +8,13 @@ class Email private constructor(
     val emailId: EmailId,
     val fromEmail: EmailAdres,
     val replyToEmail: EmailAdres,
-    val emailMessageId: EmailMessageId
+    val emailMessageId: EmailMessageId,
+    status: EmailStatus
 ) {
+
+    var status: EmailStatus = status
+        private set
+
     companion object {
         fun registreer(
             parsedEmail: ParsedEmail,
@@ -26,7 +31,8 @@ class Email private constructor(
                     emailId = EmailId.createNew(),
                     fromEmail = parsedEmail.from,
                     replyToEmail = parsedEmail.replyTo,
-                    emailMessageId = parsedEmail.messageId
+                    emailMessageId = parsedEmail.messageId,
+                    status = EmailStatus.Geregistreerd
                 )
 
             }
@@ -37,7 +43,8 @@ class Email private constructor(
                 emailId = snapshot.emailId,
                 fromEmail = snapshot.fromEmail,
                 replyToEmail = snapshot.replyToEmail,
-                emailMessageId = snapshot.emailMessageId
+                emailMessageId = snapshot.emailMessageId,
+                status = snapshot.status
             )
         }
     }

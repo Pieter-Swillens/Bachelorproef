@@ -43,7 +43,7 @@ class RegistreerEmailUseCaseTest {
 
             rawEmail = RawEmailTestBuilder().build()
             useCase.execute(
-                registreerEmailCommand = RegistreerEmailCommand(rawEmail),
+                command = RegistreerEmailCommand(rawEmail),
                 presenter = this
             )
         }
@@ -100,7 +100,7 @@ class RegistreerEmailUseCaseTest {
 
             rawEmail = RawEmailTestBuilder().build()
             useCase.execute(
-                registreerEmailCommand = RegistreerEmailCommand(rawEmail),
+                command = RegistreerEmailCommand(rawEmail),
                 presenter = this
             )
         }
@@ -142,7 +142,7 @@ class RegistreerEmailUseCaseTest {
 
             rawEmail = RawEmailTestBuilder().build()
             useCase.execute(
-                registreerEmailCommand = RegistreerEmailCommand(rawEmail),
+                command = RegistreerEmailCommand(rawEmail),
                 presenter = this
             )
         }

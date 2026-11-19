@@ -11,8 +11,8 @@ class BerekenDetectiekenmerkenUseCase(
     private val registreerbaarDomeinService: RegistreerbaarDomeinService,
     private val emailRepository: EmailRepository,
     private val eventPublisher: EventPublisher
-) {
-    fun execute(
+): UseCase<BerekenDetectiekenmerkenCommand, BerekenDetectiekenmerkenPresenter> {
+    override fun execute(
         command: BerekenDetectiekenmerkenCommand,
         presenter: BerekenDetectiekenmerkenPresenter
     ) {
@@ -28,4 +28,4 @@ interface BerekenDetectiekenmerkenPresenter: BerekenDetectiekenmerkenDomainPrese
     fun emailNotFound(emailId: EmailId)
 }
 
-data class BerekenDetectiekenmerkenCommand(val emailId: EmailId)
+data class BerekenDetectiekenmerkenCommand(val emailId: EmailId): Command

@@ -17,17 +17,17 @@ class RegistreerEmailUseCase(
     private val emailUniquenessValidator: EmailUniquenessValidator,
     private val emailRepository: EmailRepository,
     private val eventPublisher: EventPublisher
-): RegistreerEmail {
+): RegistreerEmail, UseCase<RegistreerEmailCommand, RegistreerEmailPresenter> {
 
     override fun registreerEmail(input: RegistreerEmailInput, presenter: RegistreerEmailPresenter) {
         execute(
-            registreerEmailCommand = RegistreerEmailCommand(RawEmail(input.content)),
+            command = RegistreerEmailCommand(RawEmail(input.content)),
             presenter = presenter,
         )
     }
 
-    fun execute(registreerEmailCommand: RegistreerEmailCommand, presenter: RegistreerEmailPresenter) {
-        when (val result = emailParser.parse(registreerEmailCommand.rawEmail.content)) {
+    override fun execute(command: RegistreerEmailCommand, presenter: RegistreerEmailPresenter) {
+        when (val result = emailParser.parse(command.rawEmail.content)) {
             EmailParsingResult.Mislukt -> {
                 presenter.emailRegistrationFailed()
                 return
@@ -48,4 +48,4 @@ class RegistreerEmailUseCase(
     }
 }
 
-data class RegistreerEmailCommand(val rawEmail: RawEmail)
+data class RegistreerEmailCommand(val rawEmail: RawEmail): Command

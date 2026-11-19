@@ -22,7 +22,14 @@ subprojects {
     }
 
     tasks.withType<Test> {
-        useJUnitPlatform()
+        val isSystemTest = name == "systemTest"
+        useJUnitPlatform {
+            if (isSystemTest) {
+                includeTags("system-test")
+            } else {
+                excludeTags("system-test")
+            }
+        }
         outputs.cacheIf { false }
         outputs.upToDateWhen { false }
     }

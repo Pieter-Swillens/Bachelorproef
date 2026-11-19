@@ -4,8 +4,8 @@ import io.pieterswillens.poc.domain.email.EmailStatus
 import io.pieterswillens.poc.domain.email.events.DetectiekenmerkenBerekend
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.testdoubles.MockEventPublisher
+import io.pieterswillens.poc.testdoubles.email.MockDetectiekenmerken
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
-import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.testdoubles.email.testbuilders.GeregistreerdeEmailTestBuilder
 import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenUseCase
 import io.pieterswillens.poc.vocabulary.EmailId
@@ -22,9 +22,9 @@ class EmailEventHandlerTest {
     private val eventPublisher = MockEventPublisher()
     private val handler = EmailEventHandler(
         BerekenDetectiekenmerkenUseCase(
-            registreerbaarDomeinService = MockRegistreerbaarDomeinService(),
+            detectiekenmerken = MockDetectiekenmerken(),
             emailRepository = emailRepository,
-            eventPublisher = eventPublisher
+            eventPublisher = eventPublisher,
         )
     )
 

@@ -1,22 +1,37 @@
 package io.pieterswillens.poc.main.dependencies
 
 import io.pieterswillens.poc.domain.EventHandler
+import io.pieterswillens.poc.domain.email.detectiekenmerken.DetectiekenmerkenRegistry
+import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReplyTo
+import io.pieterswillens.poc.guava.adapter.GuavaRegistreerbaarDomeinService
 import io.pieterswillens.poc.inmemory.eventpublisher.InMemoryEventPublisher
 import io.pieterswillens.poc.jakarta.mail.adapter.JakartaMailParser
 import io.pieterswillens.poc.jakarta.mail.adapter.config.JakartaMailParserConfig
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
-import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenUseCase
 import io.pieterswillens.poc.use.cases.RegistreerEmailUseCase
 import io.pieterswillens.poc.use.cases.event.handlers.EmailEventHandler
 
 internal object Dependencies {
+
+    /* --- REPOSITORIES & INFRA --- */
     private val eventHandlers = mutableListOf<EventHandler>()
     private val eventPublisher = InMemoryEventPublisher(eventHandlers)
 
     private val emailParser = JakartaMailParser(JakartaMailParserConfig)
-    private val emailRepository = MockEmailRepository()
+    internal val emailRepository = MockEmailRepository()
 
+    /* --- SERVICES --- */
+    private val registreerbaarDomeinService = GuavaRegistreerbaarDomeinService()
+
+    /* --- REGISTRIES --- */
+    private val detectiekenmerkenRegistry = DetectiekenmerkenRegistry(
+        kenmerken = listOf(
+            FromWijktAfVanReplyTo(registreerbaarDomeinService)
+        )
+    )
+
+    /* --- USE CASES --- */
     val registreerEmail = RegistreerEmailUseCase(
         emailParser = emailParser,
         emailUniquenessValidator = emailRepository,
@@ -24,7 +39,7 @@ internal object Dependencies {
         eventPublisher = eventPublisher
     )
     val berekenDetectiekenmerkenUseCase = BerekenDetectiekenmerkenUseCase(
-        registreerbaarDomeinService = MockRegistreerbaarDomeinService(),
+        detectiekenmerken = detectiekenmerkenRegistry,
         emailRepository = emailRepository,
         eventPublisher = eventPublisher
     )

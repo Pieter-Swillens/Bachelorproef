@@ -1,10 +1,9 @@
 package io.pieterswillens.poc.domain.email
 
-import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReplyTo
+import io.pieterswillens.poc.domain.email.detectiekenmerken.Detectiekenmerken
 import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidationResult
 import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidator
 import io.pieterswillens.poc.domain.email.ports.ParsedEmail
-import io.pieterswillens.poc.domain.email.ports.RegistreerbaarDomeinService
 import io.pieterswillens.poc.domain.email.presenter.BerekenDetectiekenmerkenDomainPresenter
 import io.pieterswillens.poc.domain.email.presenter.RegistreerEmailDomainPresenter
 import io.pieterswillens.poc.vocabulary.EmailAdres
@@ -23,12 +22,11 @@ class Email private constructor(
         private set
 
     fun berekenDetectiekenmerken(
-        registreerbaarDomeinService: RegistreerbaarDomeinService,
+        detectiekenmerken: Detectiekenmerken,
         presenter: BerekenDetectiekenmerkenDomainPresenter,
     ) {
-        val kenmerk = FromWijktAfVanReplyTo(registreerbaarDomeinService)
         status = EmailStatus.DetectiekenmerkenBerekend(
-            kenmerkenprofiel = mapOf("A1" to kenmerk.evaluate(this))
+            kenmerkenprofiel = detectiekenmerken.geefKenmerkenProfiel(this)
         )
         presenter.detectieKenmerkenSuccesvolBerekend(emailId)
     }

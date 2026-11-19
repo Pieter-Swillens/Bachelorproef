@@ -1,34 +1,37 @@
 package io.pieterswillens.poc.acceptance.tests.config
 
+import io.pieterswillens.poc.acceptance.tests.ApplicationContext
 import io.pieterswillens.poc.api.RegistreerEmail
 import io.pieterswillens.poc.testdoubles.MockEventPublisher
+import io.pieterswillens.poc.testdoubles.email.MockDetectiekenmerken
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
-import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.testdoubles.email.StubbedEmailParser
 import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenUseCase
 import io.pieterswillens.poc.use.cases.RegistreerEmailUseCase
 import io.pieterswillens.poc.use.cases.event.handlers.EmailEventHandler
 
-class BlackboxApplicationContext {
+class BlackboxApplicationContext: ApplicationContext {
 
     private val eventPublisher = MockEventPublisher()
 
     /* --- REPOSITORIES --- */
-    val emailRepository: MockEmailRepository = MockEmailRepository()
+    override val emailRepository: MockEmailRepository = MockEmailRepository()
 
     /* --- SERVICES --- */
     private val emailParser = StubbedEmailParser()
-    private val registreerbaarDomeinService = MockRegistreerbaarDomeinService()
+
+    /* --- REGISTRIES --- */
+    private val detectiekenmerken = MockDetectiekenmerken()
 
     /* --- USE CASES --- */
-    val registreerEmail: RegistreerEmail = RegistreerEmailUseCase(
+    override val registreerEmail: RegistreerEmail = RegistreerEmailUseCase(
         emailParser = emailParser,
         emailUniquenessValidator = emailRepository,
         emailRepository = emailRepository,
         eventPublisher = eventPublisher
     )
     val berekenDetectiekenmerken = BerekenDetectiekenmerkenUseCase(
-        registreerbaarDomeinService = registreerbaarDomeinService,
+        detectiekenmerken = detectiekenmerken,
         emailRepository = emailRepository,
         eventPublisher = eventPublisher
     )

@@ -1,12 +1,13 @@
 package io.pieterswillens.poc.use.cases
 
 import io.pieterswillens.poc.domain.email.EmailStatus
+import io.pieterswillens.poc.domain.email.detectiekenmerken.DetectiekenmerkId
 import io.pieterswillens.poc.domain.email.detectiekenmerken.ExtractieResult
 import io.pieterswillens.poc.domain.email.events.DetectiekenmerkenBerekend
 import io.pieterswillens.poc.testdoubles.MockEventPublisher
 import io.pieterswillens.poc.testdoubles.TestUtils
+import io.pieterswillens.poc.testdoubles.email.MockDetectiekenmerken
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
-import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.testdoubles.email.testbuilders.GeregistreerdeEmailTestBuilder
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.assertj.core.api.Assertions.assertThat
@@ -18,11 +19,10 @@ import org.junit.jupiter.api.Test
 @DisplayName("Given a use case to to bereken the detectiekenmerken of an email")
 class BerekenDetectiekenmerkenUseCaseTest {
 
-    private val registreerbaarDomeinService = MockRegistreerbaarDomeinService()
-
+    private val detectiekenmerken = MockDetectiekenmerken()
     private val emailRepository = MockEmailRepository()
     private val eventPublisher = MockEventPublisher()
-    private val useCase = BerekenDetectiekenmerkenUseCase(registreerbaarDomeinService, emailRepository, eventPublisher)
+    private val useCase = BerekenDetectiekenmerkenUseCase(detectiekenmerken, emailRepository, eventPublisher,)
 
     @Nested
     internal inner class `when berekening the detectiekenmerken for an email`: FailingBerekenDetectiekenmerkenPresenter() {
@@ -31,6 +31,7 @@ class BerekenDetectiekenmerkenUseCaseTest {
         private var detectieKenmerkenSuccesvolBerekendCalled = false
 
         private val emailId = EmailId.createNew()
+        private val expectedKenmerkenprofiel = mapOf(DetectiekenmerkId.A1_FROM_WIJKT_AF_VAN_REPLY_TO to ExtractieResult.NietAfwijkend)
 
         @BeforeEach
         fun setUp() {
@@ -38,6 +39,7 @@ class BerekenDetectiekenmerkenUseCaseTest {
                 .with(emailId = emailId)
                 .build()
             emailRepository.save(email)
+            detectiekenmerken.kenmerkenProfiel = expectedKenmerkenprofiel
 
             assertThat(email.status).isInstanceOf(EmailStatus.Geregistreerd::class.java)
             useCase.execute(BerekenDetectiekenmerkenCommand(emailId = emailId), this)
@@ -48,7 +50,7 @@ class BerekenDetectiekenmerkenUseCaseTest {
             assertThat(emailRepository.storedItems.values).anySatisfy { email ->
                 assertThat(email.emailId).isEqualTo(emailId)
                 assertThat(email.status).isInstanceOfSatisfying(EmailStatus.DetectiekenmerkenBerekend::class.java) {
-                    assertThat(it.kenmerkenprofiel).isNotNull()
+                    assertThat(it.kenmerkenprofiel).isEqualTo(expectedKenmerkenprofiel)
                 }
             }
         }
@@ -107,7 +109,7 @@ class BerekenDetectiekenmerkenUseCaseTest {
         private var detectieKenmerkenSuccesvolBerekendCalled = false
 
         private val emailId = EmailId.createNew()
-        private val initialKenmerkenprofiel = mapOf("XYZ" to ExtractieResult.NietBepaalbaar)
+        private val initialKenmerkenprofiel = mapOf(DetectiekenmerkId.A1_FROM_WIJKT_AF_VAN_REPLY_TO to ExtractieResult.NietBepaalbaar)
 
         @BeforeEach
         fun setUp() {
@@ -135,7 +137,7 @@ class BerekenDetectiekenmerkenUseCaseTest {
         }
 
         @Test
-        fun `then no DetectiekenmerkenBerekend event is published`() {
+        fun `then a DetectiekenmerkenBerekend event is published`() {
             assertThat(eventPublisher.lastStoredEvent).isEqualTo(DetectiekenmerkenBerekend(emailId))
         }
 

@@ -5,8 +5,10 @@ import io.pieterswillens.poc.domain.email.ports.BepaalRegistreerbaarDomeinRespon
 import io.pieterswillens.poc.domain.email.ports.RegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 
-class FromWijktAfVanReplyTo(private val registreerbaarDomeinService: RegistreerbaarDomeinService) {
-    fun evaluate(email: Email): ExtractieResult {
+class FromWijktAfVanReplyTo(private val registreerbaarDomeinService: RegistreerbaarDomeinService): Detectiekenmerk {
+    override val id = DetectiekenmerkId.A1_FROM_WIJKT_AF_VAN_REPLY_TO
+
+    override fun evaluate(email: Email): ExtractieResult {
         val fromDomein = email.fromEmail.toRegistreerbaarDomein() ?: return ExtractieResult.NietBepaalbaar
         val replyToDomein = email.replyToEmail.toRegistreerbaarDomein() ?: return ExtractieResult.NietBepaalbaar
 

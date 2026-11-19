@@ -4,7 +4,6 @@
 - Expose meer uitleg over de email parsing fout naar eindgebruiker?
 - Introduce BufferedEventPublisher to ensure correct order of `save/publish/presenter.success()`?
 - Some kind of eventHandlerAssert - now `MockEventPublisher` is both a spy and a dispatcher
-- Detectiekenmerk contract?
 
 
 ## Important

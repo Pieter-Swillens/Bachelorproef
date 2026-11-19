@@ -1,48 +1,42 @@
 package io.pieterswillens.poc.acceptance.tests
 
-import io.pieterswillens.poc.acceptance.tests.config.AcceptanceTest
 import io.pieterswillens.poc.api.RegistreerEmailInput
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.domain.email.EmailStatus
 import io.pieterswillens.poc.testdoubles.TestUtils
-import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("Given an application api to registreer an email")
-class EmailTest: AcceptanceTest {
-
-    private lateinit var savedEmailId: EmailId
+interface EmailTest {
+    val context: ApplicationContext
+    val emailInput: ByteArray
 
     @Test
     fun `when testing the flow of an email`() {
-        whenRegisteringAnEmail()
-        thenTheEmailShouldBeSaved()
-        thenTheDetectiekenmerkenShouldBeBerekend()
+        val savedEmailId = whenRegisteringAnEmail()
+        thenTheEmailShouldBeSaved(savedEmailId)
+        thenTheDetectiekenmerkenShouldBeBerekend(savedEmailId)
     }
 
-    private fun whenRegisteringAnEmail() {
-        val input = RawEmailTestBuilder().build()
-
+    private fun whenRegisteringAnEmail(): EmailId {
         val presenter = RegistreerEmailTestPresenter()
         context.registreerEmail.registreerEmail(
-            input = RegistreerEmailInput(input.content),
+            input = RegistreerEmailInput(emailInput),
             presenter = presenter
         )
 
-        savedEmailId = presenter.presentedEmailId
+        return presenter.presentedEmailId
     }
 
     // TODO: rewrite this to use application api get once it has been implemented
-    private fun thenTheEmailShouldBeSaved() {
+    private fun thenTheEmailShouldBeSaved(savedEmailId: EmailId) {
         val savedEmail = context.emailRepository.get(savedEmailId)
 
         assertThat(savedEmail).isNotNull()
     }
 
-    private fun thenTheDetectiekenmerkenShouldBeBerekend() {
+    private fun thenTheDetectiekenmerkenShouldBeBerekend(savedEmailId: EmailId) {
         val savedEmail = context.emailRepository.get(savedEmailId)
 
         assertThat(savedEmail!!.status).isInstanceOf(EmailStatus.DetectiekenmerkenBerekend::class.java)

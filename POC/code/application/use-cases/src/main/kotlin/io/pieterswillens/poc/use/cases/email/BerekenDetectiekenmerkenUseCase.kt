@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.use.cases
+package io.pieterswillens.poc.use.cases.email
 
 import io.pieterswillens.poc.domain.EventPublisher
 import io.pieterswillens.poc.domain.email.EmailRepository
@@ -11,7 +11,7 @@ class BerekenDetectiekenmerkenUseCase(
     private val detectiekenmerken: Detectiekenmerken,
     private val emailRepository: EmailRepository,
     private val eventPublisher: EventPublisher,
-): UseCase<BerekenDetectiekenmerkenCommand, BerekenDetectiekenmerkenPresenter> {
+): io.pieterswillens.poc.use.cases.UseCase<BerekenDetectiekenmerkenCommand, BerekenDetectiekenmerkenPresenter> {
     override fun execute(
         command: BerekenDetectiekenmerkenCommand,
         presenter: BerekenDetectiekenmerkenPresenter
@@ -28,4 +28,4 @@ interface BerekenDetectiekenmerkenPresenter: BerekenDetectiekenmerkenDomainPrese
     fun emailNotFound(emailId: EmailId)
 }
 
-data class BerekenDetectiekenmerkenCommand(val emailId: EmailId): Command
+data class BerekenDetectiekenmerkenCommand(val emailId: EmailId): io.pieterswillens.poc.use.cases.Command

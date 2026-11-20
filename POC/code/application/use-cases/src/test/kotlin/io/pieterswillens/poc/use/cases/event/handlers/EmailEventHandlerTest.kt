@@ -7,7 +7,7 @@ import io.pieterswillens.poc.testdoubles.MockEventPublisher
 import io.pieterswillens.poc.testdoubles.email.MockDetectiekenmerken
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
 import io.pieterswillens.poc.testdoubles.email.testbuilders.GeregistreerdeEmailTestBuilder
-import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenUseCase
+import io.pieterswillens.poc.use.cases.email.BerekenDetectiekenmerkenUseCase
 import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.assertj.core.api.Assertions.assertThat

@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.use.cases
+package io.pieterswillens.poc.use.cases.email
 
 import io.pieterswillens.poc.api.RegistreerEmail
 import io.pieterswillens.poc.api.RegistreerEmailInput
@@ -18,7 +18,7 @@ class RegistreerEmailUseCase(
     private val emailUniquenessValidator: EmailUniquenessValidator,
     private val emailRepository: EmailRepository,
     private val eventPublisher: EventPublisher
-): RegistreerEmail, UseCase<RegistreerEmailCommand, RegistreerEmailPresenter> {
+): RegistreerEmail, io.pieterswillens.poc.use.cases.UseCase<RegistreerEmailCommand, RegistreerEmailPresenter> {
 
     override fun registreerEmail(input: RegistreerEmailInput, presenter: RegistreerEmailPresenter) {
         execute(
@@ -52,4 +52,4 @@ class RegistreerEmailUseCase(
 data class RegistreerEmailCommand(
     val rawEmail: RawEmail,
     val emailAard: EmailAard
-): Command
+): io.pieterswillens.poc.use.cases.Command

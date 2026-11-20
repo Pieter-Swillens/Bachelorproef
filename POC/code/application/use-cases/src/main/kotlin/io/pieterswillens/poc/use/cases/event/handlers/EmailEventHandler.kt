@@ -3,8 +3,8 @@ package io.pieterswillens.poc.use.cases.event.handlers
 import io.pieterswillens.poc.domain.Event
 import io.pieterswillens.poc.domain.EventHandler
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
-import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenCommand
-import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenUseCase
+import io.pieterswillens.poc.use.cases.email.BerekenDetectiekenmerkenCommand
+import io.pieterswillens.poc.use.cases.email.BerekenDetectiekenmerkenUseCase
 import io.pieterswillens.poc.use.cases.event.handlers.presenters.BerekenDetectiekenmerkenLoggingPresenter
 
 class EmailEventHandler(

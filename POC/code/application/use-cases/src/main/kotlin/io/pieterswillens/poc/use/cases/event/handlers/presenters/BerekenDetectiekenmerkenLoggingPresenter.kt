@@ -1,6 +1,6 @@
 package io.pieterswillens.poc.use.cases.event.handlers.presenters
 
-import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenPresenter
+import io.pieterswillens.poc.use.cases.email.BerekenDetectiekenmerkenPresenter
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.slf4j.LoggerFactory
 

@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.use.cases
+package io.pieterswillens.poc.use.cases.email
 
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.domain.email.Email

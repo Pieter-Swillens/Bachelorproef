@@ -1,4 +1,4 @@
-package io.pieterswillens.poc.use.cases
+package io.pieterswillens.poc.use.cases.email
 
 import io.pieterswillens.poc.domain.email.EmailStatus
 import io.pieterswillens.poc.domain.email.detectiekenmerken.DetectiekenmerkId

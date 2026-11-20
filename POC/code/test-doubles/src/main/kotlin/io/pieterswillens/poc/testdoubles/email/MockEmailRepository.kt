@@ -10,12 +10,12 @@ import io.pieterswillens.poc.vocabulary.EmailMessageId
 class MockEmailRepository: EmailRepository, EmailUniquenessValidator {
     val storedItems = mutableMapOf<EmailId, Email>()
 
-    override fun save(email: Email) {
-        this.storedItems[email.emailId] = email
+    override fun save(aggregate: Email) {
+        this.storedItems[aggregate.emailId] = aggregate
     }
 
-    override fun get(emailId: EmailId): Email? {
-        return storedItems[emailId]
+    override fun get(id: EmailId): Email? {
+        return storedItems[id]
     }
 
     override fun validate(messageId: EmailMessageId): EmailUniquenessValidationResult {

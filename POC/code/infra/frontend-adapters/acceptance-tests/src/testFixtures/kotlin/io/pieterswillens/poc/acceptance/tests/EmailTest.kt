@@ -4,6 +4,7 @@ import io.pieterswillens.poc.api.RegistreerEmailInput
 import io.pieterswillens.poc.api.RegistreerEmailPresenter
 import io.pieterswillens.poc.domain.email.EmailStatus
 import io.pieterswillens.poc.testdoubles.TestUtils
+import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -22,7 +23,7 @@ interface EmailTest {
     private fun whenRegisteringAnEmail(): EmailId {
         val presenter = RegistreerEmailTestPresenter()
         context.registreerEmail.registreerEmail(
-            input = RegistreerEmailInput(emailInput),
+            input = RegistreerEmailInput(emailInput, EmailAard.LEGITIEM),
             presenter = presenter
         )
 

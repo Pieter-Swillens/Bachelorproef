@@ -3,10 +3,13 @@ package io.pieterswillens.poc.cli.adapter.email
 import io.pieterswillens.poc.cli.adapter.config.CliTest
 import io.pieterswillens.poc.cli.adapter.mocks.MockRegistreerEmail.TestAction
 import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
+import io.pieterswillens.poc.vocabulary.EmailAard
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
 import kotlin.io.path.writeBytes
 
@@ -19,14 +22,27 @@ class RegistreerEmailCliTest : CliTest {
     private val command = "registreer"
 
     @Test
-    fun `when successfully registering an email then feedback is provided`() {
+    fun `when successfully registering a legit email then feedback is provided`() {
         context.registreerEmail.setNextAction(TestAction.REGISTERED)
 
-        val result = runCli(command, padNaarEenBestand())
+        val result = runCli(command, padNaarEenBestand("legit"))
 
         assertThat(result.exitCode).isEqualTo(0)
-        assertThat(result.stdout).isEqualTo("E-mail geregistreerd - emailId: ${context.registreerEmail.emailId!!.value.toString()}")
+        assertThat(result.stdout).isEqualTo("E-mail geregistreerd - emailId: ${context.registreerEmail.emailId!!.value}")
         assertThat(context.registreerEmail.receivedInput!!.content).isEqualTo(rawEmail.content)
+        assertThat(context.registreerEmail.receivedInput!!.emailAard).isEqualTo(EmailAard.LEGITIEM)
+    }
+
+    @Test
+    fun `when successfully registering a phishing email then feedback is provided`() {
+        context.registreerEmail.setNextAction(TestAction.REGISTERED)
+
+        val result = runCli(command, padNaarEenBestand("phishing"))
+
+        assertThat(result.exitCode).isEqualTo(0)
+        assertThat(result.stdout).isEqualTo("E-mail geregistreerd - emailId: ${context.registreerEmail.emailId!!.value}")
+        assertThat(context.registreerEmail.receivedInput!!.content).isEqualTo(rawEmail.content)
+        assertThat(context.registreerEmail.receivedInput!!.emailAard).isEqualTo(EmailAard.PHISHING)
     }
 
     @Test
@@ -75,9 +91,32 @@ class RegistreerEmailCliTest : CliTest {
         assertThat(result.stderr).contains("bestaat-niet")
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = ["pdf", "docx", "xlsx", "png", "mp4", "zip"])
+    fun `when the file has an unsupported extension then the use case is not called`(extension: String) {
+        val result = runCli("registreer", padNaarEenBestand(extension = extension))
+
+        assertThat(result.exitCode).isEqualTo(64)
+        assertThat(context.registreerEmail.receivedInput).isNull()
+        assertThat(result.stderr).contains("$extension wordt niet ondersteund.")
+    }
+
+    @Test
+    fun `when the emailAard cannot be determined`() {
+        val result = runCli("registreer", padNaarEenBestand("irrelevantprefix"))
+
+        assertThat(result.exitCode).isEqualTo(64)
+        assertThat(context.registreerEmail.receivedInput).isNull()
+        assertThat(result.stderr).contains("Label kon niet worden toegekend omdat het pad 'legit' of 'phishing' moet bevatten")
+    }
+
     private val rawEmail = RawEmailTestBuilder().build()
-    private fun padNaarEenBestand(): String {
-        val bestand = tempDir.resolve("mail.eml")
+
+    private fun padNaarEenBestand(
+        prefix: String = "legit",
+        extension: String = "eml"
+    ): String {
+        val bestand = tempDir.resolve("${prefix}mail.$extension")
         bestand.writeBytes(rawEmail.content)
         return bestand.toString()
     }

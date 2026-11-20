@@ -10,6 +10,7 @@ import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.domain.email.ports.EmailParser
 import io.pieterswillens.poc.domain.email.ports.EmailParsingResult
 import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidator
+import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.RawEmail
 
 class RegistreerEmailUseCase(
@@ -21,7 +22,7 @@ class RegistreerEmailUseCase(
 
     override fun registreerEmail(input: RegistreerEmailInput, presenter: RegistreerEmailPresenter) {
         execute(
-            command = RegistreerEmailCommand(RawEmail(input.content)),
+            command = RegistreerEmailCommand(RawEmail(input.content), input.emailAard),
             presenter = presenter,
         )
     }
@@ -40,7 +41,7 @@ class RegistreerEmailUseCase(
                     presenter = presenter
                 )?.let {
                     emailRepository.save(it)
-                    eventPublisher.publish(EmailGeregistreerd(it.emailId))
+                    eventPublisher.publish(EmailGeregistreerd(it.emailId, command.emailAard))
                     presenter.emailRegistered(it.emailId)
                 }
             }
@@ -48,4 +49,7 @@ class RegistreerEmailUseCase(
     }
 }
 
-data class RegistreerEmailCommand(val rawEmail: RawEmail): Command
+data class RegistreerEmailCommand(
+    val rawEmail: RawEmail,
+    val emailAard: EmailAard
+): Command

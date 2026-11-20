@@ -4,6 +4,7 @@ import io.pieterswillens.poc.domain.Event
 import io.pieterswillens.poc.domain.email.events.DetectiekenmerkenBerekend
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.testdoubles.MockEventHandler
+import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -61,8 +62,8 @@ class InMemoryEventPublisherTest {
             assertThat(aHandler.receivedEvents).containsExactly(anEvent, anotherEvent)
         }
 
-        val anEvent = EmailGeregistreerd(EmailId.createNew())
-        val anotherEvent = EmailGeregistreerd(EmailId.createNew())
+        val anEvent = EmailGeregistreerd(EmailId.createNew(), EmailAard.LEGITIEM)
+        val anotherEvent = EmailGeregistreerd(EmailId.createNew(), EmailAard.PHISHING)
     }
 
     class EventParams: ArgumentsProvider {
@@ -71,7 +72,7 @@ class InMemoryEventPublisherTest {
             context: ExtensionContext
         ): Stream<out Arguments> {
             return Stream.of(
-                Arguments.of(EmailGeregistreerd(EmailId.createNew())),
+                Arguments.of(EmailGeregistreerd(EmailId.createNew(), EmailAard.LEGITIEM)),
                 Arguments.of(DetectiekenmerkenBerekend(EmailId.createNew()))
             )
         }

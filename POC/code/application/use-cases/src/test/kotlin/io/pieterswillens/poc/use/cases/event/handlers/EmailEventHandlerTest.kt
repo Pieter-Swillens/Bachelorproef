@@ -8,6 +8,7 @@ import io.pieterswillens.poc.testdoubles.email.MockDetectiekenmerken
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
 import io.pieterswillens.poc.testdoubles.email.testbuilders.GeregistreerdeEmailTestBuilder
 import io.pieterswillens.poc.use.cases.BerekenDetectiekenmerkenUseCase
+import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.EmailId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -36,7 +37,7 @@ class EmailEventHandlerTest {
         fun setUp() {
             emailRepository.save(GeregistreerdeEmailTestBuilder().with(emailId = emailId).build())
 
-            handler.handle(EmailGeregistreerd(emailId))
+            handler.handle(EmailGeregistreerd(emailId, EmailAard.LEGITIEM))
         }
 
         @Test

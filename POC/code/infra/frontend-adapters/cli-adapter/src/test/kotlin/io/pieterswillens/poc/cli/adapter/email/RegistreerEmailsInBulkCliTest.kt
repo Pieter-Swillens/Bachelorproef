@@ -24,12 +24,12 @@ class RegistreerEmailsInBulkCliTest: CliTest {
     fun `when successfully registering at least one email from multiple emails then OK feedback is provided`(bulkArgument: String) {
         val padNaarMap = setupDirectory(
             mapOf(
-                "bestand1.eml" to MockRegistreerEmail.TestAction.REGISTERED,
-                "bestand2.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
-                "bestand3.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED,
-                "submap/bestand4.eml" to MockRegistreerEmail.TestAction.REGISTERED,
-                "submap/bestand5.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
-                "submap/bestand6.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED
+                "legit/bestand1.eml" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand2.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
+                "legit/bestand3.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED,
+                "submap/legit/bestand4.eml" to MockRegistreerEmail.TestAction.REGISTERED,
+                "submap/legit/bestand5.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
+                "submap/legit/bestand6.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED
             )
         )
 
@@ -48,9 +48,9 @@ class RegistreerEmailsInBulkCliTest: CliTest {
         )
         assertThat(result.stderr).isEqualTo("""
             E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailIds[1].value}
-            E-mail kon niet worden verwerkt: bestand3.eml
+            E-mail kon niet worden verwerkt: legit/bestand3.eml
             E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailIds[4].value}
-            E-mail kon niet worden verwerkt: submap/bestand6.eml
+            E-mail kon niet worden verwerkt: submap/legit/bestand6.eml
         """.trimIndent())
     }
 
@@ -58,10 +58,10 @@ class RegistreerEmailsInBulkCliTest: CliTest {
     fun `when all registering multiple emails and all of them fail then MISLUKT feedback is provided`() {
         val padNaarMap = setupDirectory(
             mapOf(
-                "bestand2.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
-                "bestand3.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED,
-                "submap/bestand5.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
-                "submap/bestand6.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED
+                "legit/bestand2.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
+                "legit/bestand3.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED,
+                "legit/submap/bestand5.eml" to MockRegistreerEmail.TestAction.ALREADY_REGISTERED,
+                "legit/submap/bestand6.eml" to MockRegistreerEmail.TestAction.REGISTRATION_FAILED
             )
         )
 
@@ -74,9 +74,9 @@ class RegistreerEmailsInBulkCliTest: CliTest {
         )
         assertThat(result.stderr).isEqualTo("""
             E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailIds[0].value}
-            E-mail kon niet worden verwerkt: bestand3.eml
+            E-mail kon niet worden verwerkt: legit/bestand3.eml
             E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailIds[2].value}
-            E-mail kon niet worden verwerkt: submap/bestand6.eml
+            E-mail kon niet worden verwerkt: legit/submap/bestand6.eml
         """.trimIndent())
     }
 
@@ -119,6 +119,61 @@ class RegistreerEmailsInBulkCliTest: CliTest {
         assertThat(result.exitCode).isEqualTo(64)
         assertThat(context.registreerEmail.receivedInput).isNull()
         assertThat(result.stderr).contains("Om meerdere bestanden te imperteren verwijs je naar een geldige folder.")
+    }
+
+    @Test
+    fun `when the the directory contains unsupported file extensions then unsupported files are ignored and OK feedback is provided`() {
+        val padNaarMap = setupDirectory(
+            mapOf(
+                "legit/bestand1.pdf" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand2.docx" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand3.xlsx" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand3.png" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand5.mp4" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand6.zip" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand7.eml" to MockRegistreerEmail.TestAction.REGISTERED,
+            )
+        )
+
+        val result = runCli("registreer", "--bulk", padNaarMap)
+
+        assertThat(result.exitCode).isEqualTo(0)
+        assertThat(context.registreerEmail.emailIds).hasSize(1)
+    }
+
+    @Test
+    fun `when the the directory consists of only unsupported file extensions then MISLUKT feedback is provided`() {
+        val padNaarMap = setupDirectory(
+            mapOf(
+                "legit/bestand1.pdf" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand2.docx" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand3.xlsx" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand3.png" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand5.mp4" to MockRegistreerEmail.TestAction.REGISTERED,
+                "legit/bestand6.zip" to MockRegistreerEmail.TestAction.REGISTERED,
+            )
+        )
+
+        val result = runCli("registreer", "--bulk", padNaarMap)
+
+        assertThat(result.exitCode).isEqualTo(1)
+        assertThat(context.registreerEmail.emailIds).hasSize(0)
+    }
+
+    @Test
+    fun `when the aard of the email cannot be determined`() {
+        val padNaarMap = setupDirectory(
+            mapOf(
+                "submap/bestand1.eml" to MockRegistreerEmail.TestAction.REGISTERED,
+                "submap/bestand2.eml" to MockRegistreerEmail.TestAction.REGISTERED,
+            )
+        )
+
+        val result = runCli("registreer", "--bulk", padNaarMap)
+
+        assertThat(result.exitCode).isEqualTo(64)
+        assertThat(context.registreerEmail.receivedInput).isNull()
+        assertThat(result.stderr).contains("Label kon niet worden toegekend omdat het pad 'legit' of 'phishing' moet bevatten")
     }
 
     private fun setupDirectory(bestanden: Map<String, MockRegistreerEmail.TestAction>): String {

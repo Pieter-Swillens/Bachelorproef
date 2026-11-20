@@ -9,3 +9,7 @@
 ## Important
 - RegistreerEmail ingests all types of files, even though the application only supports `.eml` and `.txt`
   - this should be checked in the domain and not in the `cli-adapter`
+
+
+## The way how `EmailAard` is determined in the CLI-adapter is NOT robust...
+Just checking if the path contains 'phishing' or 'legit' is just a quick and dirty solution (oops). Especially for the single email import, this should be done differently, by, for example, providing a `--label` argument in the command.

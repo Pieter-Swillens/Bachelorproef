@@ -11,10 +11,7 @@ import io.pieterswillens.poc.testdoubles.TestUtils
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
 import io.pieterswillens.poc.testdoubles.email.StubbedEmailParser
 import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
-import io.pieterswillens.poc.vocabulary.EmailAdres
-import io.pieterswillens.poc.vocabulary.EmailId
-import io.pieterswillens.poc.vocabulary.EmailMessageId
-import io.pieterswillens.poc.vocabulary.RawEmail
+import io.pieterswillens.poc.vocabulary.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -43,7 +40,7 @@ class RegistreerEmailUseCaseTest {
 
             rawEmail = RawEmailTestBuilder().build()
             useCase.execute(
-                command = RegistreerEmailCommand(rawEmail),
+                command = RegistreerEmailCommand(rawEmail, EmailAard.LEGITIEM),
                 presenter = this
             )
         }
@@ -61,7 +58,7 @@ class RegistreerEmailUseCaseTest {
 
         @Test
         fun `then an EmailGeregistreerdEvent is published`() {
-            assertThat(eventPublisher.lastStoredEvent).isEqualTo(EmailGeregistreerd(presentedEmailId))
+            assertThat(eventPublisher.lastStoredEvent).isEqualTo(EmailGeregistreerd(presentedEmailId, EmailAard.LEGITIEM))
         }
 
         @Test
@@ -100,7 +97,7 @@ class RegistreerEmailUseCaseTest {
 
             rawEmail = RawEmailTestBuilder().build()
             useCase.execute(
-                command = RegistreerEmailCommand(rawEmail),
+                command = RegistreerEmailCommand(rawEmail, EmailAard.LEGITIEM),
                 presenter = this
             )
         }
@@ -142,7 +139,7 @@ class RegistreerEmailUseCaseTest {
 
             rawEmail = RawEmailTestBuilder().build()
             useCase.execute(
-                command = RegistreerEmailCommand(rawEmail),
+                command = RegistreerEmailCommand(rawEmail, EmailAard.LEGITIEM),
                 presenter = this
             )
         }

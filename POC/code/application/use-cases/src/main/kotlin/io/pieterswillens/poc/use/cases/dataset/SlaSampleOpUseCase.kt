@@ -22,21 +22,26 @@ class SlaSampleOpUseCase(
             return
         }
 
-        sampleRepository.save(
-            Sample(
-                emailId = command.emailId,
-                aard = command.aard
-            )
-        )
-        eventPublisher.publish(SampleOpgeslagen(command.emailId))
-        presenter.sampleOpgeslagen(command.emailId, command.aard)
+        val sample = command.toSample()
+        sampleRepository.save(sample)
+        eventPublisher.publish(SampleOpgeslagen(sample.emailId))
+        presenter.sampleOpgeslagen(sample.emailId, sample.bestandsnaam, sample.aard)
     }
 
+    private fun SlaSampleOpCommand.toSample() = Sample(
+        emailId = this.emailId,
+        bestandsnaam = this.bestandsnaam,
+        aard = this.aard
+    )
 }
 
 interface SlaSampleOpPresenter: Presenter {
-    fun sampleOpgeslagen(emailId: EmailId, aard: EmailAard)
+    fun sampleOpgeslagen(emailId: EmailId, bestandsnaam: String, aard: EmailAard)
     fun sampleAlreadyExists(emailId: EmailId)
 }
 
-data class SlaSampleOpCommand(val emailId: EmailId, val aard: EmailAard): Command
+data class SlaSampleOpCommand(
+    val emailId: EmailId,
+    val bestandsnaam: String,
+    val aard: EmailAard
+): Command

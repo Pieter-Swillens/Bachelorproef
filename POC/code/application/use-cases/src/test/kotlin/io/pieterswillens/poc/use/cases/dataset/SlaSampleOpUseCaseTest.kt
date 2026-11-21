@@ -24,21 +24,24 @@ class SlaSampleOpUseCaseTest {
     internal inner class `when succesfully saving a sample`: FailingSlaSampleOpPresenter(){
 
         private lateinit var presentedEmailId: EmailId
+        private lateinit var presentedBestandsnaam: String
         private lateinit var presentedAard: EmailAard
         private var sampleOpgeslagenCalled = false
 
         private val emailId = EmailId.createNew()
+        private val bestandsnaam = "email.eml"
         private val aard = EmailAard.LEGITIEM
 
         @BeforeEach
         fun setUp() {
-            useCase.execute(SlaSampleOpCommand(emailId, aard), this)
+            useCase.execute(SlaSampleOpCommand(emailId, bestandsnaam, aard), this)
         }
 
         @Test
         fun `then the sample is persisted`() {
             assertThat(sampleRepository.storedItems).anySatisfy { id, sample ->
                 assertThat(id).isEqualTo(emailId)
+                assertThat(sample.bestandsnaam).isEqualTo(bestandsnaam)
                 assertThat(sample.aard).isEqualTo(aard)
             }
         }
@@ -52,12 +55,14 @@ class SlaSampleOpUseCaseTest {
         fun `then sampleOpgeslagen is presented`() {
             assertThat(sampleOpgeslagenCalled).isTrue()
             assertThat(presentedEmailId).isEqualTo(emailId)
+            assertThat(presentedBestandsnaam).isEqualTo(bestandsnaam)
             assertThat(presentedAard).isEqualTo(aard)
         }
 
-        override fun sampleOpgeslagen(emailId: EmailId, aard: EmailAard) {
+        override fun sampleOpgeslagen(emailId: EmailId, bestandsnaam: String, aard: EmailAard) {
             this.sampleOpgeslagenCalled = true
             this.presentedEmailId = emailId
+            this.presentedBestandsnaam = bestandsnaam
             this.presentedAard = aard
         }
     }
@@ -70,14 +75,15 @@ class SlaSampleOpUseCaseTest {
 
         private val alreadyExistingSample = Sample(
             emailId = EmailId.createNew(),
-            EmailAard.LEGITIEM
+            bestandsnaam = "email.eml",
+            aard = EmailAard.LEGITIEM
         )
 
         @BeforeEach
         fun setUp() {
             sampleRepository.save(alreadyExistingSample)
 
-            useCase.execute(SlaSampleOpCommand(alreadyExistingSample.emailId, EmailAard.PHISHING), this)
+            useCase.execute(SlaSampleOpCommand(alreadyExistingSample.emailId, "email.eml", EmailAard.PHISHING), this)
         }
 
         @Test
@@ -103,7 +109,7 @@ class SlaSampleOpUseCaseTest {
     }
 
     open class FailingSlaSampleOpPresenter: SlaSampleOpPresenter {
-        override fun sampleOpgeslagen(emailId: EmailId, aard: EmailAard) = TestUtils.fail()
+        override fun sampleOpgeslagen(emailId: EmailId, bestandsnaam: String, aard: EmailAard) = TestUtils.fail()
         override fun sampleAlreadyExists(emailId: EmailId) = TestUtils.fail()
     }
 }

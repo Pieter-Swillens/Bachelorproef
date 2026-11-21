@@ -13,7 +13,7 @@ class DatasetEventHandler(
     override fun handle(event: Event) {
         when (event) {
             is EmailGeregistreerd -> slaSampleOpUseCase.execute(
-                command = SlaSampleOpCommand(event.emailId, event.aard),
+                command = SlaSampleOpCommand(event.emailId, event.bestandsnaam, event.aard),
                 presenter = SlaSampleOpLoggingPresenter
             )
         }

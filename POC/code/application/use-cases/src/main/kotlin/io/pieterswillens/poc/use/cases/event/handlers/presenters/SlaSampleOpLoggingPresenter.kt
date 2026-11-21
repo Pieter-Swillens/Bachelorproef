@@ -6,8 +6,8 @@ import io.pieterswillens.poc.vocabulary.EmailId
 import org.slf4j.LoggerFactory
 
 object SlaSampleOpLoggingPresenter : SlaSampleOpPresenter {
-    override fun sampleOpgeslagen(emailId: EmailId, aard: EmailAard) {
-        LOGGER.info("Sample opgeslagen voor email {} - aard {}", emailId, aard)
+    override fun sampleOpgeslagen(emailId: EmailId, bestandsnaam: String, aard: EmailAard) {
+        LOGGER.info("Sample opgeslagen voor {} met ID {} - aard {}", bestandsnaam, emailId, aard)
     }
 
     override fun sampleAlreadyExists(emailId: EmailId) {

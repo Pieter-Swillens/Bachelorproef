@@ -17,6 +17,7 @@ interface EmailTest {
     fun `when testing the flow of an email`() {
         val savedEmailId = whenRegisteringAnEmail()
         thenTheEmailShouldBeSaved(savedEmailId)
+        thenASampleShouldBeSaved(savedEmailId)
         thenTheDetectiekenmerkenShouldBeBerekend(savedEmailId)
     }
 
@@ -35,6 +36,12 @@ interface EmailTest {
         val savedEmail = context.emailRepository.get(savedEmailId)
 
         assertThat(savedEmail).isNotNull()
+    }
+
+    fun thenASampleShouldBeSaved(savedEmailId: EmailId) {
+        val savedSample = context.sampleRepository.get(savedEmailId)
+
+        assertThat(savedSample).isNotNull()
     }
 
     private fun thenTheDetectiekenmerkenShouldBeBerekend(savedEmailId: EmailId) {

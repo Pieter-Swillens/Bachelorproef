@@ -3,11 +3,14 @@ package io.pieterswillens.poc.acceptance.tests.config
 import io.pieterswillens.poc.acceptance.tests.ApplicationContext
 import io.pieterswillens.poc.api.RegistreerEmail
 import io.pieterswillens.poc.testdoubles.MockEventPublisher
+import io.pieterswillens.poc.testdoubles.dataset.MockSampleRepository
 import io.pieterswillens.poc.testdoubles.email.MockDetectiekenmerken
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
 import io.pieterswillens.poc.testdoubles.email.StubbedEmailParser
+import io.pieterswillens.poc.use.cases.dataset.SlaSampleOpUseCase
 import io.pieterswillens.poc.use.cases.email.BerekenDetectiekenmerkenUseCase
 import io.pieterswillens.poc.use.cases.email.RegistreerEmailUseCase
+import io.pieterswillens.poc.use.cases.event.handlers.DatasetEventHandler
 import io.pieterswillens.poc.use.cases.event.handlers.EmailEventHandler
 
 class BlackboxApplicationContext: ApplicationContext {
@@ -16,6 +19,7 @@ class BlackboxApplicationContext: ApplicationContext {
 
     /* --- REPOSITORIES --- */
     override val emailRepository: MockEmailRepository = MockEmailRepository()
+    override val sampleRepository = MockSampleRepository()
 
     /* --- SERVICES --- */
     private val emailParser = StubbedEmailParser()
@@ -24,20 +28,13 @@ class BlackboxApplicationContext: ApplicationContext {
     private val detectiekenmerken = MockDetectiekenmerken()
 
     /* --- USE CASES --- */
-    override val registreerEmail: RegistreerEmail = RegistreerEmailUseCase(
-        emailParser = emailParser,
-        emailUniquenessValidator = emailRepository,
-        emailRepository = emailRepository,
-        eventPublisher = eventPublisher
-    )
-    val berekenDetectiekenmerken = BerekenDetectiekenmerkenUseCase(
-        detectiekenmerken = detectiekenmerken,
-        emailRepository = emailRepository,
-        eventPublisher = eventPublisher
-    )
+    override val registreerEmail: RegistreerEmail = RegistreerEmailUseCase(emailParser, emailRepository, emailRepository, eventPublisher)
+    private val berekenDetectiekenmerkenUseCase = BerekenDetectiekenmerkenUseCase(detectiekenmerken, emailRepository, eventPublisher)
+    private val slaSampleOpUseCase = SlaSampleOpUseCase(sampleRepository, eventPublisher)
 
     init {
-        eventPublisher.subscribe(EmailEventHandler(berekenDetectiekenmerken))
+        eventPublisher.subscribe(EmailEventHandler(berekenDetectiekenmerkenUseCase))
+        eventPublisher.subscribe(DatasetEventHandler(slaSampleOpUseCase))
     }
 
     fun reset() {

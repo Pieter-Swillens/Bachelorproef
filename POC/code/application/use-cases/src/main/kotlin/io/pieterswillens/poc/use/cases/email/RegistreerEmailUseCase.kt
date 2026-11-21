@@ -10,6 +10,7 @@ import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.domain.email.ports.EmailParser
 import io.pieterswillens.poc.domain.email.ports.EmailParsingResult
 import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidator
+import io.pieterswillens.poc.use.cases.Command
 import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.RawEmail
 
@@ -52,4 +53,4 @@ class RegistreerEmailUseCase(
 data class RegistreerEmailCommand(
     val rawEmail: RawEmail,
     val emailAard: EmailAard
-): io.pieterswillens.poc.use.cases.Command
+): Command

@@ -7,9 +7,12 @@ import io.pieterswillens.poc.guava.adapter.GuavaRegistreerbaarDomeinService
 import io.pieterswillens.poc.inmemory.eventpublisher.InMemoryEventPublisher
 import io.pieterswillens.poc.jakarta.mail.adapter.JakartaMailParser
 import io.pieterswillens.poc.jakarta.mail.adapter.config.JakartaMailParserConfig
+import io.pieterswillens.poc.testdoubles.dataset.MockSampleRepository
 import io.pieterswillens.poc.testdoubles.email.MockEmailRepository
+import io.pieterswillens.poc.use.cases.dataset.SlaSampleOpUseCase
 import io.pieterswillens.poc.use.cases.email.BerekenDetectiekenmerkenUseCase
 import io.pieterswillens.poc.use.cases.email.RegistreerEmailUseCase
+import io.pieterswillens.poc.use.cases.event.handlers.DatasetEventHandler
 import io.pieterswillens.poc.use.cases.event.handlers.EmailEventHandler
 
 internal object Dependencies {
@@ -20,6 +23,7 @@ internal object Dependencies {
 
     private val emailParser = JakartaMailParser(JakartaMailParserConfig)
     internal val emailRepository = MockEmailRepository()
+    internal val sampleRepository = MockSampleRepository()
 
     /* --- SERVICES --- */
     private val registreerbaarDomeinService = GuavaRegistreerbaarDomeinService()
@@ -32,19 +36,12 @@ internal object Dependencies {
     )
 
     /* --- USE CASES --- */
-    val registreerEmail = RegistreerEmailUseCase(
-        emailParser = emailParser,
-        emailUniquenessValidator = emailRepository,
-        emailRepository = emailRepository,
-        eventPublisher = eventPublisher
-    )
-    val berekenDetectiekenmerkenUseCase = BerekenDetectiekenmerkenUseCase(
-        detectiekenmerken = detectiekenmerkenRegistry,
-        emailRepository = emailRepository,
-        eventPublisher = eventPublisher
-    )
+    internal val registreerEmail = RegistreerEmailUseCase(emailParser, emailRepository, emailRepository, eventPublisher)
+    private val berekenDetectiekenmerkenUseCase = BerekenDetectiekenmerkenUseCase(detectiekenmerkenRegistry, emailRepository, eventPublisher)
+    private val slaSampleOpUseCase = SlaSampleOpUseCase(sampleRepository, eventPublisher)
 
     init {
         eventHandlers.add(EmailEventHandler(berekenDetectiekenmerkenUseCase))
+        eventHandlers.add(DatasetEventHandler(slaSampleOpUseCase))
     }
 }

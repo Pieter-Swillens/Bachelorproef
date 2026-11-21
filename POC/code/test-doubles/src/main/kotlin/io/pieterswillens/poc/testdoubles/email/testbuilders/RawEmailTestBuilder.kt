@@ -1,19 +1,28 @@
 package io.pieterswillens.poc.testdoubles.email.testbuilders
 
+import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.RawEmail
 import java.util.*
 
 class RawEmailTestBuilder {
+
+    private var bestandsnaam: String = "email.eml"
+    private var emailAard: EmailAard = EmailAard.LEGITIEM
+
     private var messageId = UUID.randomUUID().toString()
     private var fromEmail = EmailAdres.noOps
     private var replyToEmail = EmailAdres.noOps
 
     fun with(
+        bestandsnaam: String? = null,
+        emailAard: EmailAard? = null,
         fromEmail: EmailAdres? = null,
         replyToEmail: EmailAdres? = null,
         messageId: String? = null,
     ): RawEmailTestBuilder {
+        bestandsnaam?.let { this.bestandsnaam = it }
+        emailAard?.let { this.emailAard = it }
         fromEmail?.let { this.fromEmail = it }
         replyToEmail?.let { this.replyToEmail = it }
         messageId?.let { this.messageId = it }
@@ -23,6 +32,8 @@ class RawEmailTestBuilder {
 
     fun build(): RawEmail =
         RawEmail(
+            bestandsnaam = bestandsnaam,
+            emailAard = emailAard,
             content = EMAIL_TEMPLATE
                 .replace(FROM_EMAIL_PLACEHOLDER, fromEmail.value)
                 .replace(REPLY_TO_EMAIL_PLACEHOLDER, replyToEmail.value)

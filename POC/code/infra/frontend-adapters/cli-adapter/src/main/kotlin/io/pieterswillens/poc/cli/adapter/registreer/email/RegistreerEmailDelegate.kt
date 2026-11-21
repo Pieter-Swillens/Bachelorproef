@@ -40,8 +40,9 @@ class RegistreerEmailDelegate(
         val presenter = RegistreerEmailCliPresenter(commandLine.out, commandLine.err, path.relativize(bestand).toString())
         registreerEmail.registreerEmail(
             input = RegistreerEmailInput(
-                content = bestand.readBytes(),
-                emailAard = bestand.bepaalEmailAard()
+                bestandsnaam = bestand.fileName.toString(),
+                emailAard = bestand.bepaalEmailAard(),
+                content = bestand.readBytes()
             ),
             presenter = presenter
         )

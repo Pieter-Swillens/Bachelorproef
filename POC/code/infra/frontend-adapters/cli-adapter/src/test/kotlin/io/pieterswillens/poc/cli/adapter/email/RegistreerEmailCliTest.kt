@@ -4,6 +4,7 @@ import io.pieterswillens.poc.cli.adapter.config.CliTest
 import io.pieterswillens.poc.cli.adapter.mocks.MockRegistreerEmail.TestAction
 import io.pieterswillens.poc.testdoubles.email.testbuilders.RawEmailTestBuilder
 import io.pieterswillens.poc.vocabulary.EmailAard
+import io.pieterswillens.poc.vocabulary.RawEmail
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -23,26 +24,32 @@ class RegistreerEmailCliTest : CliTest {
 
     @Test
     fun `when successfully registering a legit email then feedback is provided`() {
+        val rawEmail = RawEmailTestBuilder().with(bestandsnaam = "legitmail.eml").build()
         context.registreerEmail.setNextAction(TestAction.REGISTERED)
 
-        val result = runCli(command, padNaarEenBestand("legit"))
+        val result = runCli(command, rawEmail.toPath())
 
         assertThat(result.exitCode).isEqualTo(0)
         assertThat(result.stdout).isEqualTo("E-mail geregistreerd - emailId: ${context.registreerEmail.emailId!!.value}")
-        assertThat(context.registreerEmail.receivedInput!!.content).isEqualTo(rawEmail.content)
-        assertThat(context.registreerEmail.receivedInput!!.emailAard).isEqualTo(EmailAard.LEGITIEM)
+
+        val receivedInput = context.registreerEmail.receivedInput!!
+        assertThat(receivedInput.bestandsnaam).isEqualTo(rawEmail.bestandsnaam)
+        assertThat(receivedInput.emailAard).isEqualTo(EmailAard.LEGITIEM)
+        assertThat(receivedInput.content).isEqualTo(rawEmail.content)
     }
 
     @Test
     fun `when successfully registering a phishing email then feedback is provided`() {
+        val rawEmail = RawEmailTestBuilder().with(bestandsnaam = "phishingmail.eml").build()
         context.registreerEmail.setNextAction(TestAction.REGISTERED)
 
-        val result = runCli(command, padNaarEenBestand("phishing"))
+        val result = runCli(command, rawEmail.toPath())
 
         assertThat(result.exitCode).isEqualTo(0)
         assertThat(result.stdout).isEqualTo("E-mail geregistreerd - emailId: ${context.registreerEmail.emailId!!.value}")
-        assertThat(context.registreerEmail.receivedInput!!.content).isEqualTo(rawEmail.content)
+        assertThat(context.registreerEmail.receivedInput!!.bestandsnaam).isEqualTo(rawEmail.bestandsnaam)
         assertThat(context.registreerEmail.receivedInput!!.emailAard).isEqualTo(EmailAard.PHISHING)
+        assertThat(context.registreerEmail.receivedInput!!.content).isEqualTo(rawEmail.content)
     }
 
     @Test
@@ -52,7 +59,7 @@ class RegistreerEmailCliTest : CliTest {
         val result = runCli(command, padNaarEenBestand())
 
         assertThat(result.exitCode).isEqualTo(2)
-        assertThat(result.stderr).isEqualTo("E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailId!!.value.toString()}")
+        assertThat(result.stderr).isEqualTo("E-mail is al geregistreerd - emailId: ${context.registreerEmail.emailId!!.value}")
     }
 
     @Test
@@ -103,21 +110,21 @@ class RegistreerEmailCliTest : CliTest {
 
     @Test
     fun `when the emailAard cannot be determined`() {
-        val result = runCli("registreer", padNaarEenBestand("irrelevantprefix"))
+        val result = runCli("registreer", padNaarEenBestand(prefix = "irrelevantprefix"))
 
         assertThat(result.exitCode).isEqualTo(64)
         assertThat(context.registreerEmail.receivedInput).isNull()
         assertThat(result.stderr).contains("Label kon niet worden toegekend omdat het pad 'legit' of 'phishing' moet bevatten")
     }
 
-    private val rawEmail = RawEmailTestBuilder().build()
-
     private fun padNaarEenBestand(
         prefix: String = "legit",
         extension: String = "eml"
-    ): String {
-        val bestand = tempDir.resolve("${prefix}mail.$extension")
-        bestand.writeBytes(rawEmail.content)
+    ) = RawEmailTestBuilder().with(bestandsnaam = "${prefix}mail.$extension").build().toPath()
+
+    private fun RawEmail.toPath(): String {
+        val bestand = tempDir.resolve(this.bestandsnaam)
+        bestand.writeBytes(this.content)
         return bestand.toString()
     }
 }

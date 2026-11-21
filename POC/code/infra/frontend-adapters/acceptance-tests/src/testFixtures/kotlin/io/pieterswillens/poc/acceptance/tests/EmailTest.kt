@@ -24,7 +24,11 @@ interface EmailTest {
     private fun whenRegisteringAnEmail(): EmailId {
         val presenter = RegistreerEmailTestPresenter()
         context.registreerEmail.registreerEmail(
-            input = RegistreerEmailInput(emailInput, EmailAard.LEGITIEM),
+            input = RegistreerEmailInput(
+                bestandsnaam = "email.eml",
+                emailAard = EmailAard.LEGITIEM,
+                content = emailInput
+            ),
             presenter = presenter
         )
 

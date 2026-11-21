@@ -37,7 +37,7 @@ class EmailEventHandlerTest {
         fun setUp() {
             emailRepository.save(GeregistreerdeEmailTestBuilder().with(emailId = emailId).build())
 
-            handler.handle(EmailGeregistreerd(emailId, EmailAard.LEGITIEM))
+            handler.handle(EmailGeregistreerd(emailId = emailId, bestandsnaam = "mail.eml", aard = EmailAard.LEGITIEM,))
         }
 
         @Test

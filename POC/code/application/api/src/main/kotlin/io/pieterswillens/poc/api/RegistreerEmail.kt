@@ -8,7 +8,11 @@ fun interface RegistreerEmail {
     fun registreerEmail(input: RegistreerEmailInput, presenter: RegistreerEmailPresenter)
 }
 
-data class RegistreerEmailInput(val content: ByteArray, val emailAard: EmailAard)
+data class RegistreerEmailInput(
+    val bestandsnaam: String,
+    val emailAard: EmailAard,
+    val content: ByteArray
+)
 
 interface RegistreerEmailPresenter: RegistreerEmailDomainPresenter {
     fun emailRegistered(emailId: EmailId)

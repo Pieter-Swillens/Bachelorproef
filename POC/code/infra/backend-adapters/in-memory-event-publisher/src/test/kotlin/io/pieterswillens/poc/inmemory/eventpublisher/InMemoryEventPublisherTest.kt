@@ -63,8 +63,8 @@ class InMemoryEventPublisherTest {
             assertThat(aHandler.receivedEvents).containsExactly(anEvent, anotherEvent)
         }
 
-        val anEvent = EmailGeregistreerd(EmailId.createNew(), EmailAard.LEGITIEM)
-        val anotherEvent = EmailGeregistreerd(EmailId.createNew(), EmailAard.PHISHING)
+        val anEvent = EmailGeregistreerd(emailId = EmailId.createNew(), bestandsnaam = "mail.eml", aard = EmailAard.LEGITIEM)
+        val anotherEvent = EmailGeregistreerd(emailId = EmailId.createNew(), bestandsnaam = "anothermail.eml", aard = EmailAard.PHISHING)
     }
 
     class EventParams: ArgumentsProvider {
@@ -73,7 +73,7 @@ class InMemoryEventPublisherTest {
             context: ExtensionContext
         ): Stream<out Arguments> {
             return Stream.of(
-                Arguments.of(EmailGeregistreerd(EmailId.createNew(), EmailAard.LEGITIEM)),
+                Arguments.of(EmailGeregistreerd(emailId = EmailId.createNew(), bestandsnaam = "mail.eml", aard = EmailAard.LEGITIEM)),
                 Arguments.of(DetectiekenmerkenBerekend(EmailId.createNew())),
                 Arguments.of(SampleOpgeslagen(EmailId.createNew()))
             )

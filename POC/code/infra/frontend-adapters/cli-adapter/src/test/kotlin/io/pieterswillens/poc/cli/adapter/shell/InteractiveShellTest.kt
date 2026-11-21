@@ -65,11 +65,13 @@ class InteractiveShellTest : CliTest {
     @Test
     fun `when a path contains spaces and is quoted then the file is found`() {
         context.registreerEmail.setNextAction(MockRegistreerEmail.TestAction.REGISTERED)
-        val bestand = eenBestand("legit/map met spaties/mail.eml")
+        val bestand = eenBestand("legit/map met spaties/email.eml")
 
         val result = runInteractiveCli("registreer \"$bestand\"")
 
         assertThat(result.stderr).isEmpty()
+        assertThat(context.registreerEmail.receivedInput!!.bestandsnaam).isEqualTo(rawEmail.bestandsnaam)
+        assertThat(context.registreerEmail.receivedInput!!.emailAard).isEqualTo(rawEmail.emailAard)
         assertThat(context.registreerEmail.receivedInput!!.content).isEqualTo(rawEmail.content)
     }
 

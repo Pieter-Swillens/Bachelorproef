@@ -22,7 +22,7 @@ class BerekenDetectiekenmerkenUseCaseTest {
     private val detectiekenmerken = MockDetectiekenmerken()
     private val emailRepository = MockEmailRepository()
     private val eventPublisher = MockEventPublisher()
-    private val useCase = BerekenDetectiekenmerkenUseCase(detectiekenmerken, emailRepository, eventPublisher,)
+    private val useCase = BerekenDetectiekenmerkenUseCase(detectiekenmerken, emailRepository, eventPublisher)
 
     @Nested
     internal inner class `when berekening the detectiekenmerken for an email`: FailingBerekenDetectiekenmerkenPresenter() {

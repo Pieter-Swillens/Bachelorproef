@@ -1,12 +1,14 @@
 package io.pieterswillens.poc.inmemory.eventpublisher
 
 import io.pieterswillens.poc.domain.Event
+import io.pieterswillens.poc.domain.dataset.events.DatasetGecreeerd
 import io.pieterswillens.poc.domain.dataset.events.SampleOpgeslagen
 import io.pieterswillens.poc.domain.email.events.DetectiekenmerkenBerekend
 import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.testdoubles.MockEventHandler
 import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.EmailId
+import io.pieterswillens.poc.vocabulary.dataset.DatasetId
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.DisplayName
@@ -75,7 +77,8 @@ class InMemoryEventPublisherTest {
             return Stream.of(
                 Arguments.of(EmailGeregistreerd(emailId = EmailId.createNew(), bestandsnaam = "mail.eml", aard = EmailAard.LEGITIEM)),
                 Arguments.of(DetectiekenmerkenBerekend(EmailId.createNew())),
-                Arguments.of(SampleOpgeslagen(EmailId.createNew()))
+                Arguments.of(SampleOpgeslagen(EmailId.createNew())),
+                Arguments.of(DatasetGecreeerd(DatasetId.createNew()))
             )
         }
     }

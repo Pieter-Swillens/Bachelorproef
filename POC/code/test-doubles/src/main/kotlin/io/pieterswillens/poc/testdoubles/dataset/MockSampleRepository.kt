@@ -33,4 +33,8 @@ class MockSampleRepository: SampleRepository, GeefSamplesService {
         storedItems.clear()
         shuffledEntries.forEach { storedItems[it.key] = it.value }
     }
+
+    fun clear() {
+        this.storedItems.clear()
+    }
 }

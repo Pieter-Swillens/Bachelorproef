@@ -14,4 +14,9 @@ class MockDatasetRepository: DatasetRepository {
     override fun get(id: DatasetId): Dataset? {
         return storedItems[id]
     }
+
+    fun clear() {
+        this.storedItems.clear()
+    }
+
 }

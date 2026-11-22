@@ -11,23 +11,27 @@ class StubbedEmailParser : EmailParser {
 
     var usedEmail: ByteArray? = null
         private set
-    private var toReturn = ParsedEmail(
-        replyTo = EmailAdres.noOps,
-        from = EmailAdres.noOps,
-        messageId = EmailMessageId.random()
-    )
+
+    private var toReturn: () -> ParsedEmail = {
+        ParsedEmail(
+            replyTo = EmailAdres.noOps,
+            from = EmailAdres.noOps,
+            messageId = EmailMessageId.random()
+        )
+    }
+
 
     override fun parse(email: ByteArray): EmailParsingResult {
         this.usedEmail = email
         return if (failOnNext) {
             EmailParsingResult.Mislukt
         } else {
-            EmailParsingResult.Ok(toReturn)
+            EmailParsingResult.Ok(toReturn())
         }
     }
 
     fun setEmailToReturn(parsedEmail: ParsedEmail) {
-        toReturn = parsedEmail
+        toReturn = { parsedEmail }
     }
 
     fun failOnNextCall() {

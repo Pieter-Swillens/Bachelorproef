@@ -38,6 +38,7 @@ class RawEmailTestBuilder {
                 .replace(FROM_EMAIL_PLACEHOLDER, fromEmail.value)
                 .replace(REPLY_TO_EMAIL_PLACEHOLDER, replyToEmail.value)
                 .replace(MESSAGE_ID_PLACEHOLDER, messageId)
+                .trimIndent()
                 .toByteArray()
         )
 

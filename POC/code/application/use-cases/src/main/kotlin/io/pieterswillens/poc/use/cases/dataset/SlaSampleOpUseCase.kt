@@ -1,7 +1,6 @@
 package io.pieterswillens.poc.use.cases.dataset
 
 import io.pieterswillens.poc.domain.EventPublisher
-import io.pieterswillens.poc.domain.Presenter
 import io.pieterswillens.poc.domain.dataset.Sample
 import io.pieterswillens.poc.domain.dataset.SampleRepository
 import io.pieterswillens.poc.domain.dataset.events.SampleOpgeslagen
@@ -9,6 +8,7 @@ import io.pieterswillens.poc.use.cases.Command
 import io.pieterswillens.poc.use.cases.UseCase
 import io.pieterswillens.poc.vocabulary.EmailAard
 import io.pieterswillens.poc.vocabulary.EmailId
+import io.pieterswillens.poc.vocabulary.Presenter
 
 class SlaSampleOpUseCase(
     private val sampleRepository: SampleRepository,

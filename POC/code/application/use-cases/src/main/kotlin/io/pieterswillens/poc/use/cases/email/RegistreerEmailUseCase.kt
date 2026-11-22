@@ -10,8 +10,10 @@ import io.pieterswillens.poc.domain.email.events.EmailGeregistreerd
 import io.pieterswillens.poc.domain.email.ports.EmailParser
 import io.pieterswillens.poc.domain.email.ports.EmailParsingResult
 import io.pieterswillens.poc.domain.email.ports.EmailUniquenessValidator
+import io.pieterswillens.poc.domain.email.presenter.RegistreerEmailDomainPresenter
 import io.pieterswillens.poc.use.cases.Command
 import io.pieterswillens.poc.use.cases.UseCase
+import io.pieterswillens.poc.vocabulary.EmailId
 import io.pieterswillens.poc.vocabulary.RawEmail
 
 class RegistreerEmailUseCase(
@@ -45,7 +47,7 @@ class RegistreerEmailUseCase(
                 Email.registreer(
                     parsedEmail = result.parsedEmail,
                     emailUniquenessValidator = emailUniquenessValidator,
-                    presenter = presenter
+                    presenter = presenter.asDomainPresenter()
                 )?.let {
                     emailRepository.save(it)
                     eventPublisher.publish(
@@ -59,6 +61,10 @@ class RegistreerEmailUseCase(
                 }
             }
         }
+    }
+
+    private fun RegistreerEmailPresenter.asDomainPresenter() = object : RegistreerEmailDomainPresenter {
+        override fun emailAlreadyRegistered(emailId: EmailId) = this@asDomainPresenter.emailAlreadyRegistered(emailId)
     }
 }
 

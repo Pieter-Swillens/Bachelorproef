@@ -8,6 +8,7 @@ import java.util.concurrent.Callable
     name = "poc",
     mixinStandardHelpOptions = true,
     exitCodeOnInvalidInput = ExitCode.GEBRUIK,
+    version = ["1.0.0"]
 )
 class PocCli : Callable<Int> {
 

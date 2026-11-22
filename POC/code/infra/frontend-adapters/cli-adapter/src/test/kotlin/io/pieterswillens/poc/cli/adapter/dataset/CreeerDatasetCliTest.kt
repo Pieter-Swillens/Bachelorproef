@@ -4,10 +4,12 @@ import io.pieterswillens.poc.cli.adapter.config.CliTest
 import io.pieterswillens.poc.cli.adapter.mocks.MockCreeerDataset.TestAction.*
 import io.pieterswillens.poc.vocabulary.dataset.Seed
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@DisplayName("Given a CLI interface allowing a user to create a dataset")
 class CreeerDatasetCliTest : CliTest {
 
     private val command = "mkdataset"
@@ -82,7 +84,7 @@ class CreeerDatasetCliTest : CliTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["-s 1234", "--seed 1234"])
+    @ValueSource(strings = ["-s 1234", "--seed 1234", "--seed=1234"])
     fun `when running the command in an interactive shell then the responses do not deviate from the normal cli usage`(arguments: String) {
         context.creeerDataset.setNextAction(SUCCESSFULLY_CREATED)
 
@@ -93,4 +95,16 @@ class CreeerDatasetCliTest : CliTest {
         assertThat(result.stdout).contains("gecreëerd")
         assertThat(context.creeerDataset.usedSeed).isEqualTo(Seed(1234))
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["-h", "--help"])
+    fun `when the user requests help then documentation is provided`(argument: String) {
+        val expectedOutput = javaClass.getResource("/mkdataset-help-output.txt")!!.readText()
+
+        val result = runCli(command, argument)
+
+        assertThat(result.exitCode).isEqualTo(0)
+        assertThat(result.stdout).isEqualTo(expectedOutput)
+    }
+
 }

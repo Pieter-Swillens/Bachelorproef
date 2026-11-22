@@ -1,0 +1,7 @@
+Usage: poc [-hV] [COMMAND]
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+Commands:
+  registreer  Registreert een e-mail vanuit een .eml-bestand
+  mkdataset   Creëert een dataset waartegen het model getraind kan worden. De
+                dataset is gebaseerd op de reeds geregistreerde e-mails.

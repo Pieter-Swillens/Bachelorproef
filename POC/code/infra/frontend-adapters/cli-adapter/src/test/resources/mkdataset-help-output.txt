@@ -1,0 +1,7 @@
+Usage: poc mkdataset [-hV] [-s=<seed>]
+Creëert een dataset waartegen het model getraind kan worden. De dataset is
+gebaseerd op de reeds geregistreerde e-mails.
+  -h, --help          Show this help message and exit.
+  -s, --seed=<seed>   Seed voor de willekeurige verdeling van de dataset, voor
+                        reproduceerbare resultaten.
+  -V, --version       Print version information and exit.

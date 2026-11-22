@@ -1,0 +1,7 @@
+Usage: poc registreer [-bhV] <pad>
+Registreert een e-mail vanuit een .eml-bestand
+      <pad>       Pad naar het .eml-bestand, of met --bulk naar een map
+  -b, --bulk      Registreer alle .eml-bestanden in de opgegeven map (inclusief
+                    submappen)
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.

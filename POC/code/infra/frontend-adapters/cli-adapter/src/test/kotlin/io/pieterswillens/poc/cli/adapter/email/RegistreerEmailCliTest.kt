@@ -117,6 +117,18 @@ class RegistreerEmailCliTest : CliTest {
         assertThat(result.stderr).contains("Label kon niet worden toegekend omdat het pad 'legit' of 'phishing' moet bevatten")
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = ["-h", "--help"])
+    fun `when the user requests help then documentation is provided`(argument: String) {
+        val expectedOutput = javaClass.getResource("/registreer-help-output.txt")!!.readText()
+
+        val result = runCli(command, argument)
+
+        assertThat(result.exitCode).isEqualTo(0)
+        assertThat(result.stdout).isEqualTo(expectedOutput)
+    }
+
+
     private fun padNaarEenBestand(
         prefix: String = "legit",
         extension: String = "eml"

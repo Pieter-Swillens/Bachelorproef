@@ -16,6 +16,7 @@ class StubbedEmailParser : EmailParser {
         ParsedEmail(
             replyTo = EmailAdres.noOps,
             from = EmailAdres.noOps,
+            returnPath = EmailAdres.noOps,
             messageId = EmailMessageId.random()
         )
     }

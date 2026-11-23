@@ -3,6 +3,7 @@ package io.pieterswillens.poc.main.dependencies
 import io.pieterswillens.poc.domain.EventHandler
 import io.pieterswillens.poc.domain.email.detectiekenmerken.DetectiekenmerkenRegistry
 import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReplyTo
+import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReturnPath
 import io.pieterswillens.poc.guava.adapter.GuavaRegistreerbaarDomeinService
 import io.pieterswillens.poc.inmemory.eventpublisher.InMemoryEventPublisher
 import io.pieterswillens.poc.jakarta.mail.adapter.JakartaMailParser
@@ -33,9 +34,10 @@ internal object Dependencies {
     internal val geefSamplesService = sampleRepository
 
     /* --- REGISTRIES --- */
-    private val detectiekenmerkenRegistry = DetectiekenmerkenRegistry(
+    internal val detectiekenmerkenRegistry = DetectiekenmerkenRegistry(
         kenmerken = listOf(
-            FromWijktAfVanReplyTo(registreerbaarDomeinService)
+            FromWijktAfVanReplyTo(registreerbaarDomeinService),
+            FromWijktAfVanReturnPath(registreerbaarDomeinService)
         )
     )
 

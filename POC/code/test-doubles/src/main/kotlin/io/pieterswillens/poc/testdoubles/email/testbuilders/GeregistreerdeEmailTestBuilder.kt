@@ -14,12 +14,14 @@ class GeregistreerdeEmailTestBuilder private constructor(private val snapshot: E
         emailId: EmailId? = null,
         fromEmail: EmailAdres? = null,
         replyToEmail: EmailAdres? = null,
+        returnPathEmail: EmailAdres? = null,
         emailMessageId: EmailMessageId? = null
     ) = GeregistreerdeEmailTestBuilder(
         snapshot = snapshot.copy(
             emailId = emailId ?: snapshot.emailId,
             fromEmail = fromEmail ?: snapshot.fromEmail,
             replyToEmail = replyToEmail ?: snapshot.replyToEmail,
+            returnPathEmail = returnPathEmail ?: snapshot.returnPathEmail,
             emailMessageId = emailMessageId ?: snapshot.emailMessageId
         )
     )
@@ -33,6 +35,7 @@ class GeregistreerdeEmailTestBuilder private constructor(private val snapshot: E
             emailId = EmailId.createNew(),
             fromEmail = EmailAdres.noOps,
             replyToEmail = EmailAdres.noOps,
+            returnPathEmail = EmailAdres.noOps,
             emailMessageId = EmailMessageId.random(),
             status = EmailStatus.Geregistreerd
         )

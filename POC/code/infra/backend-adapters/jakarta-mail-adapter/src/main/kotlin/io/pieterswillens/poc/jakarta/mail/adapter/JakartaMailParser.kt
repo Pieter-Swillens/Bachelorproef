@@ -26,8 +26,12 @@ class JakartaMailParser(private val config: JakartaMailParserConfig): EmailParse
     private fun MimeMessage.toParsedEmail() = ParsedEmail(
         replyTo = replyTo[0].toEmailAdres(),
         from = from[0].toEmailAdres(),
+        returnPath = returnPath[0].toEmailAdres(),
         messageId = EmailMessageId.from(messageID)
     )
+
+    private val MimeMessage.returnPath: List<Address>
+            get() = getHeader("Return-Path").map { InternetAddress(it) }
 
     private fun Address.toEmailAdres(): EmailAdres {
         return when (this) {

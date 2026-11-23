@@ -8,6 +8,7 @@ data class EmailSnapshot(
     val emailId: EmailId,
     val fromEmail: EmailAdres,
     val replyToEmail: EmailAdres,
+    val returnPathEmail: EmailAdres,
     val emailMessageId: EmailMessageId,
     val status: EmailStatus = EmailStatus.Geregistreerd
 )

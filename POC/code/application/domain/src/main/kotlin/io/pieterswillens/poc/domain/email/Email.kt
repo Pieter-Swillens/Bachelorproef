@@ -14,6 +14,7 @@ class Email private constructor(
     val emailId: EmailId,
     val fromEmail: EmailAdres,
     val replyToEmail: EmailAdres,
+    val returnPath: EmailAdres,
     val emailMessageId: EmailMessageId,
     status: EmailStatus
 ) {
@@ -47,6 +48,7 @@ class Email private constructor(
                     emailId = EmailId.createNew(),
                     fromEmail = parsedEmail.from,
                     replyToEmail = parsedEmail.replyTo,
+                    returnPath = parsedEmail.returnPath,
                     emailMessageId = parsedEmail.messageId,
                     status = EmailStatus.Geregistreerd
                 )
@@ -59,6 +61,7 @@ class Email private constructor(
                 emailId = snapshot.emailId,
                 fromEmail = snapshot.fromEmail,
                 replyToEmail = snapshot.replyToEmail,
+                returnPath = snapshot.returnPathEmail,
                 emailMessageId = snapshot.emailMessageId,
                 status = snapshot.status
             )

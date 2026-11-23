@@ -55,6 +55,7 @@ class JakartaMailParserTest {
                     ParsedEmail(
                         replyTo = EmailAdres.from("reese.white@dfggameroud222.onmicrosoft.com"),
                         from = EmailAdres.from("reese.white@dfggameroud222.onmicrosoft.com"),
+                        returnPath = EmailAdres.from("reese.white@dfggameroud222.onmicrosoft.com"),
                         messageId = EmailMessageId.from("<CAMuz91Kr6tyUvpP22m95jg4OVCvOkLwCUrZ0VdNQFxPPNp--Ug@mail.gmail.com>")
                     )
                 ),
@@ -63,6 +64,7 @@ class JakartaMailParserTest {
                     ParsedEmail(
                         replyTo = EmailAdres.from("reply@2ndal7.com"),
                         from = EmailAdres.from("bowen.mo@up.ac.pa"),
+                        returnPath = EmailAdres.from("bowen.mo@up.ac.pa"),
                         messageId = EmailMessageId.from("<DM6PR08MB5321007CA5B0E0F01F8755BBB1202@DM6PR08MB5321.namprd08.prod.outlook.com>")
                     )
                 ),
@@ -71,6 +73,7 @@ class JakartaMailParserTest {
                     ParsedEmail(
                         replyTo = EmailAdres.from("kre@munnari.OZ.AU"),
                         from = EmailAdres.from("kre@munnari.OZ.AU"),
+                        returnPath = EmailAdres.from("exmh-workers-admin@spamassassin.taint.org"),
                         messageId = EmailMessageId.from("<13258.1030015585@munnari.OZ.AU>")
                     )
                 ),
@@ -79,6 +82,7 @@ class JakartaMailParserTest {
                     ParsedEmail(
                         replyTo = EmailAdres.from("zzzzteana@yahoogroups.com"),
                         from = EmailAdres.from("Stewart.Smith@ee.ed.ac.uk"),
+                        returnPath = EmailAdres.from("Stewart.Smith@ee.ed.ac.uk"),
                         messageId = EmailMessageId.from("<3D6C82CB.5040109@ee.ed.ac.uk>")
                     )
                 )

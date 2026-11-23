@@ -13,18 +13,21 @@ class RawEmailTestBuilder {
     private var messageId = UUID.randomUUID().toString()
     private var fromEmail = EmailAdres.noOps
     private var replyToEmail = EmailAdres.noOps
+    private var returnPathEmail = EmailAdres.noOps
 
     fun with(
         bestandsnaam: String? = null,
         emailAard: EmailAard? = null,
         fromEmail: EmailAdres? = null,
         replyToEmail: EmailAdres? = null,
+        returnPathEmail: EmailAdres? = null,
         messageId: String? = null,
     ): RawEmailTestBuilder {
         bestandsnaam?.let { this.bestandsnaam = it }
         emailAard?.let { this.emailAard = it }
         fromEmail?.let { this.fromEmail = it }
         replyToEmail?.let { this.replyToEmail = it }
+        returnPathEmail?.let { this.returnPathEmail = it }
         messageId?.let { this.messageId = it }
 
         return this
@@ -37,6 +40,7 @@ class RawEmailTestBuilder {
             content = EMAIL_TEMPLATE
                 .replace(FROM_EMAIL_PLACEHOLDER, fromEmail.value)
                 .replace(REPLY_TO_EMAIL_PLACEHOLDER, replyToEmail.value)
+                .replace(RETURN_PATH_EMAIL_PLACEHOLDER, returnPathEmail.value)
                 .replace(MESSAGE_ID_PLACEHOLDER, messageId)
                 .trimIndent()
                 .toByteArray()
@@ -45,11 +49,13 @@ class RawEmailTestBuilder {
     companion object {
         private const val FROM_EMAIL_PLACEHOLDER = "{FROM_EMAIL}"
         private const val REPLY_TO_EMAIL_PLACEHOLDER = "{REPLY_TO_EMAIL}"
+        private const val RETURN_PATH_EMAIL_PLACEHOLDER = "{RETURN_PATH_EMAIL}"
         private const val MESSAGE_ID_PLACEHOLDER = "{MESSAGE_ID}"
 
         private const val EMAIL_TEMPLATE = """
             From: $FROM_EMAIL_PLACEHOLDER
             Reply-To: $REPLY_TO_EMAIL_PLACEHOLDER
+            Return-Path: $RETURN_PATH_EMAIL_PLACEHOLDER
             Message-Id: $MESSAGE_ID_PLACEHOLDER
             
             Dit is een test builder email

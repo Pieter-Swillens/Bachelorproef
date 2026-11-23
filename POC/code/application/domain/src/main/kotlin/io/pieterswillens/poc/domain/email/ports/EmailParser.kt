@@ -15,5 +15,6 @@ sealed interface EmailParsingResult {
 data class ParsedEmail(
     val replyTo: EmailAdres,
     val from: EmailAdres,
+    val returnPath: EmailAdres,
     val messageId: EmailMessageId
 )

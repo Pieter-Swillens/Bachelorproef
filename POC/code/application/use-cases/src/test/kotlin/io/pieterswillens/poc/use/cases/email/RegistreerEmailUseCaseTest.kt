@@ -97,6 +97,7 @@ class RegistreerEmailUseCaseTest {
                         emailId = EmailId.createNew(),
                         fromEmail = aParsedEmail.from,
                         replyToEmail = aParsedEmail.replyTo,
+                        returnPathEmail = aParsedEmail.returnPath,
                         emailMessageId = aParsedEmail.messageId
                     )
                 )
@@ -178,6 +179,7 @@ class RegistreerEmailUseCaseTest {
     private val aParsedEmail = ParsedEmail(
         replyTo = EmailAdres.noOps,
         from = EmailAdres.noOps,
+        returnPath = EmailAdres.noOps,
         messageId = EmailMessageId.random()
     )
 

@@ -6,7 +6,7 @@ import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
 import io.pieterswillens.poc.vocabulary.EmailAdres
 import io.pieterswillens.poc.vocabulary.EmailId
 import io.pieterswillens.poc.vocabulary.EmailMessageId
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -39,7 +39,7 @@ class FromWijktAfVanReplyToTest {
         fun `then extractor should report NietAfwijkend`(email: Email) {
             setUp(email)
 
-            Assertions.assertThat(result).isEqualTo(ExtractieResult.NietAfwijkend)
+            assertThat(result).isEqualTo(ExtractieResult.NietAfwijkend)
         }
     }
 
@@ -52,6 +52,7 @@ class FromWijktAfVanReplyToTest {
                 emailId = EmailId.createNew(),
                 fromEmail = EmailAdres.from("test@valid.com"),
                 replyToEmail = EmailAdres.from("test@phishing.com"),
+                returnPathEmail = EmailAdres.noOps,
                 emailMessageId = EmailMessageId.random()
             )
         )
@@ -63,9 +64,8 @@ class FromWijktAfVanReplyToTest {
 
         @Test
         fun `then extractor should report Afwijkend and provide evidence for the inconsistency`() {
-            Assertions.assertThat(result).isInstanceOfSatisfying(ExtractieResult.Afwijkend::class.java) {
-                println(it.bewijs)
-                Assertions.assertThat(it.bewijs).isEqualTo("De afzender van de email (${email.fromEmail}) is niet de ontvanger van je antwoord. Je antwoord wordt verstuurd naar: ${email.replyToEmail}")
+            assertThat(result).isInstanceOfSatisfying(ExtractieResult.Afwijkend::class.java) {
+                assertThat(it.bewijs).isEqualTo("De afzender van de email (${email.fromEmail}) is niet de ontvanger van je antwoord. Je antwoord wordt verstuurd naar: ${email.replyToEmail}")
             }
         }
     }
@@ -84,7 +84,7 @@ class FromWijktAfVanReplyToTest {
         fun `then extractor should report NietBepaalbaar`(email: Email) {
             setUp(email)
 
-            Assertions.assertThat(result).isEqualTo(ExtractieResult.NietBepaalbaar)
+            assertThat(result).isEqualTo(ExtractieResult.NietBepaalbaar)
         }
     }
 
@@ -100,6 +100,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
                             replyToEmail = EmailAdres.from("test@email.be"),
+                            returnPathEmail = EmailAdres.noOps,
                             emailMessageId = EmailMessageId.random()
                         )
                     )
@@ -110,6 +111,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
                             replyToEmail = EmailAdres.from("nogeentest@email.be"),
+                            returnPathEmail = EmailAdres.noOps,
                             emailMessageId = EmailMessageId.random()
                         )
                     )
@@ -120,6 +122,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
                             replyToEmail = EmailAdres.from("test@subdomein.email.be"),
+                            returnPathEmail = EmailAdres.noOps,
                             emailMessageId = EmailMessageId.random()
                         )
                     )
@@ -130,6 +133,7 @@ class FromWijktAfVanReplyToTest {
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@EMAIL.be"),
                             replyToEmail = EmailAdres.from("test@email.BE"),
+                            returnPathEmail = EmailAdres.noOps,
                             emailMessageId = EmailMessageId.random()
                         )
                     )
@@ -149,6 +153,7 @@ class FromWijktAfVanReplyToTest {
                         EmailSnapshot(
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@localhost"),
+                            returnPathEmail = EmailAdres.noOps,
                             replyToEmail = EmailAdres.from("test@email.be"),
                             emailMessageId = EmailMessageId.random()
                         )
@@ -159,6 +164,7 @@ class FromWijktAfVanReplyToTest {
                         EmailSnapshot(
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
+                            returnPathEmail = EmailAdres.noOps,
                             replyToEmail = EmailAdres.from("test@localhost"),
                             emailMessageId = EmailMessageId.random()
                         )
@@ -169,6 +175,7 @@ class FromWijktAfVanReplyToTest {
                         EmailSnapshot(
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email!be"),
+                            returnPathEmail = EmailAdres.noOps,
                             replyToEmail = EmailAdres.from("test@email.be"),
                             emailMessageId = EmailMessageId.random()
                         )
@@ -179,6 +186,7 @@ class FromWijktAfVanReplyToTest {
                         EmailSnapshot(
                             emailId = EmailId.createNew(),
                             fromEmail = EmailAdres.from("test@email.be"),
+                            returnPathEmail = EmailAdres.noOps,
                             replyToEmail = EmailAdres.from("test@email!be"),
                             emailMessageId = EmailMessageId.random()
                         )

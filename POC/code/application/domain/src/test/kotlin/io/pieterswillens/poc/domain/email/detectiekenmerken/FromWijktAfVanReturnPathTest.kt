@@ -60,7 +60,7 @@ class FromWijktAfVanReturnPathTest {
         @Test
         fun `then extractor should report Afwijkend and provide evidence for the inconsistency`() {
             assertThat(result).isInstanceOfSatisfying(ExtractieResult.Afwijkend::class.java) {
-                assertThat(it.bewijs).isEqualTo("De afzender van de email (${email.fromEmail}) wordt niet op de hoogte gebracht van een bericht dat niet kon worden afgeleverd. Deze melding wordt verstuurd naar ${email.returnPath}")
+                assertThat(it.bewijs).isEqualTo("De afzender van de email (${email.fromEmail}) wordt niet op de hoogte gebracht van de email die niet kon worden afgeleverd. Deze melding wordt verstuurd naar ${email.returnPath}")
             }
         }
     }

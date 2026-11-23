@@ -4,6 +4,7 @@ import io.pieterswillens.poc.domain.EventHandler
 import io.pieterswillens.poc.domain.email.detectiekenmerken.DetectiekenmerkenRegistry
 import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReplyTo
 import io.pieterswillens.poc.domain.email.detectiekenmerken.FromWijktAfVanReturnPath
+import io.pieterswillens.poc.domain.email.detectiekenmerken.ReplyToWijktAfVanReturnPath
 import io.pieterswillens.poc.guava.adapter.GuavaRegistreerbaarDomeinService
 import io.pieterswillens.poc.inmemory.eventpublisher.InMemoryEventPublisher
 import io.pieterswillens.poc.jakarta.mail.adapter.JakartaMailParser
@@ -37,7 +38,8 @@ internal object Dependencies {
     internal val detectiekenmerkenRegistry = DetectiekenmerkenRegistry(
         kenmerken = listOf(
             FromWijktAfVanReplyTo(registreerbaarDomeinService),
-            FromWijktAfVanReturnPath(registreerbaarDomeinService)
+            FromWijktAfVanReturnPath(registreerbaarDomeinService),
+            ReplyToWijktAfVanReturnPath(registreerbaarDomeinService)
         )
     )
 

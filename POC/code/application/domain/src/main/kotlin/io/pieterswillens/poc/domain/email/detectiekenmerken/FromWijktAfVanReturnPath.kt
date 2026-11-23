@@ -15,7 +15,7 @@ class FromWijktAfVanReturnPath(private val registreerbaarDomeinService: Registre
         return if (fromDomein == returnPathDomein) {
             ExtractieResult.NietAfwijkend
         } else {
-            ExtractieResult.Afwijkend("De afzender van de email (${email.fromEmail}) wordt niet op de hoogte gebracht van een bericht dat niet kon worden afgeleverd. Deze melding wordt verstuurd naar ${email.returnPath}")
+            ExtractieResult.Afwijkend("De afzender van de email (${email.fromEmail}) wordt niet op de hoogte gebracht van de email die niet kon worden afgeleverd. Deze melding wordt verstuurd naar ${email.returnPath}")
         }
     }
 

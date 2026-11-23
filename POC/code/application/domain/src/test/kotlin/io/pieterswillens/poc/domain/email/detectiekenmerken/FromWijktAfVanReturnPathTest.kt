@@ -1,11 +1,9 @@
 package io.pieterswillens.poc.domain.email.detectiekenmerken
 
 import io.pieterswillens.poc.domain.email.Email
-import io.pieterswillens.poc.domain.email.EmailSnapshot
 import io.pieterswillens.poc.testdoubles.email.MockRegistreerbaarDomeinService
+import io.pieterswillens.poc.testdoubles.email.testbuilders.EmailSnapshotTestBuilder
 import io.pieterswillens.poc.vocabulary.EmailAdres
-import io.pieterswillens.poc.vocabulary.EmailId
-import io.pieterswillens.poc.vocabulary.EmailMessageId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -48,13 +46,10 @@ class FromWijktAfVanReturnPathTest {
 
         private lateinit var result: ExtractieResult
         private val email = Email.fromSnapshot(
-            EmailSnapshot(
-                emailId = EmailId.createNew(),
+            EmailSnapshotTestBuilder().with(
                 fromEmail = EmailAdres.from("test@valid.com"),
-                replyToEmail = EmailAdres.from("test@phishing.com"),
-                returnPathEmail = EmailAdres.from("test@phishing.com"),
-                emailMessageId = EmailMessageId.random()
-            )
+                returnPathEmail = EmailAdres.from("test@phishing.com")
+            ).build()
         )
 
         @BeforeEach
@@ -96,46 +91,34 @@ class FromWijktAfVanReturnPathTest {
             return Stream.of(
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@email.be"),
-                            replyToEmail = EmailAdres.from("test@email.be"),
-                            returnPathEmail = EmailAdres.from("test@email.be"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("test@email.be")
+                        ).build()
                     )
                 ),
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@email.be"),
-                            replyToEmail = EmailAdres.from("nogeentest@email.be"),
-                            returnPathEmail = EmailAdres.from("nogeentest@email.be"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("nogeentest@email.be")
+                        ).build()
                     )
                 ),
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@email.be"),
-                            replyToEmail = EmailAdres.from("test@subdomein.email.be"),
-                            returnPathEmail = EmailAdres.from("test@subdomein.email.be"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("test@subdomein.email.be")
+                        ).build()
                     )
                 ),
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@EMAIL.be"),
-                            replyToEmail = EmailAdres.from("test@email.BE"),
-                            returnPathEmail = EmailAdres.from("test@email.BE"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("test@email.BE")
+                        ).build()
                     )
                 ),
             )
@@ -150,50 +133,37 @@ class FromWijktAfVanReturnPathTest {
             return Stream.of(
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@localhost"),
-                            replyToEmail = EmailAdres.noOps,
-                            returnPathEmail = EmailAdres.from("test@email.be"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("test@email.be")
+                        ).build()
                     )
                 ),
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@email.be"),
-                            replyToEmail = EmailAdres.noOps,
-                            returnPathEmail = EmailAdres.from("test@localhost"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("test@localhost")
+                        ).build()
                     )
                 ),
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@email!be"),
-                            replyToEmail = EmailAdres.noOps,
-                            returnPathEmail = EmailAdres.from("test@email.be"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("test@email.be")
+                        ).build()
                     )
                 ),
                 Arguments.of(
                     Email.fromSnapshot(
-                        EmailSnapshot(
-                            emailId = EmailId.createNew(),
+                        EmailSnapshotTestBuilder().with(
                             fromEmail = EmailAdres.from("test@email.be"),
-                            replyToEmail = EmailAdres.noOps,
-                            returnPathEmail = EmailAdres.from("test@email!be"),
-                            emailMessageId = EmailMessageId.random()
-                        )
+                            returnPathEmail = EmailAdres.from("test@email!be")
+                        ).build()
                     )
                 ),
             )
         }
     }
-
 }
